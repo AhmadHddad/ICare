@@ -10,8 +10,6 @@ namespace ICareAPI.Repositories
 
         Task<bool> EmailExists(string email);
 
-        Task<User> GetUserById(int id);
-
         Task<bool> SaveAll();
     }
 }

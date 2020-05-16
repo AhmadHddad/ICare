@@ -23,7 +23,7 @@ namespace ICareAPI.Repositories
 
         Task<Patient> EditPatient(Patient patient);
 
-        Task<bool> PatientExistsByOfficialId(int officialId);
+        Task<bool> PatientExistsByOfficialId(string officialId);
 
         Task<List<Patient>> PatientsWithSimilarDisease(int patientId);
 

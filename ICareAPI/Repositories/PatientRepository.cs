@@ -8,6 +8,7 @@ using ICareAPI.Repositories;
 using ICareAPI.Helpers;
 using ICareAPI.Helpers.Pagination;
 using ICareAPI.Models;
+using System.Collections.ObjectModel;
 
 namespace ICareAPI.Repositories
 {
@@ -24,7 +25,8 @@ namespace ICareAPI.Repositories
         {
 
             patient.Created = DateTime.Now;
-            patient.Records = null;
+            // TODO Test this
+            patient.Records = new Collection<Record>() { };
             var patientToBeCreated = _context.Patients.Add(patient).Entity;
 
             _context.SaveChanges();
@@ -98,7 +100,7 @@ namespace ICareAPI.Repositories
 
 
 
-        public async Task<bool> PatientExistsByOfficialId(int officialId)
+        public async Task<bool> PatientExistsByOfficialId(string officialId)
         {
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.OfficialId == officialId);
 
@@ -139,7 +141,6 @@ namespace ICareAPI.Repositories
             patient.ApplyTo(patientToPatch);
 
             var result = await _context.SaveChangesAsync();
-
 
             return result;
         }
