@@ -13,7 +13,8 @@ using ICareAPI.Helpers;
 namespace ICareAPI.Controllers
 
 {
-    //[Authorize]
+    [ServiceFilter(typeof(LogUserAcitivity))]
+    [Authorize]
     [Route("api/patients")]
     [ApiController]
     public class PatientsController : ControllerBase
