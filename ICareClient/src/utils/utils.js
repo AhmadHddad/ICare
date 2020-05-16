@@ -1,5 +1,5 @@
 export const toggle = (name, stateObj, callback) => event => {
-  callback(prev => ({ ...stateObj, [name]: !prev[name] }));
+  callback && callback(prev => ({ ...stateObj, [name]: !prev[name] }));
 };
 
 export function parseJwt(token) {
