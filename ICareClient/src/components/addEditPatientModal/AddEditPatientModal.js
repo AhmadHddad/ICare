@@ -47,6 +47,7 @@ export default function AddEditPatientModal({
   onClose,
   onSave
 }) {
+  // ----------------------- //
   const { handleSubmit, control, errors, setValue } = useForm();
   const [isLoading, setLoading] = useState({
     dataLoader: false,
@@ -179,7 +180,7 @@ export default function AddEditPatientModal({
               fullWidth
               id="outlined-basic"
               label={
-                (errors.officialId && "Official ID is required") ||
+                (errors.officialId && "Official ID must be 9 digits") ||
                 "Official ID"
               }
               variant="outlined"
@@ -188,7 +189,7 @@ export default function AddEditPatientModal({
           defaultValue=""
           rules={{
             required: true,
-            minLength: 2,
+            minLength: 9,
             maxLength: 9,
             validate: value => value == Number(value)
           }}
