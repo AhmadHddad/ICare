@@ -2,13 +2,18 @@
 
 # dependencies
 /node_modules
-client/node_modules
+ICareClient/node_modules
 /.pnp
 /.history
 /.git
 .pnp.js
-api/.vs
+ICareAPI/.vs
+ICareAPI/bin
+ICareAPI/ICareDB.db
+
+
 /.vscode
+
 # testing
 /coverage
 
@@ -26,3 +31,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /ICareClient/node_modules/adjust-sourcemap-loader/node_modules
+ICareAPI/obj
+ICareAPI/obj
+ICareAPI/bin
