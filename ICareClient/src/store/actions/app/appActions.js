@@ -82,13 +82,17 @@ const dispatchWhenSuccess = (actionType, data, rest) => {
 };
 
 const dispatchWhenFailure = (dispatch, actionType, err, rest) => {
-  dispatch(
-    showErrorMessage(
-      (err && err.response && err.response.data && err.response.data.title) ||
-        err.response.data ||
-        "Something went wrong"
-    )
-  );
+  const errorObj = err?.response?.data;
+
+  const errMsg = Object.keys(errorObj.errors).length
+    ? Object.entries(errorObj.errors)[0][1]
+    : null;
+
+  console.log("dispatchWhenFailure -> errMsg", errMsg);
+  const message =
+    errMsg ?? errorObj?.title ?? errorObj ?? "Something went wrong";
+
+  dispatch(showErrorMessage(message));
 
   return {
     type: actionType + "_FAILURE",
