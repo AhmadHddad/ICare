@@ -34,3 +34,5 @@ yarn-error.log*
 ICareAPI/obj
 ICareAPI/obj
 ICareAPI/bin
+ICareAPI/obj/Debug/*
+ICareAPI/bin/Debug/netcoreapp2.5
