@@ -15,7 +15,7 @@ using ICareAPI.Models;
 namespace ICareAPI.Controllers
 {
     [Route("api/records")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class RecordsController : ControllerBase
     {
