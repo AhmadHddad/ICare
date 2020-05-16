@@ -16,7 +16,7 @@ namespace ICareAPI.Helpers
             var userId = int.Parse(resultContext.HttpContext.User
             .FindFirst(NameIdentifier).Value);
 
-            var repo = resultContext.HttpContext.RequestServices.GetService<AuthRepository>();
+            var repo = resultContext.HttpContext.RequestServices.GetService<IUserRepository>();
             var user = await repo.GetUserById(userId);
 
             user.LastAcitve = DateTime.Now;
