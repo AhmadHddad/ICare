@@ -9,7 +9,7 @@ namespace ICareAPI.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int OfficialId { get; set; }
+        public string OfficialId { get; set; }
 
         public DateTime DateOfBirth { get; set; }
 

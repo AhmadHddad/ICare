@@ -13,8 +13,8 @@ namespace ICareAPI.Dtos
         public string Name { get; set; }
 
         [Required]
-        [Range(2, 9)]
-        public int OfficialId { get; set; }
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "OfficialId must be 9 digits")]
+        public string OfficialId { get; set; }
 
 
         [Required]
