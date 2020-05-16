@@ -12,7 +12,7 @@ namespace ICareAPI.Helpers
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var resultContext = await next();
-                var NameIdentifier = ClaimTypes.NameIdentifier;
+            var NameIdentifier = ClaimTypes.NameIdentifier;
             var userId = int.Parse(resultContext.HttpContext.User
             .FindFirst(NameIdentifier).Value);
 
