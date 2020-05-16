@@ -1,0 +1,75 @@
+import React from "react";
+import PropTypes from "prop-types";
+
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import { makeStyles } from "@material-ui/core";
+import GeneralStyles from "shared/GeneralStyles";
+
+const useStyles = makeStyles((theme) => ({
+  ...GeneralStyles(),
+}));
+
+export default function IModal({
+  onClose,
+  open,
+  modalActions,
+  modalTitle,
+  children,
+  modalRootStyle,
+  modalTitleStyle,
+  modalContentStyle,
+  modalActionsStyle,
+  modalProps,
+  disabled,
+}) {
+  let modalActionContainerStyle = { display: "none" };
+  const classes = useStyles();
+
+  if (modalActions) {
+    modalActionContainerStyle = null;
+  }
+
+  return (
+    <Dialog
+      className={disabled ? classes.disabled : null}
+      {...modalProps}
+      classes={{ ...modalRootStyle }}
+      open={open}
+      onClose={onClose}
+      aria-labelledby="form-dialog-title"
+    >
+      <DialogTitle classes={{ ...modalTitleStyle }} id="form-dialog-title">
+        {modalTitle}
+      </DialogTitle>
+      <DialogContent classes={{ ...modalContentStyle }}>
+        {children}
+      </DialogContent>
+      <DialogActions
+        style={modalActionContainerStyle}
+        classes={{ ...modalActionsStyle }}
+      >
+        {modalActions}
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+IModal.defaultProps = {
+  open: false,
+};
+
+IModal.propTypes = {
+  onClose: PropTypes.func,
+  open: PropTypes.bool,
+  modalActions: PropTypes.any,
+  modalTitle: PropTypes.any,
+  children: PropTypes.any,
+  modalRootStyle: PropTypes.object,
+  modalTitleStyle: PropTypes.object,
+  modalContentStyle: PropTypes.object,
+  modalActionsStyle: PropTypes.object,
+  modalProps: PropTypes.object,
+};
