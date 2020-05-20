@@ -12,16 +12,23 @@ namespace ICareAPI.Helpers
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var resultContext = await next();
+
             var NameIdentifier = ClaimTypes.NameIdentifier;
-            var userId = int.Parse(resultContext.HttpContext.User
-            .FindFirst(NameIdentifier).Value);
 
-            var repo = resultContext.HttpContext.RequestServices.GetService<IUserRepository>();
-            var user = await repo.GetUserById(userId);
+            var userId = resultContext.HttpContext.User
+             .FindFirst(NameIdentifier);
 
-            user.LastAcitve = DateTime.Now;
+            if (userId != null)
+            {
 
-            await repo.SaveAll();
+                var repo = resultContext.HttpContext.RequestServices.GetService<IUserRepository>();
+                var user = await repo.GetUserById(int.Parse(userId.Value));
+
+                user.LastAcitve = DateTime.Now;
+
+                await repo.SaveAll();
+            }
+
 
         }
     }
