@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ICareAPI.Dtos;
 using ICareAPI.Models;
+
 namespace ICareAPI.Helpers
 {
     public class AutoMapperProfiles : Profile
@@ -14,7 +15,8 @@ namespace ICareAPI.Helpers
             CreateMap<Patient, PatientsForListDto>()
                 .ForMember(dest => dest.LastEntry, opt => opt.MapFrom(src => src.Records.Select(r => r.TimeOfEntry).GetLatestDate().ToString()));
 
-            CreateMap<Patient, PatientForDetailsDto>().ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.ToLowerIfPossible()));
+            CreateMap<Patient, PatientForDetailsDto>()
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.ToLowerIfPossible()));
 
             CreateMap<Patient, PatientForAddEditDto>();
 
@@ -40,6 +42,11 @@ namespace ICareAPI.Helpers
 
             CreateMap<Operation<Record>, Operation<RecordForAddEditDetails>>();
             CreateMap<Operation<RecordForAddEditDetails>, Operation<Record>>();
+
+
+            CreateMap<UserForDetailsDto, User>();
+            CreateMap<User, UserForDetailsDto>();
+
         }
     }
 }

@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using ICareAPI.Models;
 using ICareAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using ICareAPI.Dtos;
 
 namespace ICareAPI.Controllers
 {
@@ -13,8 +14,10 @@ namespace ICareAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _repo;
-        public UsersController(IUserRepository repository)
+        private readonly IMapper _mapper;
+        public UsersController(IUserRepository repository, IMapper mapper)
         {
+            _mapper = mapper;
             _repo = repository;
 
         }
@@ -23,8 +26,7 @@ namespace ICareAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _repo.GetAllUsers();
-
+            var users = _mapper.Map<IList<UserForDetailsDto>>(await _repo.GetAllUsers());
             return Ok(users);
         }
     }
