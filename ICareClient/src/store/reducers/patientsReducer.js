@@ -3,31 +3,30 @@ import {
   PATIENT_GET_PATIENTS_LIST_SUCCESS,
   PATIENT_DELETE_PATIENT_SUCCESS,
   PATIENT_UPDATE_PATIENT_SUCCESS,
-  PATIENT_ADD_NEW_PATIENT_SUCCESS,
+  PATIENT_ADD_NEW_PATIENT_SUCCESS
 } from "store/actions/patients/patientsActionTypes";
 
 const initialState = {
-  patientsList: [],
+  patientsList: []
 };
 const patientsReducer = (state = initialState, { data, type, id }) => {
-  console.log("patientsReducer -> data", data);
   let updatedPatientsList = [...state.patientsList];
 
   switch (type) {
     case PATIENT_GET_PATIENTS_LIST_SUCCESS:
       return {
         ...state,
-        patientsList: data,
+        patientsList: data
       };
     case PATIENT_DELETE_PATIENT_SUCCESS:
       return {
         ...state,
-        patientsList: updatedPatientsList.filter(p => p.id !== id),
+        patientsList: updatedPatientsList.filter(p => p.id !== id)
       };
     case PATIENT_ADD_NEW_PATIENT_SUCCESS:
       return {
         ...state,
-        patientsList: updatedPatientsList.concat(data),
+        patientsList: updatedPatientsList.concat(data)
       };
     case PATIENT_UPDATE_PATIENT_SUCCESS:
       updatedPatientsList = updatedPatientsList.map(patient => {
@@ -39,11 +38,11 @@ const patientsReducer = (state = initialState, { data, type, id }) => {
       });
       return {
         ...state,
-        patientsList: updatedPatientsList,
+        patientsList: updatedPatientsList
       };
     case PURGE:
       return {
-        ...initialState,
+        ...initialState
       };
     default:
       return state;
