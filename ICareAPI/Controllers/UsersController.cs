@@ -5,6 +5,7 @@ using ICareAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using ICareAPI.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ICareAPI.Controllers
 {
