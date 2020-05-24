@@ -9,10 +9,15 @@ import {
   PATIENT_GET_PATIENT_STATISTICS
 } from "./patientsActionTypes";
 
-export const callGetPatientsList = (onStart, onSuccess, onFailure) => {
+export const callGetPatientsList = (
+  paginationQuery,
+  onStart,
+  onSuccess,
+  onFailure
+) => {
   return apiCaller({
     method: HTTP_REQUEST.GET,
-    url: APIS.patients,
+    url: APIS.patients + paginationQuery,
     actionType: PATIENT_GET_PATIENTS_LIST,
     onStart,
     onSuccess,
