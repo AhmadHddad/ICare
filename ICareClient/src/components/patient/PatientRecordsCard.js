@@ -126,7 +126,7 @@ function PatientRecordsCard({
         <ITable
           isLoading={isLoading}
           hover
-          withCollapse={true}
+          addCollapse={true}
           emptyView={<strong>No Records!</strong>}
           headers={[
             "Disease Name",

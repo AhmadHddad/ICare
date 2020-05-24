@@ -251,7 +251,7 @@ export default function PatientStatistics({
             <ITable
               isLoading={isLoading}
               hover
-              withCollapse={true}
+              addCollapse={true}
               emptyView={<strong>No Record</strong>}
               headers={["Disease Name", "Time of Entry", "Bill", "Description"]}
               rows={(renderRowsFifthRecord && renderRowsFifthRecord()) || []}
