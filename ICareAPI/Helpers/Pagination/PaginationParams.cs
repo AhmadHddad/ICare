@@ -4,7 +4,7 @@ namespace ICareAPI.Helpers.Pagination
     {
 
         private const int maxPageSize = 50;
-        private int pageSize = 10;
+        private int pageSize = 5;
 
 
         public int PageNumber { get; set; } = 1;
