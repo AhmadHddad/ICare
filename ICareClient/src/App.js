@@ -24,7 +24,7 @@ function App({ dispatch, isAuthenticated, message, history, userName }) {
   }, [dispatch, history]);
 
   useEffect(() => {
-    if (message && message.text) {
+    if (message?.text) {
       toggleSnackbar(true)();
     }
   }, [message]);
@@ -57,9 +57,9 @@ function App({ dispatch, isAuthenticated, message, history, userName }) {
           elevation={6}
           variant="filled"
           onClose={toggleSnackbar(false)}
-          severity={(message && message.type) || ""}
+          severity={message?.type || ""}
         >
-          {(message && message.text) || ""}
+          {message?.text || ""}
         </MuiAlert>
       </Snackbar>
     );
