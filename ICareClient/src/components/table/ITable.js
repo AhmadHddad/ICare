@@ -15,6 +15,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import GeneralStyles from "shared/GeneralStyles";
+import TablePagination from "@material-ui/core/TablePagination";
 
 const useStyles = makeStyles(theme => ({
   ...GeneralStyles(),
@@ -29,6 +30,10 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 0,
     paddingTop: 0,
     border: "none"
+  },
+  paper: {
+    width: "100%",
+    marginBottom: theme.spacing(2)
   }
 }));
 
@@ -43,7 +48,14 @@ export default function ITable(props) {
     paperProps,
     emptyView,
     hover,
-    withCollapse
+    addCollapse,
+    page,
+    rowsPerPage,
+    rowsPerPageOptions,
+    onChangePage,
+    onChangeRowsPerPage,
+    addPagination,
+    totalItems
   } = props;
 
   const [collapseRow, setCollapseRow] = useState(null);
@@ -61,7 +73,7 @@ export default function ITable(props) {
   };
 
   let tableRows = [];
-  if (withCollapse) {
+  if (addCollapse) {
     tableRows =
       rows &&
       rows.length &&
@@ -136,18 +148,33 @@ export default function ITable(props) {
   }
 
   return (
-    <TableContainer
-      {...tableContainerProps}
-      component={Paper}
-      className={disabled ? classes.disabled : null}
-    >
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>{tableHeaders}</TableRow>
-        </TableHead>
-        <TableBody>{tableRows}</TableBody>
-      </Table>
-    </TableContainer>
+    <div className={classes.fullWidth}>
+      <Paper {...paperProps}>
+        <TableContainer
+          {...tableContainerProps}
+          component={"div"}
+          className={disabled ? classes.disabled : null}
+        >
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>{tableHeaders}</TableRow>
+            </TableHead>
+            <TableBody>{tableRows}</TableBody>
+          </Table>
+        </TableContainer>
+        {addPagination && (
+          <TablePagination
+            component="div"
+            rowsPerPageOptions={rowsPerPageOptions}
+            count={totalItems || rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page - 1}
+            onChangePage={onChangePage}
+            onChangeRowsPerPage={onChangeRowsPerPage}
+          />
+        )}
+      </Paper>
+    </div>
   );
 }
 
@@ -159,10 +186,20 @@ ITable.propTypes = {
   hover: PropTypes.bool,
   tableContainerProps: PropTypes.object,
   paperProps: PropTypes.object,
-  emptyView: PropTypes.any
+  emptyView: PropTypes.any,
+  addPagination: PropTypes.bool,
+  rowsPerPageOptions: PropTypes.array,
+  rowsPerPage: PropTypes.number,
+  page: PropTypes.number,
+  totalItems: PropTypes.number,
+  onChangePage: PropTypes.func,
+  onChangeRowsPerPage: PropTypes.func
 };
 
 ITable.defaultProps = {
+  rowsPerPageOptions: [5, 15, 20],
+  rowsPerPage: 5,
+  page: 1,
   headers: ["Header#1", "Header#2"],
   rows: [
     {
