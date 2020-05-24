@@ -36,3 +36,9 @@ ICareAPI/obj
 ICareAPI/bin
 ICareAPI/obj/Debug/*
 ICareAPI/bin/Debug/netcoreapp2.5
+
+ICareClient/.history
+ICareClient/ICareClient.code-workspace
+ICareAPI/.vscode
+ICareAPI/.history
+ICareAPI/ICareApi.code-workspace
