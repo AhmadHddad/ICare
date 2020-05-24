@@ -1,53 +1,68 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+// Material UI
 import {
   Grid,
   Button,
   IconButton,
   withStyles,
-  Tooltip,
+  Tooltip
 } from "@material-ui/core";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import ITable from "../../../components/table/ITable";
-import { connect } from "react-redux";
-import {
-  callGetPatientsList,
-  callDeletePatient,
-} from "../../../store/actions/patients/patientsActions";
 
+// Icons
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
+// Actions
+import {
+  callGetPatientsList,
+  callDeletePatient
+} from "store/actions/patients/patientsActions";
+
+// Styles
 import PatientsListStyle from "./PatientsListStyle";
+
+// Components
 import WarningModal from "components/warningModal/WarningModal";
 import AddEditPatientModal from "components/addEditPatientModal/AddEditPatientModal";
+import ITable from "components/table/ITable";
+
+// Utils
 import { toggle } from "utils/utils";
 import ForceUnMount from "components/forceUnMount/ForceUnMount";
 
+// constants
+import { PAGINATION, DEFAULT_PAGINATION_VALUES } from "constants/constants";
+
 const toggleTypes = {
   modal: "modal",
-  loader: "loader",
+  loader: "loader"
 };
 
 const toggleNames = {
   addModal: "addModal",
   dataLoader: "dataLoader",
   warningModal: "warningModal",
-  deleteLoader: "deleteLoader",
+  deleteLoader: "deleteLoader"
 };
 
 function PatientsList({ dispatch, patientsList, classes, history }) {
   const [showModal, setModalState] = useState({
     [toggleNames.addModal]: false,
-    [toggleNames.warningModal]: false,
+    [toggleNames.warningModal]: false
   });
   const [isLoading, setIsLoading] = useState({
     [toggleNames.dataLoader]: false,
-    [toggleNames.deleteLoader]: false,
+    [toggleNames.deleteLoader]: false
   });
   const [warningMsg, setWarningMsg] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
+
+  const [pagination, setPagination] = useState(DEFAULT_PAGINATION_VALUES);
 
   useEffect(() => {
     if (!patientsList || !patientsList.length) {
@@ -55,11 +70,16 @@ function PatientsList({ dispatch, patientsList, classes, history }) {
     }
   }, []);
 
-  const getPatientsList = () => {
+  const getPatientsList = (paginationQuery = "") => {
     dispatch(
       callGetPatientsList(
+        paginationQuery,
         toggle(toggleNames.dataLoader, isLoading, setIsLoading),
-        toggle(toggleNames.dataLoader, isLoading, setIsLoading),
+        res => {
+          const resPagination = res?.headers?.pagination;
+          setPagination({ ...pagination, ...JSON.parse(resPagination) });
+          toggle(toggleNames.dataLoader, isLoading, setIsLoading)();
+        },
         toggle(toggleNames.dataLoader, isLoading, setIsLoading)
       )
     );
@@ -72,20 +92,20 @@ function PatientsList({ dispatch, patientsList, classes, history }) {
         id: li.id,
         cells: [
           {
-            component: <strong>{li.name}</strong>,
+            component: <strong>{li.name}</strong>
           },
           {
-            component: new Date(li.dateOfBirth).toLocaleDateString(),
+            component: new Date(li.dateOfBirth).toLocaleDateString()
           },
           {
             component:
               (li.lastEntry && new Date(li.lastEntry).toLocaleDateString()) ||
-              "No Records",
+              "No Records"
           },
           {
-            component: renderActionBtns(li.id, li.name),
-          },
-        ],
+            component: renderActionBtns(li.id, li.name)
+          }
+        ]
       }))) ||
     [];
 
@@ -173,6 +193,25 @@ function PatientsList({ dispatch, patientsList, classes, history }) {
     setSelectedPatient(null);
   };
 
+  const onChangePage = (e, newPage) => {
+    setPagination({ ...pagination, currentPage: newPage + 1 });
+    getPatientsList(`?${PAGINATION.pageNumber}=${newPage + 1}`);
+  };
+
+  const onChangeRowsPerPage = e => {
+    let value = e?.target?.value || 5;
+    value = Number(value);
+
+    getPatientsList(
+      `?${PAGINATION.pageNumber}=${1}&${PAGINATION.pageSize}=${value}`
+    );
+    setPagination({
+      ...pagination,
+      itemsPerPage: value,
+      currentPage: 1
+    });
+  };
+
   return (
     <React.Fragment>
       <WarningModal
@@ -205,6 +244,12 @@ function PatientsList({ dispatch, patientsList, classes, history }) {
         </Grid>
         <Grid item md={12} xs={12} className={classes.tableContainer}>
           <ITable
+            onChangePage={onChangePage}
+            onChangeRowsPerPage={onChangeRowsPerPage}
+            page={pagination.currentPage}
+            rowsPerPage={pagination.itemsPerPage}
+            totalItems={pagination.totalItems}
+            addPagination
             isLoading={isLoading && isLoading.dataLoader}
             rows={renderTableRows()}
             headers={["Patient Name", "Date Of Birth", "Last Entry", " "]}
@@ -219,11 +264,11 @@ PatientsList.propTypes = {
   dispatch: PropTypes.func,
   patientsList: PropTypes.array,
   classes: PropTypes.object,
-  history: PropTypes.object,
+  history: PropTypes.object
 };
 
 const mapStateToProps = state => ({
-  patientsList: state.patientsReducer.patientsList,
+  patientsList: state.patientsReducer.patientsList
 });
 
 export default connect(mapStateToProps)(
