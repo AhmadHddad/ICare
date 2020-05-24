@@ -22,3 +22,14 @@ export const HTTP_REQUEST = {
   PUT: "put",
   DELETE: "delete"
 };
+
+export const PAGINATION = {
+  pageNumber: "pageNumber",
+  pageSize: "pageSize"
+};
+
+export const DEFAULT_PAGINATION_VALUES = {
+  currentPage: 1,
+  itemsPerPage: 5,
+  totalItems: 5
+};
