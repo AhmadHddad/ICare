@@ -17,6 +17,31 @@ namespace ICareAPI.Repositories
 
         public DbSet<Record> Records { get; set; }
 
+        public DbSet<Doctor> Doctors { get; set; }
+
+        public DbSet<PatientDoctor> PatientDoctors { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+
+            modelBuilder.Entity<PatientDoctor>().HasKey(k => new { k.DoctorId, k.PatientId });
+            modelBuilder.Entity<PatientDoctor>()
+            .HasOne(p => p.Doctor)
+            .WithMany(pd => pd.PatientDoctors)
+            .HasForeignKey(k => k.DoctorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PatientDoctor>()
+           .HasOne(p => p.Patient)
+           .WithMany(pd => pd.PatientDoctors)
+            .HasForeignKey(k => k.PatientId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
+            base.OnModelCreating(modelBuilder);
+        }
 
     }
 }
