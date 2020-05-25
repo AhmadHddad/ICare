@@ -16,6 +16,26 @@ namespace ICareAPI.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
+            modelBuilder.Entity("ICareAPI.Models.Doctor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Department");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("OfficialId");
+
+                    b.Property<string>("Specialty");
+
+                    b.Property<string>("University");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Doctors");
+                });
+
             modelBuilder.Entity("ICareAPI.Models.Patient", b =>
                 {
                     b.Property<int>("Id")
@@ -29,11 +49,24 @@ namespace ICareAPI.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("OfficialId");
+                    b.Property<string>("OfficialId");
 
                     b.HasKey("Id");
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("ICareAPI.Models.PatientDoctor", b =>
+                {
+                    b.Property<int>("DoctorId");
+
+                    b.Property<int>("PatientId");
+
+                    b.HasKey("DoctorId", "PatientId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientDoctors");
                 });
 
             modelBuilder.Entity("ICareAPI.Models.Record", b =>
@@ -80,6 +113,19 @@ namespace ICareAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ICareAPI.Models.PatientDoctor", b =>
+                {
+                    b.HasOne("ICareAPI.Models.Doctor", "Doctor")
+                        .WithMany("PatientDoctors")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("ICareAPI.Models.Patient", "Patient")
+                        .WithMany("PatientDoctors")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("ICareAPI.Models.Record", b =>

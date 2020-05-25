@@ -8,13 +8,30 @@ namespace ICareAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Doctors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    OfficialId = table.Column<string>(nullable: true),
+                    Specialty = table.Column<string>(nullable: true),
+                    University = table.Column<string>(nullable: true),
+                    Department = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doctors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Patients",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
-                    OfficialId = table.Column<int>(nullable: false),
+                    OfficialId = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     Email = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false)
@@ -43,6 +60,30 @@ namespace ICareAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PatientDoctors",
+                columns: table => new
+                {
+                    PatientId = table.Column<int>(nullable: false),
+                    DoctorId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PatientDoctors", x => new { x.DoctorId, x.PatientId });
+                    table.ForeignKey(
+                        name: "FK_PatientDoctors_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PatientDoctors_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Records",
                 columns: table => new
                 {
@@ -67,6 +108,11 @@ namespace ICareAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_PatientDoctors_PatientId",
+                table: "PatientDoctors",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Records_PatientId",
                 table: "Records",
                 column: "PatientId");
@@ -75,10 +121,16 @@ namespace ICareAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "PatientDoctors");
+
+            migrationBuilder.DropTable(
                 name: "Records");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Doctors");
 
             migrationBuilder.DropTable(
                 name: "Patients");
