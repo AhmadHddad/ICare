@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ICareAPI.Models
 {
@@ -17,6 +18,9 @@ namespace ICareAPI.Models
 
         public DateTime Created { get; set; } = DateTime.Now;
 
-        public ICollection<Record> Records { get; set; }
+        public ICollection<Record> Records { get; set; } = new Collection<Record>();
+
+
+        public ICollection<PatientDoctor> PatientDoctors { get; set; } = new Collection<PatientDoctor>();
     }
 }
