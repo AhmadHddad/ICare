@@ -21,15 +21,18 @@ namespace ICareAPI.Controllers
     {
         private readonly IPatientRepository _repo;
         private readonly IMapper _mapper;
+        private readonly IPatientDoctorRepository _patientDoctorRepo;
+        private readonly IDoctorRepository _doctorRepo;
 
-        public PatientsController(IPatientRepository repo, IMapper mapper)
+        public PatientsController(IPatientRepository repo, IMapper mapper, IPatientDoctorRepository patientDoctor, IDoctorRepository doctorRepository)
         {
             _repo = repo;
             _mapper = mapper;
+            _patientDoctorRepo = patientDoctor;
+            _doctorRepo = doctorRepository;
         }
 
         [HttpGet]
-
         public async Task<IActionResult> Patients(bool? withRecords, [FromQuery] PaginationParams paginationParams)
         {
 
@@ -194,6 +197,70 @@ namespace ICareAPI.Controllers
             {
                 return BadRequest();
             }
+        }
+
+
+        [HttpPost("{patientId}/{doctorId}")]
+        public async Task<IActionResult> AssginDoctor(int patientId, int doctorId)
+        {
+            if (await _doctorRepo.GetDoctor(doctorId) != null)
+            {
+                return BadRequest("Doctor is not found");
+            }
+
+            else if (await _repo.GetPatient(patientId, false) != null)
+            {
+                return BadRequest("Patient is not found");
+
+            }
+
+            else if (await _patientDoctorRepo.GetPatientDoctor(doctorId, patientId, false) != null)
+            {
+                return BadRequest("This doctor is already assigned to this patient");
+            }
+
+
+            var assinge = await _patientDoctorRepo.AddPatientDoctor(doctorId, patientId);
+
+            return Ok(assinge);
+        }
+
+        [HttpGet("{patientId}/{doctorId}")]
+        public async Task<IActionResult> GetAssginedDoctor(int patientId, int doctorId, bool? withPatientRecords)
+        {
+            if (await _doctorRepo.GetDoctor(doctorId) != null)
+            {
+                return BadRequest("Doctor is not found");
+            }
+
+            else if (await _repo.GetPatient(patientId, false) != null)
+            {
+                return BadRequest("Patient is not found");
+
+            }
+
+            var assinged = await _patientDoctorRepo.GetPatientDoctor(doctorId, patientId, withPatientRecords);
+
+            return Ok(assinged);
+        }
+
+        [HttpDelete("{patientId}/{doctorId}")]
+        public async Task<IActionResult> RemovePatientDoctor(int patientId, int doctorId)
+        {
+            if (await _doctorRepo.GetDoctor(doctorId) != null)
+            {
+                return BadRequest("Doctor is not found");
+            }
+
+            else if (await _repo.GetPatient(patientId, false) != null)
+            {
+                return BadRequest("Patient is not found");
+
+            }
+
+            var removed = await _patientDoctorRepo.RemovePatientDoctor(doctorId, patientId);
+
+            return Ok(removed);
         }
 
 
