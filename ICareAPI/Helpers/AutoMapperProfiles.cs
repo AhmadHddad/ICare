@@ -47,6 +47,8 @@ namespace ICareAPI.Helpers
             CreateMap<UserForDetailsDto, User>();
             CreateMap<User, UserForDetailsDto>();
 
+            CreateMap<DoctorForAddDto, Doctor>();
+
         }
     }
 }
