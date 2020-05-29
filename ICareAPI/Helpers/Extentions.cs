@@ -36,10 +36,6 @@ namespace ICareAPI.Helpers
 
         }
 
-        public static string PrintPatata (this HttpResponse response)
-        {
-            return "patata";
-        }
 
         public static DateTime GetLatestDate(this IEnumerable<DateTime> dateTimes)
         {
