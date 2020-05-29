@@ -16,6 +16,7 @@ namespace ICareAPI.Controllers
     [Route("api/doctors")]
     [ApiController]
     [Authorize]
+    [ServiceFilter(typeof(LogUserAcitivity))]
 
     public class DoctorsController : ControllerBase
     {
