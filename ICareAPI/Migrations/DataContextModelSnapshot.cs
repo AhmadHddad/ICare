@@ -21,6 +21,8 @@ namespace ICareAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("Created");
+
                     b.Property<string>("Department");
 
                     b.Property<string>("Name");

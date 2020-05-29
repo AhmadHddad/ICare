@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ICareAPI.Migrations
 {
-    public partial class initialMigration : Migration
+    public partial class addNewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,8 @@ namespace ICareAPI.Migrations
                     OfficialId = table.Column<string>(nullable: true),
                     Specialty = table.Column<string>(nullable: true),
                     University = table.Column<string>(nullable: true),
-                    Department = table.Column<string>(nullable: true)
+                    Department = table.Column<string>(nullable: true),
+                    Created = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
