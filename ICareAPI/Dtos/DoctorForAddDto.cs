@@ -1,10 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using System;
 namespace ICareAPI.Dtos
 {
     public class DoctorForAddDto
     {
 
         [Required]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "User Name Minimum Length Is 3 And Maximum Is 20")]
+
         public string Name { get; set; }
 
         [Required]
@@ -14,13 +17,16 @@ namespace ICareAPI.Dtos
         [Required]
         public string Specialty { get; set; }
 
+        [Required]
+        public DateTime DateOfBirth { get; set; }
+
+        public string? Email { get; set; }
 
         [Required]
         public string University { get; set; }
 
         [Required]
         public string Department { get; set; }
-
 
 
     }
