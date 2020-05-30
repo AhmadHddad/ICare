@@ -99,7 +99,7 @@ namespace ICareAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPatient(PatientForAddEditDto patient)
         {
-            if (patient.Id > 1 || await _repo.PatientExistsByOfficialId(patient.OfficialId))
+            if (patient.Id > 1 || await _repo.PatientExistsByOfficialId(patient.OfficialId) || await _doctorRepo.GetDoctorByOfficialId(patient.OfficialId) != null)
             {
                 return BadRequest("User already exits");
             }
@@ -203,12 +203,12 @@ namespace ICareAPI.Controllers
         [HttpPost("{patientId}/{doctorId}")]
         public async Task<IActionResult> AssginDoctor(int patientId, int doctorId)
         {
-            if (await _doctorRepo.GetDoctor(doctorId) != null)
+            if (await _doctorRepo.GetDoctor(doctorId) == null)
             {
                 return BadRequest("Doctor is not found");
             }
 
-            else if (await _repo.GetPatient(patientId, false) != null)
+            else if (await _repo.GetPatient(patientId, false) == null)
             {
                 return BadRequest("Patient is not found");
 
