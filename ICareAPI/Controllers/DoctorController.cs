@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,15 +42,17 @@ namespace ICareAPI.Controllers
 
         // GET api/doctor
         [HttpGet]
-        public async Task<IActionResult> GetDoctors([FromQuery] PaginationParams paginationParams)
+        public async Task<IActionResult> GetDoctors([FromQuery] PaginationParams paginationParams, bool? withAssignedPatients)
         {
 
             var doctors = await _repo.GetDoctors(paginationParams);
 
+            var doctorsForReturn = _mapper.Map<IList<DoctorForListDto>>(doctors);
+
             HttpContext.Response.AddPagination(doctors.CurrnetPage, doctors.PageSize, doctors.TotalCount, doctors.TotalPages);
 
 
-            return Ok(doctors);
+            return Ok(doctorsForReturn);
         }
 
         // GET api/doctor/5
@@ -72,11 +75,17 @@ namespace ICareAPI.Controllers
 
         // POST api/doctor
         [HttpPost]
-        public async Task<IActionResult> PostDoctor(DoctorForAddDto doctor)
+        public async Task<IActionResult> AddDoctor(DoctorForAddDto doctor)
         {
 
             if (ModelState.IsValid)
             {
+
+                if (await _repo.GetDoctorByOfficialId(doctor.OfficialId) != null || await _patientRepo.PatientExistsByOfficialId(doctor.OfficialId))
+                {
+                    return BadRequest("User already exists");
+                }
+
                 var addedDoctor = await _repo.AddDoctor(_mapper.Map<Doctor>(doctor));
                 return Ok(addedDoctor);
             }
