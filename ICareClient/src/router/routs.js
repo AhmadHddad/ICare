@@ -1,6 +1,11 @@
-import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import { lazy } from "react";
 
+// Icons
+import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
+import AirlineSeatFlatIcon from "@material-ui/icons/AirlineSeatFlat";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+
+// Lazy Imports
 const lazyPatientsList = lazy(() =>
   import("containers/patients/patientsList/PatientsList")
 );
@@ -10,6 +15,9 @@ const lazyPatientDetails = lazy(() =>
 const lazyLoginAndRegister = lazy(() =>
   import("containers/login/LoginAndRegister")
 );
+const lazyDoctorsList = lazy(_ =>
+  import("containers/doctors/doctorsList/DoctorsList")
+);
 
 const routs = [
   {
@@ -17,7 +25,7 @@ const routs = [
     name: "Patients list",
     path: "/pationslist",
     component: lazyPatientsList,
-    icon: FormatListBulletedIcon,
+    icon: AirlineSeatFlatIcon,
     isMain: true
   },
   {
@@ -27,6 +35,13 @@ const routs = [
     component: lazyPatientDetails,
     icon: FormatListBulletedIcon,
     hidden: true
+  },
+  {
+    id: 3,
+    name: "Doctors list",
+    path: "/doctorslist",
+    component: lazyDoctorsList,
+    icon: AssignmentIndIcon
   }
 ];
 
