@@ -49,6 +49,12 @@ namespace ICareAPI.Helpers
 
             CreateMap<DoctorForAddDto, Doctor>();
 
+            CreateMap<Doctor, DoctorForDetailsDto>()
+            .ForMember(dest => dest.NumberOfAssignedPatients, opt => opt.MapFrom(src => src.PatientDoctors.Count));
+
+            CreateMap<Doctor, DoctorForListDto>()
+            .ForMember(dest => dest.NumberOfAssignedPatients, opt => opt.MapFrom(src => src.PatientDoctors.Count));
+
         }
     }
 }
