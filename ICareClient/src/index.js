@@ -3,26 +3,17 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import axios from "axios";
 import "./index.css";
-import { createStore, compose, applyMiddleware, combineReducers } from "redux";
+import { createStore, compose, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import thunk from "redux-thunk";
+import rootReducer from "store/reducers/reducersIndex";
 
-//reducers
-import authReducer from "./store/reducers/authReducer";
-import appReducer from "store/reducers/appReducer";
-import patientsReducer from "store/reducers/patientsReducer";
-
+///Axios Configuration
 axios.defaults.baseURL = "http://localhost:5000/api/";
 axios.defaults.headers.common = {
-  Authorization: `bearer ${localStorage.getItem("token")}`,
+  Authorization: `bearer ${localStorage.getItem("token")}`
 };
-
-const rootReducer = combineReducers({
-  authReducer: authReducer,
-  appReducer: appReducer,
-  patientsReducer: patientsReducer,
-});
 
 // MiddleWare
 const logger = store => {
