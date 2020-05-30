@@ -23,7 +23,11 @@ namespace ICareAPI.Migrations
 
                     b.Property<DateTime>("Created");
 
+                    b.Property<DateTime>("DateOfBirth");
+
                     b.Property<string>("Department");
+
+                    b.Property<string>("Email");
 
                     b.Property<string>("Name");
 

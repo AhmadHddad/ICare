@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ICareAPI.Migrations
 {
-    public partial class addNewMigration : Migration
+    public partial class AddedNewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,6 +15,8 @@ namespace ICareAPI.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     OfficialId = table.Column<string>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
                     Specialty = table.Column<string>(nullable: true),
                     University = table.Column<string>(nullable: true),
                     Department = table.Column<string>(nullable: true),

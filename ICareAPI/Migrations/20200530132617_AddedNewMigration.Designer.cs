@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ICareAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200529230507_addNewMigration")]
-    partial class addNewMigration
+    [Migration("20200530132617_AddedNewMigration")]
+    partial class AddedNewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,7 +25,11 @@ namespace ICareAPI.Migrations
 
                     b.Property<DateTime>("Created");
 
+                    b.Property<DateTime>("DateOfBirth");
+
                     b.Property<string>("Department");
+
+                    b.Property<string>("Email");
 
                     b.Property<string>("Name");
 
