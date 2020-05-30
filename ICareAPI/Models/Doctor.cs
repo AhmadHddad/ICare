@@ -12,6 +12,10 @@ namespace ICareAPI.Models
 
         public string OfficialId { get; set; }
 
+        public DateTime DateOfBirth { get; set; }
+
+        public string? Email { get; set; }
+
         public string Specialty { get; set; }
 
         public string University { get; set; }
