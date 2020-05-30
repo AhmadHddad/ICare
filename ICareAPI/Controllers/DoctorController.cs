@@ -42,7 +42,7 @@ namespace ICareAPI.Controllers
 
         // GET api/doctor
         [HttpGet]
-        public async Task<IActionResult> GetDoctors([FromQuery] PaginationParams paginationParams, bool? withAssignedPatients)
+        public async Task<IActionResult> GetDoctors([FromQuery] PaginationParams paginationParams)
         {
 
             var doctors = await _repo.GetDoctors(paginationParams);
