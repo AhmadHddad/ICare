@@ -46,6 +46,13 @@ namespace ICareAPI.Repositories
             return doctor;
         }
 
+        public async Task<Doctor> GetDoctorByOfficialId(string officialId)
+        {
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.OfficialId == officialId);
+
+            return doctor;
+        }
+
         public async Task<PagedList<Doctor>> GetDoctors(PaginationParams paginationParams)
         {
             var doctors = await PagedList<Doctor>.CreatePagedAsync(_context.Doctors.Include(d => d.PatientDoctors), paginationParams.PageNumber, paginationParams.PageSize);

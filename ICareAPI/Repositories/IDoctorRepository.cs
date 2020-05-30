@@ -10,6 +10,8 @@ namespace ICareAPI.Repositories
     {
         Task<Doctor> GetDoctor(int id);
 
+        Task<Doctor> GetDoctorByOfficialId(string officialId);
+
         Task<PagedList<Doctor>> GetDoctors(PaginationParams paginationParams);
 
         Task<Doctor> AddDoctor(Doctor doctor);
