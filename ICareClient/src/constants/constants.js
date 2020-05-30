@@ -8,7 +8,8 @@ export const APIS = {
   register: "auth/register",
   patients: "patients",
   records: "records",
-  statistics: "patients/statistics"
+  statistics: "patients/statistics",
+  doctors: "doctors"
 };
 
 export const MESSAGE_TYPES = {
