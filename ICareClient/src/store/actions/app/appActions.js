@@ -85,7 +85,9 @@ const dispatchWhenFailure = (dispatch, actionType, err, rest) => {
   const errorObj = err?.response?.data;
 
   const errMsg =
-    errorObj && Object.keys(errorObj?.errors).length
+    errorObj &&
+    typeof errorObj === "object" &&
+    Object.keys(errorObj?.errors).length
       ? Object.entries(errorObj.errors)[0][1]
       : null;
 
