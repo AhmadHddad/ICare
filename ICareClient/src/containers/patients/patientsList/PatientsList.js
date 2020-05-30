@@ -3,19 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 // Material UI
-import {
-  Grid,
-  Button,
-  IconButton,
-  withStyles,
-  Tooltip
-} from "@material-ui/core";
-
-// Icons
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import VisibilityIcon from "@material-ui/icons/Visibility";
+import { withStyles } from "@material-ui/core";
 
 // Actions
 import {
@@ -29,7 +17,6 @@ import PatientsListStyle from "./PatientsListStyle";
 // Components
 import WarningModal from "components/warningModal/WarningModal";
 import AddEditPatientModal from "components/addEditPatientModal/AddEditPatientModal";
-import ITable from "components/table/ITable";
 
 // Utils
 import { toggle } from "utils/utils";
@@ -37,6 +24,8 @@ import ForceUnMount from "components/forceUnMount/ForceUnMount";
 
 // constants
 import { PAGINATION, DEFAULT_PAGINATION_VALUES } from "constants/constants";
+import { RenderActionBtns } from "containers/listUtils/listUtils";
+import TableWithBtnLayout from "components/tableWithBtnLayout/TableWithBtnLayout";
 
 const toggleTypes = {
   modal: "modal",
@@ -50,7 +39,7 @@ const toggleNames = {
   deleteLoader: "deleteLoader"
 };
 
-function PatientsList({ dispatch, patientsList, classes, history }) {
+function PatientsList({ dispatch, patientsList, history }) {
   const [showModal, setModalState] = useState({
     [toggleNames.addModal]: false,
     [toggleNames.warningModal]: false
@@ -103,58 +92,17 @@ function PatientsList({ dispatch, patientsList, classes, history }) {
               "No Records"
           },
           {
-            component: renderActionBtns(li.id, li.name)
+            component: RenderActionBtns(
+              li.id,
+              li.name,
+              onViewDetailsClick,
+              onEditPatientClick,
+              onDeletePatientClicked
+            )
           }
         ]
       }))) ||
     [];
-
-  const renderActionBtns = (id, name) => (
-    <Grid container>
-      <Grid item>
-        <Tooltip title="Details">
-          <IconButton
-            color="primary"
-            aria-label="View"
-            edge="start"
-            size="small"
-            onClick={onViewDetailsClick(id)}
-            className={classes.margin}
-          >
-            <VisibilityIcon fontSize="inherit" />
-          </IconButton>
-        </Tooltip>
-      </Grid>
-      <Grid item>
-        <Tooltip title="Edit">
-          <IconButton
-            color="default"
-            aria-label="Edit"
-            edge="start"
-            size="small"
-            onClick={onEditPatientClick(id)}
-            className={classes.margin}
-          >
-            <EditIcon fontSize="inherit" />
-          </IconButton>
-        </Tooltip>
-      </Grid>
-      <Grid item>
-        <Tooltip title="Delete">
-          <IconButton
-            color="secondary"
-            aria-label="Delete"
-            edge="start"
-            size="small"
-            onClick={onDeletePatientClicked(id, name)}
-            className={classes.margin}
-          >
-            <DeleteIcon fontSize="inherit" />
-          </IconButton>
-        </Tooltip>
-      </Grid>
-    </Grid>
-  );
 
   const onViewDetailsClick = id => event => {
     history.push(`pationslist/${id}`, id);
@@ -229,33 +177,16 @@ function PatientsList({ dispatch, patientsList, classes, history }) {
           dispatch={dispatch}
         />
       </ForceUnMount>
-      <Grid container direction="row" justify="center" alignItems="center">
-        <Grid item container md={12} xs={12} justify="flex-end">
-          <Grid item>
-            <Button
-              onClick={toggle(toggleNames.addModal, showModal, setModalState)}
-              variant="contained"
-              color="primary"
-            >
-              <PersonAddIcon fontSize="small" className={classes.root} />
-              Add New Patient
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid item md={12} xs={12} className={classes.tableContainer}>
-          <ITable
-            onChangePage={onChangePage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-            page={pagination.currentPage}
-            rowsPerPage={pagination.itemsPerPage}
-            totalItems={pagination.totalItems}
-            addPagination
-            isLoading={isLoading && isLoading.dataLoader}
-            rows={renderTableRows()}
-            headers={["Patient Name", "Date Of Birth", "Last Entry", " "]}
-          />
-        </Grid>
-      </Grid>
+      <TableWithBtnLayout
+        AddBtnLabel="Add New Patient"
+        isLoadingData={isLoading && isLoading.dataLoader}
+        onAddBtnClick={toggle(toggleNames.addModal, showModal, setModalState)}
+        onChangePage={onChangePage}
+        onChangeRowsPerPage={onChangeRowsPerPage}
+        pagination={pagination}
+        tableHeaders={["Patient Name", "Date Of Birth", "Last Entry", " "]}
+        tableDataRows={renderTableRows()}
+      />
     </React.Fragment>
   );
 }
