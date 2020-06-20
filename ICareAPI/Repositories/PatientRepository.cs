@@ -131,7 +131,7 @@ namespace ICareAPI.Repositories
 
 
             }
-            return patientsWithSimilarDiseasesList;
+            return patientsWithSimilarDiseasesList.Distinct().ToList();
         }
 
         public async Task<int> PatchPatient(int id, JsonPatchDocument<Patient> patient)
