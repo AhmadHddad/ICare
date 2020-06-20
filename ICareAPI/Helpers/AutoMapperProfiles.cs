@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using System.Collections.Generic;
@@ -16,20 +17,18 @@ namespace ICareAPI.Helpers
                 .ForMember(dest => dest.LastEntry, opt => opt.MapFrom(src => src.Records.Select(r => r.TimeOfEntry).GetLatestDate().ToString()));
 
             CreateMap<Patient, PatientForDetailsDto>()
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.ToLowerIfPossible()));
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => String.IsNullOrEmpty(src.Email) ? "" : src.Email));
 
-            CreateMap<Patient, PatientForAddEditDto>();
+            CreateMap<Patient, PatientForAddEditDto>().ReverseMap();
 
-            CreateMap<PatientForAddEditDto, Patient>();
 
-            CreateMap<Record, RecordForAddEditDetails>();
+            CreateMap<Record, RecordForAddEditDetails>().ReverseMap();
 
-            CreateMap<RecordForAddEditDetails, Record>();
 
             CreateMap<List<Record>, List<RecordForAddEditDetails>>();
 
             CreateMap<PatientForDetailsDto, StatisticsDto>()
-                .ForMember(dest => dest.FivethRecord, opt => opt.MapFrom(src => HelpersMethods.GetFifithPatientRecord(src.Records)))
+                .ForMember(dest => dest.FivethRecord, opt => opt.MapFrom(src => src.Records == null ? new RecordForAddEditDetails { } : HelpersMethods.GetFifithPatientRecord(src.Records)))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.CacluateDateOfBirth()))
                 .ForMember(dest => dest.AvarageOfBills, opt => opt.MapFrom(src => HelpersMethods.CalcuateAvarageOfBills(src.Records, false)))
                 .ForMember(dest => dest.AverageeOfBillsWithoutOutlier, opt => opt.MapFrom(src => HelpersMethods.CalcuateAvarageOfBills(src.Records, true)))
@@ -37,20 +36,18 @@ namespace ICareAPI.Helpers
 
             CreateMap(typeof(JsonPatchDocument<>), typeof(JsonPatchDocument<>));
 
-            CreateMap<Operation<Patient>, Operation<PatientForAddEditDto>>();
-            CreateMap<Operation<PatientForAddEditDto>, Operation<Patient>>();
+            CreateMap<Operation<Patient>, Operation<PatientForAddEditDto>>().ReverseMap();
 
-            CreateMap<Operation<Record>, Operation<RecordForAddEditDetails>>();
-            CreateMap<Operation<RecordForAddEditDetails>, Operation<Record>>();
+            CreateMap<Operation<Record>, Operation<RecordForAddEditDetails>>().ReverseMap();
 
 
-            CreateMap<UserForDetailsDto, User>();
-            CreateMap<User, UserForDetailsDto>();
 
-            CreateMap<DoctorForAddDto, Doctor>();
+            CreateMap<User, UserForDetailsDto>().ReverseMap();
+
+            CreateMap<DoctorForAddDto, Doctor>().ReverseMap();
 
             CreateMap<Doctor, DoctorForDetailsDto>()
-            .ForMember(dest => dest.NumberOfAssignedPatients, opt => opt.MapFrom(src => src.PatientDoctors.Count));
+                .ForMember(dest => dest.NumberOfAssignedPatients, opt => opt.MapFrom(src => src.PatientDoctors.Count));
 
             CreateMap<Doctor, DoctorForListDto>()
             .ForMember(dest => dest.NumberOfAssignedPatients, opt => opt.MapFrom(src => src.PatientDoctors.Count));

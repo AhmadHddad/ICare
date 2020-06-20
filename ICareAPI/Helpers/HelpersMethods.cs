@@ -10,10 +10,10 @@ namespace ICareAPI.Helpers
     public class HelpersMethods
     {
 
-        public static RecordForAddEditDetails GetFifithPatientRecord(IList<RecordForAddEditDetails> records)
+        public static RecordForAddEditDetails? GetFifithPatientRecord(IList<RecordForAddEditDetails> records)
         {
 
-            if(records.Count > 5)
+            if (records?.Count > 3)
             {
                 return records[4];
             }
@@ -26,7 +26,7 @@ namespace ICareAPI.Helpers
 
         public static double CalcuateAvarageOfBills(IList<RecordForAddEditDetails> passedRecrords, bool reoveOutLier)
         {
-            var  records = passedRecrords.ToList();
+            var records = passedRecrords.ToList();
 
             if (records.Count == 0)
             {
@@ -43,11 +43,11 @@ namespace ICareAPI.Helpers
             });
 
 
-                if (reoveOutLier)
-                {
+            if (reoveOutLier)
+            {
                 billsList = billsList.SkipOutliers(k: 2, selector: result => result).ToList();
-                }
-            
+            }
+
 
             return billsList.Average();
 
@@ -55,7 +55,7 @@ namespace ICareAPI.Helpers
 
 
 
-        public static string GetMostVisitedMonth (IList<RecordForAddEditDetails> records)
+        public static string GetMostVisitedMonth(IList<RecordForAddEditDetails> records)
         {
             IDictionary<string, int> monthsDict = new Dictionary<string, int>()
                                             {
@@ -73,17 +73,18 @@ namespace ICareAPI.Helpers
                                                 {"December",0},
                                                   };
 
-            records.ToList().ForEach(delegate (RecordForAddEditDetails rec) {
+            records.ToList().ForEach(delegate (RecordForAddEditDetails rec)
+            {
                 monthsDict[rec.TimeOfEntry.ToMonthName()]++;
             });
 
-           
+
             var keyOfMaxValue = monthsDict.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
 
             return keyOfMaxValue;
         }
 
 
-        
+
     }
 }
