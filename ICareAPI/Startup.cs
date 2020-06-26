@@ -14,6 +14,7 @@ using ICareAPI.Helpers;
 using Microsoft.AspNetCore.Http;
 using AutoMapper;
 using ICareAPI.Interfaces;
+using ICareAPI.Middlewares;
 
 namespace ICareAPI
 {
@@ -38,11 +39,14 @@ namespace ICareAPI
 
             services.AddCors();
             services.AddAutoMapper(typeof(Startup));
+
+            /// Repos --- START ---
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IRecordRepository, RecordRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IPatientDoctorRepository, PatientDoctorRepository>();
+            /// Repos --- END ---
 
             // To Authenticate Token
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("AppSettings:Token").Value));
@@ -101,6 +105,10 @@ namespace ICareAPI
             app.UseAuthentication();
             //app.UseDefaultFiles();
             //app.UseStaticFiles();
+
+            // ErrorHandlingMiddleware
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+
             app.UseMvc();
         }
     }
