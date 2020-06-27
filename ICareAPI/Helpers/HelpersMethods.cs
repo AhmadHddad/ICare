@@ -86,23 +86,5 @@ namespace ICareAPI.Helpers
             return keyOfMaxValue;
         }
 
-
-        public static void ThrowErrorIfEntiryExist(Repositories.DataContext _context, int id, string? OfficialId = "0")
-        {
-
-            var patient = _context.Patients.FirstOrDefault(p => p.Id == id || p.OfficialId == OfficialId);
-
-            var doctor = _context.Doctors.FirstOrDefault(d => d.Id == id || d.OfficialId == OfficialId);
-
-
-
-            if (patient != null || doctor != null)
-            {
-                throw new BadRequestException("Entiry already exists");
-            }
-
-
-        }
-
     }
 }
