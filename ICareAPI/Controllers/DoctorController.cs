@@ -1,7 +1,4 @@
-using System.Collections.ObjectModel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ICareAPI.Dtos;
@@ -23,19 +20,16 @@ namespace ICareAPI.Controllers
     {
         private readonly IDoctorRepository _repo;
         private readonly IPatientDoctorRepository _patientDoctorRepo;
-        private readonly IPatientRepository _patientRepo;
         private readonly IMapper _mapper;
 
         public DoctorsController(
             IDoctorRepository doctorRepository,
               IMapper mapper,
-          IPatientDoctorRepository patientDoctorRepository,
-          IPatientRepository patientRepository
+          IPatientDoctorRepository patientDoctorRepository
           )
         {
             _mapper = mapper;
             _patientDoctorRepo = patientDoctorRepository;
-            _patientRepo = patientRepository;
             _repo = doctorRepository;
 
         }
@@ -57,18 +51,25 @@ namespace ICareAPI.Controllers
 
         // GET api/doctor/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDoctorById(int id)
+        public async Task<IActionResult> GetDoctorById(int id, bool withAssignedPatients, bool withRecords)
         {
             var doctor = await _repo.GetDoctor(id);
 
-            if (doctor == null)
+
+
+            if (!withAssignedPatients)
             {
-                return BadRequest("No doctor with this id");
+
+
+                return Ok(doctor);
+
             }
             else
             {
+                var patientDoctors = await _patientDoctorRepo.GetAssignedPatientsToDoctorId(id, withRecords);
 
-                return Ok(doctor);
+                return Ok(patientDoctors);
+
 
             }
         }
@@ -78,13 +79,9 @@ namespace ICareAPI.Controllers
         public async Task<IActionResult> AddDoctor(DoctorForAddDto doctor)
         {
 
+
             if (ModelState.IsValid)
             {
-
-                if (await _repo.GetDoctorByOfficialId(doctor.OfficialId) != null || await _patientRepo.PatientExistsByOfficialId(doctor.OfficialId))
-                {
-                    return BadRequest("User already exists");
-                }
 
                 var addedDoctor = await _repo.AddDoctor(_mapper.Map<Doctor>(doctor));
                 return Ok(addedDoctor);
@@ -110,38 +107,24 @@ namespace ICareAPI.Controllers
         public async Task<ActionResult> DeleteDoctor(int id)
         {
 
-            if (await _repo.GetDoctor(id) == null)
-            {
-                return BadRequest("Doctor is not found!");
-            }
-
             var deleted = await _repo.DeleteDocotr(id);
 
             return Ok(deleted);
         }
 
 
-        [HttpPost("{doctorId}/{patientId}")]
 
+
+        [HttpPost("{doctorId}/{patientId}")]
         public async Task<ActionResult> AssignPatient(int doctorId, int patientId)
         {
-            if (await _repo.GetDoctor(doctorId) == null)
-            {
-                return BadRequest("Doctor is not found!");
-
-            }
-
-            if (await _patientRepo.GetPatient(patientId, false) == null)
-            {
-                return BadRequest("Patient is not found!");
-
-            }
 
             var patientDoctor = await _patientDoctorRepo.AddPatientDoctor(doctorId, patientId);
 
             return Ok(patientDoctor);
 
         }
+
 
     }
 }
