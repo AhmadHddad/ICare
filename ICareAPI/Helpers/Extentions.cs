@@ -12,6 +12,7 @@ using ICareAPI.Models;
 
 namespace ICareAPI.Helpers
 {
+
     public static class Extentions
     {
         public static void AddApplicationError(this HttpResponse response, string message)
@@ -50,18 +51,6 @@ namespace ICareAPI.Helpers
 
             }
 
-        }
-
-        public static dynamic ToLowerIfPossible(this string str)
-        {
-            if (str != null)
-            {
-                return str.ToLower();
-            }
-            else
-            {
-                return str;
-            }
         }
 
         public static dynamic Cast(dynamic obj, Type castTo)
