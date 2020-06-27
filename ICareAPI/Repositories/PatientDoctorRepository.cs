@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ICareAPI.Helpers;
 using ICareAPI.Middlewares;
 using ICareAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using static ICareAPI.constants.Enums;
 
 namespace ICareAPI.Repositories
 {
@@ -12,13 +14,6 @@ namespace ICareAPI.Repositories
         private readonly DataContext _context;
         private readonly IPatientRepository _patientRepo;
         private readonly IDoctorRepository _doctorRepo;
-
-        private enum CheckObjType
-        {
-            both,
-            patinet,
-            doctor
-        }
 
         public PatientDoctorRepository(DataContext context,
          IPatientRepository patientRepository,
@@ -31,7 +26,10 @@ namespace ICareAPI.Repositories
         public async Task<PatientDoctor> AddPatientDoctor(int doctorId, int patientId)
         {
 
-            CheckForPatientOrDoctor(patientId, doctorId);
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(EntityType.doctor, _context, doctorId);
+
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(EntityType.patinet, _context, patientId);
+
 
             if (await GetPatientDoctor(doctorId, patientId) != null)
             {
@@ -55,7 +53,7 @@ namespace ICareAPI.Repositories
         public async Task<List<PatientDoctor>> GetAssignedDoctorsToPatientId(int patientId, bool? withPatientRecords)
         {
 
-            CheckForPatientOrDoctor(patientId, 0, CheckObjType.patinet);
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(EntityType.patinet, _context, patientId);
 
             var patientsForThisDoctor = _context.PatientDoctors.Where(d => d.PatientId == patientId)
                 .Include(d => d.Doctor)
@@ -88,8 +86,7 @@ namespace ICareAPI.Repositories
         public async Task<List<PatientDoctor>> GetAssignedPatientsToDoctorId(int doctorId, bool? withPatientRecords)
         {
 
-            CheckForPatientOrDoctor(0, doctorId, CheckObjType.doctor);
-
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(EntityType.doctor, _context, doctorId);
 
             // TODO what should be returned is a doctor with a list of assinged patients 
 
@@ -115,12 +112,16 @@ namespace ICareAPI.Repositories
         public async Task<PatientDoctor> GetPatientDoctor(int doctorId, int patientId, bool? withPatientRecords = false)
         {
 
-            CheckForPatientOrDoctor(patientId, doctorId);
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(EntityType.doctor, _context, doctorId);
+
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(EntityType.patinet, _context, patientId);
+
 
             var patientDoctor = _context.PatientDoctors
             .Where(p => p.PatientId == patientId && p.DoctorId == doctorId)
             .Include(d => d.Doctor)
             .Include(p => p.Patient);
+
 
             if (withPatientRecords == true)
             {
@@ -133,10 +134,15 @@ namespace ICareAPI.Repositories
         public async Task<PatientDoctor> RemovePatientDoctor(int doctorId, int patientId)
         {
 
-            CheckForPatientOrDoctor(patientId, doctorId);
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(EntityType.doctor, _context, doctorId);
+
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(EntityType.patinet, _context, patientId);
+
 
             var patientDoctor = await GetPatientDoctor(doctorId, patientId, false);
 
+
+            if (patientDoctor == null) throw new BadRequestException("There is no assigned relatoinship");
 
 
             _context.PatientDoctors.Remove(patientDoctor);
@@ -148,36 +154,6 @@ namespace ICareAPI.Repositories
         }
 
 
-        private async void CheckForPatientOrDoctor(int patientId, int doctorId, CheckObjType checkObj = CheckObjType.both)
-        {
-
-            Patient patient = await _patientRepo.GetPatient(patientId);
-            Doctor doctor = await _doctorRepo.GetDoctor(doctorId);
-
-            if (checkObj == CheckObjType.both)
-            {
-
-                if (doctor == null)
-                {
-                    throw new BadRequestException("No doctor with this id");
-                }
-
-                if (patient == null)
-                {
-                    throw new BadRequestException("No patient with this id");
-                }
-            }
-
-            else if (checkObj == CheckObjType.patinet && patient == null)
-            {
-                throw new BadRequestException("No patient with this id");
-            }
-            else if (checkObj == CheckObjType.doctor && doctor == null)
-            {
-                throw new BadRequestException("No doctor with this id");
-            }
-
-        }
     }
 
 

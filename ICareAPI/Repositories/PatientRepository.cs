@@ -9,31 +9,29 @@ using ICareAPI.Helpers.Pagination;
 using ICareAPI.Models;
 using System.Collections.ObjectModel;
 using ICareAPI.Middlewares;
+using static ICareAPI.constants.Enums;
 
 namespace ICareAPI.Repositories
 {
     public class PatientRepository : IPatientRepository
     {
         private readonly DataContext _context;
+        private readonly EntityType _entityTypePatient;
+
+
 
         public PatientRepository(DataContext context)
         {
             _context = context;
+
+            _entityTypePatient = EntityType.patinet;
         }
 
         public Patient AddPatient(Patient patient)
         {
 
-            try
-            {
-                int.Parse(patient.OfficialId);
-            }
-            catch
-            {
-                throw new BadRequestException("OfficialId is not a number");
-            }
 
-            HelpersMethods.ThrowErrorIfEntiryExist(_context, patient.Id, patient.OfficialId);
+            ExceptionThrowers.ThrowErrorIfEntiryExist(_entityTypePatient, _context, patient.OfficialId);
 
             patient.Created = DateTime.Now;
             // TODO Test this
@@ -50,10 +48,7 @@ namespace ICareAPI.Repositories
         public async Task<Patient> DeletePatient(Patient patient)
         {
 
-            if (await GetPatient(patient.Id) == null)
-            {
-                throw new BadRequestException("Patient not found");
-            }
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(_entityTypePatient, _context, patient.Id);
 
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
@@ -64,21 +59,12 @@ namespace ICareAPI.Repositories
         public async Task<Patient> EditPatient(Patient patient)
 
         {
-            var existingPatient = await GetPatient(patient.Id);
 
+            if (patient.OfficialId == null) throw new InternalServerException("OfficialId is null");
 
-            if (existingPatient == null)
-            {
-                throw new NotFoundException("Patient does not exit");
-            }
-            else if (existingPatient.OfficialId != patient.OfficialId)
-            {
-                throw new BadRequestException("You can't change officialId");
-            }
-
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(_entityTypePatient, _context, patient.Id);
 
             var patientToBeUpdated = await _context.Patients.FirstOrDefaultAsync(p => p.Id == patient.Id);
-
 
             _context.Entry(patientToBeUpdated).CurrentValues.SetValues(patient);
 
@@ -94,11 +80,7 @@ namespace ICareAPI.Repositories
         {
 
 
-            if (id == 0)
-            {
-                throw new BadRequestException("Must be a valid id");
-            }
-
+            ExceptionThrowers.ThrowErrorIfNotValidId(id);
 
             Patient patient;
 
@@ -153,10 +135,7 @@ namespace ICareAPI.Repositories
         public async Task<List<Patient>> PatientsWithSimilarDisease(int patientId)
         {
 
-            if (await GetPatient(patientId) == null)
-            {
-                throw new BadRequestException("Patient not found");
-            }
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(_entityTypePatient, _context, patientId);
 
             var patientRecord = _context.Records.Where(p => p.PatientId == patientId).ToList();
             var patientsWithSimilarDiseasesList = new List<Patient>() { };
@@ -186,8 +165,6 @@ namespace ICareAPI.Repositories
 
             return result;
         }
-
-
 
 
     }
