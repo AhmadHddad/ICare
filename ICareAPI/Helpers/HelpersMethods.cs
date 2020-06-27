@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ICareAPI.Dtos;
+using ICareAPI.Middlewares;
 using ICareAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ICareAPI.Helpers
 {
-    public class HelpersMethods
+    public static class HelpersMethods
     {
 
         public static RecordForAddEditDetails? GetFifithPatientRecord(IList<RecordForAddEditDetails> records)
@@ -85,6 +87,22 @@ namespace ICareAPI.Helpers
         }
 
 
+        public static void ThrowErrorIfEntiryExist(Repositories.DataContext _context, int id, string? OfficialId = "0")
+        {
+
+            var patient = _context.Patients.FirstOrDefault(p => p.Id == id || p.OfficialId == OfficialId);
+
+            var doctor = _context.Doctors.FirstOrDefault(d => d.Id == id || d.OfficialId == OfficialId);
+
+
+
+            if (patient != null || doctor != null)
+            {
+                throw new BadRequestException("Entiry already exists");
+            }
+
+
+        }
 
     }
 }
