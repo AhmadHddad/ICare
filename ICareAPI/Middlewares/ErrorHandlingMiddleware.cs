@@ -25,6 +25,16 @@ namespace ICareAPI.Middlewares
         }
     }
 
+    class InternalServerException : Exception
+    {
+        public InternalServerException(string msg)
+     : base(String.Format(msg))
+        {
+
+        }
+    }
+
+
 
 
 
@@ -56,6 +66,7 @@ namespace ICareAPI.Middlewares
 
             if (ex is NotFoundException) code = HttpStatusCode.NotFound;
             else if (ex is BadRequestException) code = HttpStatusCode.BadRequest;
+            else if (ex is InternalServerException) code = HttpStatusCode.InternalServerError;
 
             var result = JsonConvert.SerializeObject(new { error = ex.Message + "!" });
             context.Response.ContentType = "application/json";
