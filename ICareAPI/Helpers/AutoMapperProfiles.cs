@@ -19,7 +19,10 @@ namespace ICareAPI.Helpers
             CreateMap<Patient, PatientForDetailsDto>()
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => String.IsNullOrEmpty(src.Email) ? "" : src.Email));
 
-            CreateMap<Patient, PatientForAddEditDto>().ReverseMap();
+            CreateMap<Patient, PatientForEditDto>()
+            .ReverseMap().ForMember(dest => dest.OfficialId, opt => opt.UseDestinationValue());
+
+            CreateMap<Patient, PatientForAddDto>().ReverseMap();
 
 
             CreateMap<Record, RecordForAddEditDetails>().ReverseMap();
@@ -30,13 +33,13 @@ namespace ICareAPI.Helpers
             CreateMap<PatientForDetailsDto, StatisticsDto>()
                 .ForMember(dest => dest.FivethRecord, opt => opt.MapFrom(src => src.Records == null ? new RecordForAddEditDetails { } : HelpersMethods.GetFifithPatientRecord(src.Records)))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.CacluateDateOfBirth()))
-                .ForMember(dest => dest.AvarageOfBills, opt => opt.MapFrom(src => HelpersMethods.CalcuateAvarageOfBills(src.Records, false)))
-                .ForMember(dest => dest.AverageeOfBillsWithoutOutlier, opt => opt.MapFrom(src => HelpersMethods.CalcuateAvarageOfBills(src.Records, true)))
-                .ForMember(dest => dest.HighestMonth, opt => opt.MapFrom(src => HelpersMethods.GetMostVisitedMonth(src.Records)));
+                .ForMember(dest => dest.AvarageOfBills, opt => opt.MapFrom(src => HelpersMethods.CalcuateAvarageOfBills(src.Records == null ? new List<RecordForAddEditDetails>() : src.Records, false)))
+                .ForMember(dest => dest.AverageeOfBillsWithoutOutlier, opt => opt.MapFrom(src => HelpersMethods.CalcuateAvarageOfBills(src.Records == null ? new List<RecordForAddEditDetails>() : src.Records, true)))
+                .ForMember(dest => dest.HighestMonth, opt => opt.MapFrom(src => HelpersMethods.GetMostVisitedMonth(src.Records == null ? new List<RecordForAddEditDetails>() : src.Records)));
 
             CreateMap(typeof(JsonPatchDocument<>), typeof(JsonPatchDocument<>));
 
-            CreateMap<Operation<Patient>, Operation<PatientForAddEditDto>>().ReverseMap();
+            CreateMap<Operation<Patient>, Operation<PatientForEditDto>>().ReverseMap();
 
             CreateMap<Operation<Record>, Operation<RecordForAddEditDetails>>().ReverseMap();
 
