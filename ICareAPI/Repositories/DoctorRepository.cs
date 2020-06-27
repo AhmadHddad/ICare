@@ -7,6 +7,7 @@ using ICareAPI.Helpers.Pagination;
 using ICareAPI.Middlewares;
 using ICareAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using static ICareAPI.constants.Enums;
 
 namespace ICareAPI.Repositories
 {
@@ -14,25 +15,17 @@ namespace ICareAPI.Repositories
     public class DoctorRepository : IDoctorRepository
     {
         private readonly DataContext _context;
-
+        private readonly EntityType _entityTypeDoctor;
         public DoctorRepository(DataContext dataContext)
         {
             _context = dataContext;
+            _entityTypeDoctor = EntityType.doctor;
         }
 
         public async Task<Doctor> AddDoctor(Doctor doctor)
         {
 
-            try
-            {
-                int.Parse(doctor.OfficialId);
-            }
-            catch
-            {
-                throw new BadRequestException("OfficialId is not a number");
-            }
-
-            HelpersMethods.ThrowErrorIfEntiryExist(_context, doctor.Id, doctor.OfficialId);
+            ExceptionThrowers.ThrowErrorIfEntiryExist(_entityTypeDoctor, _context, doctor.OfficialId);
 
             var newDoctor = await _context.Doctors.AddAsync(doctor);
 
@@ -43,6 +36,9 @@ namespace ICareAPI.Repositories
 
         public async Task<Doctor> DeleteDocotr(int id)
         {
+
+            ExceptionThrowers.ThrowErrorIfEntiryNotExist(_entityTypeDoctor, _context, id);
+
             var doctor = await GetDoctor(id);
 
             _context.Doctors.Remove(doctor);
@@ -52,14 +48,18 @@ namespace ICareAPI.Repositories
             return doctor;
         }
 
+        public Task<Doctor> EditDoctor(Doctor doctor)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Doctor> GetDoctor(int id)
         {
-            if (id == 0)
-            {
-                throw new NotFoundException("Doctor not found");
-            }
+            ExceptionThrowers.ThrowErrorIfNotValidId(id);
 
-            var doctor = await _context.Doctors.Include(d => d.PatientDoctors).ThenInclude(d => d.Patient).FirstOrDefaultAsync(d => d.Id == id);
+            var doctor = await _context.Doctors.Include(d => d.PatientDoctors)
+            .ThenInclude(d => d.Patient)
+            .FirstOrDefaultAsync(d => d.Id == id);
 
             if (doctor == null)
             {
