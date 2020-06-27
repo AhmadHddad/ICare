@@ -82,7 +82,7 @@ namespace ICareAPI.Controllers
 
 
         [HttpPost]
-        public IActionResult AddPatient(PatientForAddEditDto patient)
+        public IActionResult AddPatient(PatientForAddDto patient)
         {
 
             var newPatientToAdd = _mapper.Map<Patient>(patient);
@@ -92,15 +92,17 @@ namespace ICareAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> EditPatient(PatientForAddEditDto patient)
+        public async Task<IActionResult> EditPatient(PatientForEditDto patient)
         {
 
             if (ModelState.IsValid)
             {
 
-                var newPation = await _repo.EditPatient(_mapper.Map<Patient>(patient));
+                var patientToEdit = await _repo.GetPatient(patient.Id);
+                var mappedPatient = _mapper.Map<PatientForEditDto, Patient>(patient, patientToEdit);
+                var newPation = await _repo.EditPatient(mappedPatient);
 
-                return Ok(newPation);
+                return Ok(patientToEdit);
             }
             else
             {
@@ -120,7 +122,7 @@ namespace ICareAPI.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchPatient(int id, JsonPatchDocument<PatientForAddEditDto> patient)
+        public async Task<IActionResult> PatchPatient(int id, JsonPatchDocument<PatientForEditDto> patient)
         {
 
             var patientToPatch = _repo.GetPatient(id, false).Result;
