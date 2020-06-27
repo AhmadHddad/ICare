@@ -19,11 +19,9 @@ namespace ICareAPI.Repositories
 
         Task<PagedList<Patient>> GetPatients(bool? withRecords, PaginationParams paginationParams);
 
-        Task<Patient> GetPatient(int id, bool? withRecords);
+        Task<Patient> GetPatient(int id, bool? withRecords = false);
 
         Task<Patient> EditPatient(Patient patient);
-
-        Task<bool> PatientExistsByOfficialId(string officialId);
 
         Task<List<Patient>> PatientsWithSimilarDisease(int patientId);
 

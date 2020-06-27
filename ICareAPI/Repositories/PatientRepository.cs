@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ICareAPI.Repositories;
 using ICareAPI.Helpers;
 using ICareAPI.Helpers.Pagination;
 using ICareAPI.Models;
 using System.Collections.ObjectModel;
+using ICareAPI.Middlewares;
 
 namespace ICareAPI.Repositories
 {
@@ -24,6 +24,17 @@ namespace ICareAPI.Repositories
         public Patient AddPatient(Patient patient)
         {
 
+            try
+            {
+                int.Parse(patient.OfficialId);
+            }
+            catch
+            {
+                throw new BadRequestException("OfficialId is not a number");
+            }
+
+            HelpersMethods.ThrowErrorIfEntiryExist(_context, patient.Id, patient.OfficialId);
+
             patient.Created = DateTime.Now;
             // TODO Test this
             patient.Records = new Collection<Record>() { };
@@ -38,6 +49,12 @@ namespace ICareAPI.Repositories
 
         public async Task<Patient> DeletePatient(Patient patient)
         {
+
+            if (await GetPatient(patient.Id) == null)
+            {
+                throw new BadRequestException("Patient not found");
+            }
+
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
 
@@ -47,6 +64,17 @@ namespace ICareAPI.Repositories
         public async Task<Patient> EditPatient(Patient patient)
 
         {
+            var existingPatient = await GetPatient(patient.Id);
+
+
+            if (existingPatient == null)
+            {
+                throw new NotFoundException("Patient does not exit");
+            }
+            else if (existingPatient.OfficialId != patient.OfficialId)
+            {
+                throw new BadRequestException("You can't change officialId");
+            }
 
 
             var patientToBeUpdated = await _context.Patients.FirstOrDefaultAsync(p => p.Id == patient.Id);
@@ -62,22 +90,44 @@ namespace ICareAPI.Repositories
         }
 
 
-        public async Task<Patient> GetPatient(int id, bool? withRecords)
+        public async Task<Patient> GetPatient(int id, bool? withRecords = false)
         {
+
+
+            if (id == 0)
+            {
+                throw new BadRequestException("Must be a valid id");
+            }
+
+
+            Patient patient;
+
             if (withRecords == true)
             {
 
-                return await _context.Patients.Include(p => p.Records).FirstOrDefaultAsync(p => p.Id == id);
+                patient = await _context.Patients.Include(p => p.Records).FirstOrDefaultAsync(p => p.Id == id);
             }
             else
             {
-                return await _context.Patients.FindAsync(id);
+                patient = await _context.Patients.FindAsync(id);
 
             }
+
+            if (patient == null)
+            {
+
+                throw new BadRequestException("Patient not found");
+            }
+
+
+            return patient;
+
         }
 
         public async Task<PagedList<Patient>> GetPatients(bool? withRecords, PaginationParams paginationParams)
         {
+
+
 
             if (withRecords == true)
             {
@@ -100,22 +150,14 @@ namespace ICareAPI.Repositories
 
 
 
-        public async Task<bool> PatientExistsByOfficialId(string officialId)
-        {
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.OfficialId == officialId);
-
-            if (patient != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public async Task<List<Patient>> PatientsWithSimilarDisease(int patientId)
         {
+
+            if (await GetPatient(patientId) == null)
+            {
+                throw new BadRequestException("Patient not found");
+            }
+
             var patientRecord = _context.Records.Where(p => p.PatientId == patientId).ToList();
             var patientsWithSimilarDiseasesList = new List<Patient>() { };
 
@@ -144,6 +186,8 @@ namespace ICareAPI.Repositories
 
             return result;
         }
+
+
 
 
     }
