@@ -53,13 +53,12 @@ namespace ICareAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDoctorById(int id, bool withAssignedPatients, bool withRecords)
         {
-            var doctor = await _repo.GetDoctor(id);
-
 
 
             if (!withAssignedPatients)
             {
 
+                var doctor = await _repo.GetDoctor(id);
 
                 return Ok(doctor);
 
