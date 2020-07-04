@@ -20,7 +20,7 @@ namespace ICareAPI.Helpers
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => String.IsNullOrEmpty(src.Email) ? "" : src.Email));
 
             CreateMap<Patient, PatientForEditDto>()
-            .ReverseMap().ForMember(dest => dest.OfficialId, opt => opt.UseDestinationValue());
+            .ReverseMap().ForMember(dest => dest.OfficialId, opt => opt.UseDestinationValue()).ReverseMap();
 
             CreateMap<Patient, PatientForAddDto>().ReverseMap();
 
@@ -54,6 +54,10 @@ namespace ICareAPI.Helpers
 
             CreateMap<Doctor, DoctorForListDto>()
             .ForMember(dest => dest.NumberOfAssignedPatients, opt => opt.MapFrom(src => src.PatientDoctors.Count));
+
+
+            CreateMap<DoctorForEditDto, Doctor>()
+            .ForMember(dest => dest.OfficialId, opt => opt.UseDestinationValue()).ReverseMap();
 
         }
     }

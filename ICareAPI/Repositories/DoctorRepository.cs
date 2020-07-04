@@ -37,7 +37,7 @@ namespace ICareAPI.Repositories
         public async Task<Doctor> DeleteDocotr(int id)
         {
 
-            ExceptionThrowers.ThrowErrorIfEntiryNotExist(_entityTypeDoctor, _context, id);
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypeDoctor, _context, id);
 
             var doctor = await GetDoctor(id);
 
@@ -48,9 +48,32 @@ namespace ICareAPI.Repositories
             return doctor;
         }
 
-        public Task<Doctor> EditDoctor(Doctor doctor)
+        public async Task<Doctor> EditDoctor(Doctor doctor)
         {
-            throw new NotImplementedException();
+
+            if (doctor.OfficialId == null) throw new InternalServerException("OfficialId is null");
+
+            var doctorToBeUpdated = await GetDoctor(doctor.Id);
+
+
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctor.Id);
+
+            _context.Entry(doctorToBeUpdated).CurrentValues.SetValues(doctor);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+
+                return doctor;
+
+            }
+            catch (System.Exception)
+            {
+
+                throw new Exception("Could not save");
+            }
+
+
         }
 
         public async Task<Doctor> GetDoctor(int id)
@@ -74,7 +97,7 @@ namespace ICareAPI.Repositories
 
         public async Task<PagedList<Doctor>> GetDoctors(PaginationParams paginationParams)
         {
-            var doctors = await PagedList<Doctor>.CreatePagedAsync(_context.Doctors.Include(d => d.PatientDoctors), paginationParams.PageNumber, paginationParams.PageSize);
+            var doctors = await PagedList<Doctor>.CreatePagedAsync(_context.Doctors.OrderByDescending(d => d.Created).Include(d => d.PatientDoctors), paginationParams.PageNumber, paginationParams.PageSize);
 
             return doctors;
 

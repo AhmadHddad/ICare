@@ -51,7 +51,7 @@ namespace ICareAPI.Controllers
 
         // GET api/doctor/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDoctorById(int id, bool withAssignedPatients, bool withRecords)
+        public async Task<IActionResult> GetDoctorById(int id, bool withAssignedPatients = false, bool withRecords = false)
         {
 
 
@@ -123,6 +123,20 @@ namespace ICareAPI.Controllers
             return Ok(patientDoctor);
 
         }
+
+
+        [HttpPut]
+        public async Task<ActionResult> EditDoctor(DoctorForEditDto doctorForEdit)
+        {
+
+            var doctor = await _repo.GetDoctor(doctorForEdit.Id);
+
+            var mappedDoctor = _mapper.Map<DoctorForEditDto, Doctor>(doctorForEdit, doctor);
+
+            return Ok(await _repo.EditDoctor(mappedDoctor));
+
+        }
+
 
 
     }
