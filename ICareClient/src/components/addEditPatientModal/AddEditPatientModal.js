@@ -6,7 +6,7 @@ import {Controller, useForm} from "react-hook-form";
 import {
     callGetPatientById,
     callAddNewPatient,
-    callUpdatePatient
+    callEditPatient
 } from "store/actions/patients/patientsActions";
 import {MuiPickersUtilsProvider, KeyboardDatePicker} from "@material-ui/pickers";
 
@@ -84,7 +84,7 @@ export default function AddEditPatientModal({
         };
         if (isEdit) {
             dispatch(
-                callUpdatePatient(
+                callEditPatient(
                     {...patient, id: patientIdToEdit || patientToEdit.id},
                     toggle(toggleObj.savingLoader, isLoading, setLoading),
                     AddSuccess,
