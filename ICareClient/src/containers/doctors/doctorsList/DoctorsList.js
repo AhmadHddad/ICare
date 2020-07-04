@@ -2,13 +2,14 @@ import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {callGetDoctors, callDeleteDoctor} from "store/actions/doctors/doctorsActions";
-import {toggle} from "utils/utils";
+import {toggle, isLength} from "utils/utils";
 
 import {RenderActionBtns} from "containers/listUtils/listUtils";
 import TableWithBtnLayout from "components/tableWithBtnLayout/TableWithBtnLayout";
-import {DEFAULT_PAGINATION_VALUES} from "constants/constants";
 import DoctorComposer from "../doctorComposer/DoctorComposer";
 import WarningModal from "components/warningModal/WarningModal";
+import ForceUnMount from "components/forceUnMount/ForceUnMount";
+import {useITablePagination} from "hooks/stateHooks";
 
 const propTypes = {};
 
@@ -16,24 +17,32 @@ const defaultProps = {};
 
 // Constants
 const toggleNames = {
-    addModal: "addModal",
+    doctorComposer: "doctorComposer",
     dataLoader: "dataLoader",
     warningModal: "warningModal",
     deleteLoader: "deleteLoader"
 };
-let selectedDoctor;
+let selectedDoctorId;
 function DoctorsList({dispatch, doctorsList}) {
     const [flags, setFlags] = useState({
         [toggleNames.dataLoader]: false,
-        [toggleNames.addModal]: false
+        [toggleNames.doctorComposer]: false
     });
+
+    const [pagination, onPageChange, onRowChange, setPagination] = useITablePagination();
 
     const [warningMsg, setWarningMsg] = useState("");
 
-    function getDoctors() {
+    function getDoctorsList(searchQuery = "") {
         dispatch(
             callGetDoctors(
+                searchQuery,
                 toggle(toggleNames.dataLoader, flags, setFlags),
+                res => {
+                    const resPagination = res?.headers?.pagination;
+                    setPagination({...pagination, ...JSON.parse(resPagination)});
+                    toggle(toggleNames.dataLoader, flags, setFlags)();
+                },
                 toggle(toggleNames.dataLoader, flags, setFlags),
                 toggle(toggleNames.dataLoader, flags, setFlags)
             )
@@ -41,14 +50,14 @@ function DoctorsList({dispatch, doctorsList}) {
     }
 
     useEffect(function () {
-        !doctorsList?.length && getDoctors();
+        !isLength(doctorsList) && getDoctorsList();
     }, []);
 
     const renderTableRows = () =>
         (doctorsList &&
             doctorsList.length &&
-            doctorsList.map((doctor) => ({
-                id: doctor.id,
+            doctorsList.map(doctor => ({
+                id: doctor?.id,
                 cells: [
                     {
                         component: <strong>{doctor.name}</strong>
@@ -69,8 +78,8 @@ function DoctorsList({dispatch, doctorsList}) {
                         component: RenderActionBtns(
                             doctor.id,
                             doctor.name,
-                            () => {},
-                            () => {},
+                            onViewDoctor,
+                            onEditDoctor,
                             onDeleteDoctor
                         )
                     }
@@ -78,9 +87,22 @@ function DoctorsList({dispatch, doctorsList}) {
             }))) ||
         [];
 
+    function onViewDoctor(id, name) {
+        return _ => {
+            alert("Not implemented yet!");
+        };
+    }
+
+    function onEditDoctor(id, name) {
+        return () => {
+            selectedDoctorId = id;
+            toggle(toggleNames.doctorComposer, flags, setFlags)();
+        };
+    }
+
     function onDeleteDoctor(id, name) {
         return () => {
-            selectedDoctor = id;
+            selectedDoctorId = id;
             toggle(toggleNames.warningModal, flags, setFlags)();
             setWarningMsg("Are sure you want to delete " + name);
         };
@@ -89,12 +111,22 @@ function DoctorsList({dispatch, doctorsList}) {
     function deleteDoctor() {
         dispatch(
             callDeleteDoctor(
-                selectedDoctor,
+                selectedDoctorId,
                 toggle(toggleNames.deleteLoader, flags, setFlags),
                 toggle(toggleNames.deleteLoader, flags, setFlags),
                 toggle(toggleNames.deleteLoader, flags, setFlags)
             )
         );
+    }
+
+    function onChangePage(e, newPage) {
+        onPageChange(newPage, getDoctorsList);
+    }
+
+    function onChangeRowsPerPage(e) {
+        const value = e?.target?.value || 5;
+
+        onRowChange(value, getDoctorsList);
     }
 
     return (
@@ -106,19 +138,22 @@ function DoctorsList({dispatch, doctorsList}) {
                 message={warningMsg}
                 open={flags[toggleNames.warningModal]}
             />
-            <DoctorComposer
-                dispatch={dispatch}
-                open={flags[toggleNames.addModal]}
-                onClose={toggle(toggleNames.addModal, flags, setFlags)}
-                onSaveSuccess={toggle(toggleNames.addModal, flags, setFlags)}
-            />
+            <ForceUnMount mount={flags[toggleNames.doctorComposer]}>
+                <DoctorComposer
+                    doctorId={selectedDoctorId}
+                    dispatch={dispatch}
+                    open
+                    onClose={toggle(toggleNames.doctorComposer, flags, setFlags)}
+                    onSaveSuccess={toggle(toggleNames.doctorComposer, flags, setFlags)}
+                />
+            </ForceUnMount>
             <TableWithBtnLayout
                 AddBtnLabel="Add New Doctor"
                 isLoadingData={flags[toggleNames.dataLoader]}
-                onAddBtnClick={toggle(toggleNames.addModal, flags, setFlags)}
-                onChangePage={() => {}}
-                onChangeRowsPerPage={() => {}}
-                pagination={DEFAULT_PAGINATION_VALUES}
+                onAddBtnClick={toggle(toggleNames.doctorComposer, flags, setFlags)}
+                onChangePage={onChangePage}
+                onChangeRowsPerPage={onChangeRowsPerPage}
+                pagination={pagination}
                 tableHeaders={[
                     "Name",
                     "Date Of Birth",
@@ -133,7 +168,7 @@ function DoctorsList({dispatch, doctorsList}) {
     );
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     doctorsList: state.doctorsReducer.doctorsList
 });
 
