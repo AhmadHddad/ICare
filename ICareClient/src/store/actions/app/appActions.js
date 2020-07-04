@@ -3,7 +3,7 @@ import {MESSAGE_TYPES} from "constants/constants";
 import axios from "axios";
 
 export function purgeApp(params) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({
             type: PURGE
         });
@@ -11,7 +11,7 @@ export function purgeApp(params) {
 }
 
 export function showMessage(message) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({
             type: SHOW_MESSAGE,
             message
@@ -20,7 +20,7 @@ export function showMessage(message) {
 }
 
 export function showErrorMessage(message) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({
             type: SHOW_MESSAGE,
             message: {
@@ -32,7 +32,7 @@ export function showErrorMessage(message) {
 }
 
 export function showSuccessMessage(message) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({
             type: SHOW_MESSAGE,
             message: {
@@ -44,7 +44,7 @@ export function showSuccessMessage(message) {
 }
 
 export function deleteMessage() {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({
             type: SHOW_MESSAGE,
             message: null
@@ -56,17 +56,17 @@ export const apiCaller = (
     {method, url, data, actionType, successMsg, onStart, onSuccess, onFailure},
     rest
 ) => {
-    return async (dispatch) => {
+    return async dispatch => {
         onStart && onStart();
 
         await axios[method](url, data)
-            .then((res) => {
+            .then(res => {
                 dispatch(dispatchWhenSuccess(actionType, res.data, {...rest}));
                 onSuccess && onSuccess(res);
 
                 !!successMsg && dispatch(showSuccessMessage(successMsg));
             })
-            .catch((err) => {
+            .catch(err => {
                 dispatch(dispatchWhenFailure(dispatch, actionType, err));
                 onFailure && onFailure(err, {...rest});
             });
@@ -85,8 +85,10 @@ const dispatchWhenFailure = (dispatch, actionType, err, rest) => {
     const errorObj = err?.response?.data;
 
     const errMsg =
-        errorObj && typeof errorObj === "object" && Object.keys(errorObj?.errors).length
-            ? Object.entries(errorObj.errors)[0][1]
+        errorObj && typeof errorObj === "object" && Object.keys(errorObj?.errors ?? errorObj).length
+            ? errorObj.title ||
+              Object.entries(errorObj)[0][1] ||
+              Object.entries(errorObj.errors)[0][1]
             : null;
 
     const message = errMsg ?? errorObj?.title ?? errorObj ?? err?.message ?? "Something went wrong";
