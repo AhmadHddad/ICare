@@ -21,6 +21,7 @@ export const APIS = {
         getDoctorById: {url: "doctors/{id}", method: HTTP_REQUEST.GET},
         deleteDoctor: {url: "doctors/{id}", method: HTTP_REQUEST.DELETE},
         addDoctor: {url: "doctors", method: HTTP_REQUEST.POST},
+        editDoctor: {url: "doctors", method: HTTP_REQUEST.PUT},
         assignPatient: {url: "doctors/{doctorId}/{patientId}", method: HTTP_REQUEST.POST}
     }
 };
