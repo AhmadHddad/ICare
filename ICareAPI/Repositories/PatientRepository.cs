@@ -48,7 +48,7 @@ namespace ICareAPI.Repositories
         public async Task<Patient> DeletePatient(Patient patient)
         {
 
-            ExceptionThrowers.ThrowErrorIfEntiryNotExist(_entityTypePatient, _context, patient.Id);
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypePatient, _context, patient.Id);
 
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
@@ -62,7 +62,7 @@ namespace ICareAPI.Repositories
 
             if (patient.OfficialId == null) throw new InternalServerException("OfficialId is null");
 
-            ExceptionThrowers.ThrowErrorIfEntiryNotExist(_entityTypePatient, _context, patient.Id);
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypePatient, _context, patient.Id);
 
             var patientToBeUpdated = await _context.Patients.FirstOrDefaultAsync(p => p.Id == patient.Id);
 
@@ -110,10 +110,9 @@ namespace ICareAPI.Repositories
         {
 
 
-
             if (withRecords == true)
             {
-                var patients = _context.Patients.Include(p => p.Records);
+                var patients = _context.Patients.OrderByDescending(p => p.Created).Include(p => p.Records);
 
                 var pagedPatients = await PagedList<Patient>.CreatePagedAsync(patients, paginationParams.PageNumber, paginationParams.PageSize);
 
@@ -135,7 +134,7 @@ namespace ICareAPI.Repositories
         public async Task<List<Patient>> PatientsWithSimilarDisease(int patientId)
         {
 
-            ExceptionThrowers.ThrowErrorIfEntiryNotExist(_entityTypePatient, _context, patientId);
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypePatient, _context, patientId);
 
             var patientRecord = _context.Records.Where(p => p.PatientId == patientId).ToList();
             var patientsWithSimilarDiseasesList = new List<Patient>() { };

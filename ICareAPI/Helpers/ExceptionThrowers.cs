@@ -32,7 +32,7 @@ namespace ICareAPI.Helpers
 
         }
 
-        public static void ThrowErrorIfEntiryNotExist(EntityType entityType,
+        public static void ThrowErrorIfEntityNotExist(EntityType entityType,
       Repositories.DataContext context,
        int id)
         {
@@ -71,7 +71,7 @@ namespace ICareAPI.Helpers
 
         }
 
-        public static void ThrowErrorIfEntiryNotExist(EntityType entityType,
+        public static void ThrowErrorIfEntityNotExist(EntityType entityType,
       Repositories.DataContext context,
        string OfficialId)
         {
