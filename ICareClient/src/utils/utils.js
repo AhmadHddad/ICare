@@ -32,3 +32,13 @@ export function isLength(objOrArr) {
         return !!Object.keys(objOrArr).length;
     }
 }
+
+export function replaceObj(arrObj = [], objToReplace = {}, key = "id") {
+    return arrObj.map(obj => {
+        if (obj[key] === objToReplace[key]) {
+            return arrObj;
+        } else {
+            return obj;
+        }
+    });
+}
