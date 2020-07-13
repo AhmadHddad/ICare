@@ -14,7 +14,7 @@ export const RenderActionBtns = (id, name, onView, onEdit, onDelete) => (
                     aria-label="View"
                     edge="start"
                     size="small"
-                    onClick={onView(id, name)}
+                    onClick={onView && onView(id, name)}
                     style={{margin: 4}}
                 >
                     <VisibilityIcon fontSize="inherit" />
@@ -28,7 +28,7 @@ export const RenderActionBtns = (id, name, onView, onEdit, onDelete) => (
                     aria-label="Edit"
                     edge="start"
                     size="small"
-                    onClick={onEdit(id, name)}
+                    onClick={onEdit && onEdit(id, name)}
                     style={{margin: 4}}
                 >
                     <EditIcon fontSize="inherit" />
@@ -42,7 +42,7 @@ export const RenderActionBtns = (id, name, onView, onEdit, onDelete) => (
                     aria-label="Delete"
                     edge="start"
                     size="small"
-                    onClick={onDelete(id, name)}
+                    onClick={onDelete && onDelete(id, name)}
                     style={{margin: 4}}
                 >
                     <DeleteIcon fontSize="inherit" />
