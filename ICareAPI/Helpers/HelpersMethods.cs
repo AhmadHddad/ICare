@@ -57,6 +57,21 @@ namespace ICareAPI.Helpers
 
 
 
+        public static string GetLastEntry(ICollection<Record> records)
+        {
+            if (records.Count != 0)
+            {
+                return records.Select(r => r.TimeOfEntry).GetLatestDate().ToString();
+
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+
+
         public static string GetMostVisitedMonth(IList<RecordForAddEditDetails> records)
         {
             IDictionary<string, int> monthsDict = new Dictionary<string, int>()
