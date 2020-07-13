@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ICareAPI.Dtos;
 using ICareAPI.Models;
+using ICareAPI.Helpers;
 
 namespace ICareAPI.Helpers
 {
@@ -14,7 +15,7 @@ namespace ICareAPI.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<Patient, PatientsForListDto>()
-                .ForMember(dest => dest.LastEntry, opt => opt.MapFrom(src => src.Records.Select(r => r.TimeOfEntry).GetLatestDate().ToString()));
+                .ForMember(dest => dest.LastEntry, opt => opt.MapFrom(src => HelpersMethods.GetLastEntry(src.Records)));
 
             CreateMap<Patient, PatientForDetailsDto>()
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => String.IsNullOrEmpty(src.Email) ? "" : src.Email));
@@ -58,6 +59,11 @@ namespace ICareAPI.Helpers
 
             CreateMap<DoctorForEditDto, Doctor>()
             .ForMember(dest => dest.OfficialId, opt => opt.UseDestinationValue()).ReverseMap();
+
+            CreateMap<Patient, PatientWithAssignedDoctorsDto>()
+            .ForMember(dest => dest.AssignedDoctorsIds, opt => opt.MapFrom(src => src.PatientDoctors.Select(p => p.DoctorId)))
+            .ForMember(dest => dest.LastEntry, opt => opt.MapFrom(src => HelpersMethods.GetLastEntry(src.Records)))
+            .ReverseMap();
 
         }
     }
