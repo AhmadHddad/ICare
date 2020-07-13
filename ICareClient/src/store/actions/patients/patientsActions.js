@@ -81,7 +81,7 @@ export const callEditPatient = (patient, onStart, onSuccess, onFailure) => {
 export const callGetPatientStatistics = (patientId, onStart, onSuccess, onFailure) => {
     return apiCaller({
         method: HTTP_REQUEST.GET,
-        url: `${APIS.statistics}?id=${patientId}`,
+        url: `${APIS.statistics}/${patientId}`,
         actionType: PATIENT_GET_PATIENT_STATISTICS,
         onStart,
         onSuccess,
