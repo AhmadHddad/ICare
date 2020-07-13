@@ -22,7 +22,7 @@ const doctorsReducer = (state = initialState, {data, type, id}) => {
             };
 
         case DOCTOR_ADD_DOCTOR_SUCCESS:
-            updatedDoctorsList.push(data);
+            updatedDoctorsList.unshift(data);
             return {
                 ...state,
                 doctorsList: updatedDoctorsList
@@ -34,7 +34,6 @@ const doctorsReducer = (state = initialState, {data, type, id}) => {
             };
         case DOCTOR_EDIT_DOCTOR_SUCCESS: {
             updatedDoctorsList = updateEntityList(updatedDoctorsList, data);
-            console.log("doctorsReducer -> updatedDoctorsList", updatedDoctorsList);
 
             return {
                 ...state,
