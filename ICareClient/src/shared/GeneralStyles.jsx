@@ -1,4 +1,4 @@
-const GeneralStyles = (theme) => ({
+const GeneralStyles = theme => ({
     disabled: {
         "pointer-events": "none",
         "-webkit-user-select": "none",
@@ -22,6 +22,10 @@ const GeneralStyles = (theme) => ({
     },
     removeMargin: {
         margin: "0 !important"
+    },
+    tablePaper: {
+        boxShadow: "none",
+        border: "1px solid whitesmoke"
     }
 });
 
