@@ -4,7 +4,8 @@ import {
     DOCTOR_ADD_DOCTOR,
     DOCTOR_DELETE_DOCTOR,
     DOCTOR_GET_DOCTOR_BY_ID,
-    DOCTOR_EDIT_DOCTOR
+    DOCTOR_EDIT_DOCTOR,
+    DOCTOR_GET_ASSIGNED_PATIENTS
 } from "./doctorsActionTypes";
 
 const {apiCaller} = require("store/actions/app/appActions");
@@ -51,6 +52,18 @@ export function callGetDoctorById(id, onStart, onSuccess, onFailure) {
         url: api.url.replace("{id}", id),
         method: api.method,
         actionType: DOCTOR_GET_DOCTOR_BY_ID,
+        onStart,
+        onSuccess,
+        onFailure
+    });
+}
+
+export function callGetAssignedPatients(id, onStart, onSuccess, onFailure) {
+    const api = APIS.doctors.getDoctorById;
+    return apiCaller({
+        url: api.url.replace("{id}", id) + "?withAssignedPatients=true",
+        method: api.method,
+        actionType: DOCTOR_GET_ASSIGNED_PATIENTS,
         onStart,
         onSuccess,
         onFailure
