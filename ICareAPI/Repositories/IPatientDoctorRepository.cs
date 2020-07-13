@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ICareAPI.Dtos;
 using ICareAPI.Models;
 
 namespace ICareAPI.Repositories
@@ -8,7 +9,7 @@ namespace ICareAPI.Repositories
     {
         Task<List<PatientDoctor>> GetAssignedDoctorsToPatientId(int patientId, bool? withPatientRecords);
 
-        Task<List<PatientDoctor>> GetAssignedPatientsToDoctorId(int dcotorId, bool? withPatientRecords);
+        Task<List<PatientWithAssignedDoctorsDto>> GetAssignedPatientsToDoctorId(int dcotorId);
 
         Task<List<PatientDoctor>> GetAssignedPatientsDoctors(bool? withPatientRecords);
 
