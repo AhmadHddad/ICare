@@ -26,9 +26,10 @@ const patientsReducer = (state = initialState, {data, type, id}) => {
                 patientsList: updatedPatientsList.filter(p => p.id !== id)
             };
         case PATIENT_ADD_NEW_PATIENT_SUCCESS:
+            updatedPatientsList.unshift(data);
             return {
                 ...state,
-                patientsList: updatedPatientsList.concat(data)
+                patientsList: updatedPatientsList
             };
         case PATIENT_EDIT_PATIENT_SUCCESS:
             updatedPatientsList = updateEntityList(updatedPatientsList, data);
