@@ -23,7 +23,9 @@ const toggleNames = {
     deleteLoader: "deleteLoader"
 };
 let selectedDoctorId;
-function DoctorsList({dispatch, doctorsList}) {
+function DoctorsList(props) {
+    const {dispatch, doctorsList, history, match} = props;
+
     const [flags, setFlags] = useState({
         [toggleNames.dataLoader]: false,
         [toggleNames.doctorComposer]: false
@@ -89,7 +91,7 @@ function DoctorsList({dispatch, doctorsList}) {
 
     function onViewDoctor(id, name) {
         return _ => {
-            alert("Not implemented yet!");
+            history.push(`${match.path}/${id}`);
         };
     }
 
