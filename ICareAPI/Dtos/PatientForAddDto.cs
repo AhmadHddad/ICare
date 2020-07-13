@@ -17,7 +17,7 @@ namespace ICareAPI.Dtos
         [Required]
         public DateTime DateOfBirth { get; set; } = DateTime.Now;
 
-        public string? Email { get; set; }
+        public string? Email { get; set; } = "";
 
     }
 }
