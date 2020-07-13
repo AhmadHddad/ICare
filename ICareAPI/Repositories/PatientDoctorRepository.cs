@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using ICareAPI.Helpers;
 using ICareAPI.Middlewares;
 using ICareAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using ICareAPI.Dtos;
 using static ICareAPI.constants.Enums;
 
 namespace ICareAPI.Repositories
@@ -14,14 +16,17 @@ namespace ICareAPI.Repositories
         private readonly DataContext _context;
         private readonly IPatientRepository _patientRepo;
         private readonly IDoctorRepository _doctorRepo;
+        private readonly IMapper _mapper;
 
         public PatientDoctorRepository(DataContext context,
          IPatientRepository patientRepository,
-          IDoctorRepository doctorRepository)
+          IDoctorRepository doctorRepository,
+          IMapper mapper)
         {
             _context = context;
             _patientRepo = patientRepository;
             _doctorRepo = doctorRepository;
+            _mapper = mapper;
         }
         public async Task<PatientDoctor> AddPatientDoctor(int doctorId, int patientId)
         {
@@ -83,29 +88,21 @@ namespace ICareAPI.Repositories
             return await patientsDoctors.ToListAsync(); ;
         }
 
-        public async Task<List<PatientDoctor>> GetAssignedPatientsToDoctorId(int doctorId, bool? withPatientRecords)
+        public async Task<List<PatientWithAssignedDoctorsDto>> GetAssignedPatientsToDoctorId(int doctorId)
         {
-
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
-
-            // TODO what should be returned is a doctor with a list of assinged patients 
 
             var patientsForThisDoctor = _context.PatientDoctors
             .Where(d => d.DoctorId == doctorId)
-            .Include(d => d.Doctor)
             .Include(p => p.Patient)
-            .ThenInclude(doc => doc.PatientDoctors);
+            .Select(d => d.Patient)
+            .Include(x => x.PatientDoctors)
+            .Include(i => i.Records);
 
 
+            var mappedPatients = _mapper.Map<List<PatientWithAssignedDoctorsDto>>(await patientsForThisDoctor.ToListAsync());
 
-            if (withPatientRecords == true)
-            {
-                patientsForThisDoctor.Include(p => p.Patient.Records);
-            }
-
-
-            return await patientsForThisDoctor.ToListAsync(); ;
-
+            return mappedPatients;
         }
 
 
@@ -119,7 +116,6 @@ namespace ICareAPI.Repositories
 
             var patientDoctor = _context.PatientDoctors
             .Where(p => p.PatientId == patientId && p.DoctorId == doctorId)
-            .Include(d => d.Doctor)
             .Include(p => p.Patient);
 
 
