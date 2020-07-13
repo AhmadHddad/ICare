@@ -1,16 +1,27 @@
-import {useState} from "react";
+import {useState, useCallback} from "react";
 import {PAGINATION, DEFAULT_PAGINATION_VALUES} from "constants/constants";
 
-export function useFlag(initialValues = Object) {
+export function useFlag(initialKeys = [], initialValue = false) {
+    const initialValues = {};
+    initialKeys.forEach(key => {
+        initialValues[key] = initialValue;
+    });
+
     const [flags, setFlags] = useState(initialValues);
 
-    function getFlagFunc(flagName = String) {
-        return flags[flagName];
-    }
+    const getFlagFunc = useCallback(
+        function (flagName = String) {
+            return flags[flagName];
+        },
+        [flags]
+    );
 
-    function setFlagFunc(flagName = String, flagValue = Boolean) {
-        setFlags({...flags, [flagName]: flagValue});
-    }
+    const setFlagFunc = useCallback(
+        function (flagName = String, flagValue = Boolean) {
+            setFlags({...flags, [flagName]: flagValue});
+        },
+        [flags]
+    );
 
     return [getFlagFunc, setFlagFunc];
 }
