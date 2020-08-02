@@ -14,16 +14,16 @@ namespace ICareAPI.Helpers
         public int TotalCount { get; set; }
 
 
-        public PagedList(List<T> items, int count, int pageNumber, int pageSize)
+        public PagedList(List<T> items, int count, int pageNumber, int pageSize, int? totalPages = null)
         {
             TotalCount = count;
             PageSize = pageSize;
             CurrnetPage = pageNumber;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            TotalPages = totalPages ?? (int)Math.Ceiling(count / (double)pageSize);
             this.AddRange(items);
         }
 
-        public static async Task<PagedList<T>> CreatePagedAsync(IQueryable<T> source, int pageNumber, int pageSize)
+        public static async Task<PagedList<T>> CreatePagedAsync(IQueryable<T> source, int pageNumber, int pageSize, int? totalPages = null)
         {
 
             var count = await source.CountAsync();
@@ -31,7 +31,7 @@ namespace ICareAPI.Helpers
             var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
 
-            return new PagedList<T>(items, count, pageNumber, pageSize);
+            return new PagedList<T>(items, count, pageNumber, pageSize, totalPages);
         }
     }
 }
