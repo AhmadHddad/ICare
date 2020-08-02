@@ -34,7 +34,7 @@ namespace ICareAPI.Helpers
 
         public static void ThrowErrorIfEntityNotExist(EntityType entityType,
       Repositories.DataContext context,
-       int id)
+       int id, bool checkArchived = false, bool archived = true)
         {
 
             ThrowErrorIfNotValidId(id);
@@ -45,7 +45,7 @@ namespace ICareAPI.Helpers
 
                 if (entityType == EntityType.patinet)
                 {
-                    using (var patient = context.Patients.FirstOrDefaultAsync(p => p.Id == id))
+                    using (var patient = context.Patients.FirstOrDefaultAsync(p => checkArchived == true ? p.Id == id && p.Archived == archived : p.Id == id))
                     {
                         if (patient.Result == null) throw new BadRequestException("Patient does not exists");
 
@@ -55,7 +55,7 @@ namespace ICareAPI.Helpers
                 if (entityType == EntityType.doctor)
                 {
 
-                    using (var doctor = context.Doctors.FirstOrDefaultAsync(d => d.Id == id))
+                    using (var doctor = context.Doctors.FirstOrDefaultAsync(d => checkArchived == true ? d.Id == id && d.Archived == archived : d.Id == id))
                     {
                         if (doctor.Result == null) throw new BadRequestException("Doctor does not exists");
                     }
@@ -73,7 +73,7 @@ namespace ICareAPI.Helpers
 
         public static void ThrowErrorIfEntityNotExist(EntityType entityType,
       Repositories.DataContext context,
-       string OfficialId)
+       string OfficialId, bool checkArchived = false, bool archived = true)
         {
 
             ThrowErrorIfNotValidId(OfficialId);
@@ -82,7 +82,7 @@ namespace ICareAPI.Helpers
             {
                 if (entityType == EntityType.patinet)
                 {
-                    using (var patient = context.Patients.FirstOrDefaultAsync(p => p.OfficialId == OfficialId))
+                    using (var patient = context.Patients.FirstOrDefaultAsync(p => checkArchived == true ? p.OfficialId == OfficialId && p.Archived == archived : p.OfficialId == OfficialId))
                     {
                         if (patient.Result == null) throw new BadRequestException("Patient does not exists");
 
@@ -92,7 +92,7 @@ namespace ICareAPI.Helpers
                 if (entityType == EntityType.doctor)
                 {
 
-                    using (var doctor = context.Doctors.FirstOrDefaultAsync(d => d.OfficialId == OfficialId))
+                    using (var doctor = context.Doctors.FirstOrDefaultAsync(d => checkArchived == true ? d.OfficialId == OfficialId && d.Archived == archived : d.OfficialId == OfficialId))
                     {
                         if (doctor.Result == null) throw new BadRequestException("Doctor does not exists");
                     }
@@ -107,7 +107,7 @@ namespace ICareAPI.Helpers
 
         public static void ThrowErrorIfEntiryExist(EntityType entityType,
          Repositories.DataContext context,
-          int id)
+          int id, bool checkArchived = false, bool archived = false)
         {
 
             ThrowErrorIfNotValidId(id);
@@ -117,7 +117,7 @@ namespace ICareAPI.Helpers
 
                 if (entityType == EntityType.patinet)
                 {
-                    using (var patient = context.Patients.FirstOrDefaultAsync(p => p.Id == id))
+                    using (var patient = context.Patients.FirstOrDefaultAsync(p => checkArchived ? p.Id == id && p.Archived == archived : p.Id == id))
                     {
                         if (patient.Result != null) throw new BadRequestException("Patient already exists");
 
@@ -127,7 +127,7 @@ namespace ICareAPI.Helpers
                 if (entityType == EntityType.doctor)
                 {
 
-                    using (var doctor = context.Doctors.FirstOrDefaultAsync(d => d.Id == id))
+                    using (var doctor = context.Doctors.FirstOrDefaultAsync(d => checkArchived ? d.Id == id && d.Archived == archived : d.Id == id))
                     {
                         if (doctor.Result != null) throw new BadRequestException("Doctor already exists");
                     }
@@ -141,7 +141,7 @@ namespace ICareAPI.Helpers
         }
 
         public static void ThrowErrorIfEntiryExist(EntityType entityType,
-         Repositories.DataContext context, string OfficialId)
+         Repositories.DataContext context, string OfficialId, bool checkArchived = false, bool archived = false)
         {
             ThrowErrorIfNotValidId(OfficialId);
 
@@ -151,7 +151,7 @@ namespace ICareAPI.Helpers
 
                 if (entityType == EntityType.patinet)
                 {
-                    using (var patient = context.Patients.FirstOrDefaultAsync(p => p.OfficialId == OfficialId))
+                    using (var patient = context.Patients.FirstOrDefaultAsync(p => checkArchived ? p.OfficialId == OfficialId && p.Archived == archived : p.OfficialId == OfficialId))
                     {
                         if (patient.Result != null) throw new BadRequestException("Patient already exists");
 
@@ -161,7 +161,7 @@ namespace ICareAPI.Helpers
                 if (entityType == EntityType.doctor)
                 {
 
-                    using (var doctor = context.Doctors.FirstOrDefaultAsync(d => d.OfficialId == OfficialId))
+                    using (var doctor = context.Doctors.FirstOrDefaultAsync(d => checkArchived ? d.OfficialId == OfficialId && d.Archived == archived : d.OfficialId == OfficialId))
                     {
                         if (doctor.Result != null) throw new BadRequestException("Doctor already exists");
                     }
