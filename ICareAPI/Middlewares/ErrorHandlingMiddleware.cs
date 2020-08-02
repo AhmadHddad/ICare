@@ -64,11 +64,13 @@ namespace ICareAPI.Middlewares
             var exMsg = ex.Message;
 
 
+
+
             if (ex is NotFoundException) code = HttpStatusCode.NotFound;
             else if (ex is BadRequestException) code = HttpStatusCode.BadRequest;
             else if (ex is InternalServerException) code = HttpStatusCode.InternalServerError;
 
-            var result = JsonConvert.SerializeObject(new { error = ex.Message + "!" });
+            var result = JsonConvert.SerializeObject(new { message = ex.Message + "!", status = (int)code });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
             return context.Response.WriteAsync(result);
