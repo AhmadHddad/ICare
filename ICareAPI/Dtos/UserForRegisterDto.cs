@@ -10,7 +10,7 @@ namespace ICareAPI.Dtos
         public string Email { get; set; }
 
         [Required]
-        [StringLength(20, MinimumLength = 3, ErrorMessage ="User Name Minimum Length Is 3 And Maximum Is 20")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "User Name Minimum Length Is 3 And Maximum Is 20")]
         public string UserName { get; set; }
 
 
