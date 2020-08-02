@@ -25,5 +25,11 @@ namespace ICareAPI.Models
         public DateTime Created { get; set; } = DateTime.Now;
 
         public ICollection<PatientDoctor> PatientDoctors { get; set; } = new Collection<PatientDoctor>();
+
+
+        public bool Archived { get; set; }
+
+        public DateTime? ArchivedDate { get; set; }
+
     }
 }

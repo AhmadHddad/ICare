@@ -15,5 +15,10 @@ namespace ICareAPI.Dtos
         public string Department { get; set; }
 
         public int NumberOfAssignedPatients { get; set; } = 0;
+
+
+        public bool Archived { get; set; }
+        public DateTime? ArchivedDate { get; set; }
+
     }
 }

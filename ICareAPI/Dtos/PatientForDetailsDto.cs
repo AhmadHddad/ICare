@@ -19,5 +19,9 @@ namespace ICareAPI.Dtos
 
 
         public IList<RecordForAddEditDetails>? Records { get; set; }
+
+        public bool Archived { get; set; }
+        public DateTime? ArchivedDate { get; set; }
+
     }
 }

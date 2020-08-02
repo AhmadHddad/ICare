@@ -23,6 +23,10 @@ namespace ICareAPI.Models
 
         public int PatientId { get; set; }
 
+        public bool Archived { get; set; }
+
+        public DateTime? ArchivedDate { get; set; }
+
 
     }
 }

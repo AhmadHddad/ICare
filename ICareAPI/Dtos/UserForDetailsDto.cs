@@ -17,6 +17,10 @@ namespace ICareAPI.Dtos
 
         public DateTime LastAcitve { get; set; }
 
+        public bool Archived { get; set; }
+
+        public DateTime? ArchivedDate { get; set; }
+
     }
 
 

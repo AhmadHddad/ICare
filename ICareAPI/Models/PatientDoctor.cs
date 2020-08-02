@@ -1,3 +1,4 @@
+using System;
 namespace ICareAPI.Models
 {
     public class PatientDoctor
@@ -9,6 +10,10 @@ namespace ICareAPI.Models
         public Doctor Doctor { get; set; }
 
         public Patient Patient { get; set; }
+
+        public bool Archived { get; set; }
+        public DateTime? ArchivedDate { get; set; }
+
 
     }
 }

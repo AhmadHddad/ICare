@@ -10,8 +10,12 @@ namespace ICareAPI.Dtos
 
 
         public DateTime DateOfBirth { get; set; }
-         
-        public string LastEntry { get; set; } 
+
+        public string LastEntry { get; set; }
+
+
+        public bool Archived { get; set; }
+        public DateTime? ArchivedDate { get; set; }
 
     }
 }

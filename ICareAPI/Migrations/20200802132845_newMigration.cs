@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ICareAPI.Migrations
 {
-    public partial class AddedNewMigration : Migration
+    public partial class newMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,7 +20,9 @@ namespace ICareAPI.Migrations
                     Specialty = table.Column<string>(nullable: true),
                     University = table.Column<string>(nullable: true),
                     Department = table.Column<string>(nullable: true),
-                    Created = table.Column<DateTime>(nullable: false)
+                    Created = table.Column<DateTime>(nullable: false),
+                    Archived = table.Column<bool>(nullable: false),
+                    ArchivedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,7 +39,9 @@ namespace ICareAPI.Migrations
                     OfficialId = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     Email = table.Column<string>(nullable: true),
-                    Created = table.Column<DateTime>(nullable: false)
+                    Created = table.Column<DateTime>(nullable: false),
+                    Archived = table.Column<bool>(nullable: false),
+                    ArchivedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -55,7 +59,9 @@ namespace ICareAPI.Migrations
                     PasswordHash = table.Column<byte[]>(nullable: true),
                     PasswordSalt = table.Column<byte[]>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
-                    LastAcitve = table.Column<DateTime>(nullable: false)
+                    LastAcitve = table.Column<DateTime>(nullable: false),
+                    Archived = table.Column<bool>(nullable: false),
+                    ArchivedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -67,7 +73,9 @@ namespace ICareAPI.Migrations
                 columns: table => new
                 {
                     PatientId = table.Column<int>(nullable: false),
-                    DoctorId = table.Column<int>(nullable: false)
+                    DoctorId = table.Column<int>(nullable: false),
+                    Archived = table.Column<bool>(nullable: false),
+                    ArchivedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,13 +85,13 @@ namespace ICareAPI.Migrations
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PatientDoctors_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,7 +105,9 @@ namespace ICareAPI.Migrations
                     Bill = table.Column<double>(nullable: false),
                     TimeOfEntry = table.Column<DateTime>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
-                    PatientId = table.Column<int>(nullable: false)
+                    PatientId = table.Column<int>(nullable: false),
+                    Archived = table.Column<bool>(nullable: false),
+                    ArchivedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

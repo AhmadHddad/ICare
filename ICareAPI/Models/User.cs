@@ -19,6 +19,10 @@ namespace ICareAPI.Models
 
         public DateTime LastAcitve { get; set; } = DateTime.Now;
 
+        public bool Archived { get; set; }
+
+        public DateTime? ArchivedDate { get; set; }
+
 
 
 

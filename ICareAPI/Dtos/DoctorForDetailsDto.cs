@@ -28,5 +28,9 @@ namespace ICareAPI.Dtos
         public ICollection<PatientDoctor> PatientDoctors { get; set; } = new Collection<PatientDoctor>();
 
         public int NumberOfAssignedPatients { get; set; } = 0;
+
+        public bool Archived { get; set; }
+        public DateTime? ArchivedDate { get; set; }
+
     }
 }

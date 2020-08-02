@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ICareAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200530132617_AddedNewMigration")]
-    partial class AddedNewMigration
+    [Migration("20200802132845_newMigration")]
+    partial class newMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,10 @@ namespace ICareAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
 
                     b.Property<DateTime>("Created");
 
@@ -49,6 +53,10 @@ namespace ICareAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
+
                     b.Property<DateTime>("Created");
 
                     b.Property<DateTime>("DateOfBirth");
@@ -70,6 +78,10 @@ namespace ICareAPI.Migrations
 
                     b.Property<int>("PatientId");
 
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
+
                     b.HasKey("DoctorId", "PatientId");
 
                     b.HasIndex("PatientId");
@@ -81,6 +93,10 @@ namespace ICareAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
 
                     b.Property<double>("Bill");
 
@@ -106,6 +122,10 @@ namespace ICareAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
+
                     b.Property<DateTime>("Created");
 
                     b.Property<string>("Email");
@@ -128,12 +148,12 @@ namespace ICareAPI.Migrations
                     b.HasOne("ICareAPI.Models.Doctor", "Doctor")
                         .WithMany("PatientDoctors")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ICareAPI.Models.Patient", "Patient")
                         .WithMany("PatientDoctors")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ICareAPI.Models.Record", b =>
