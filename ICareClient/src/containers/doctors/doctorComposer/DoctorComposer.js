@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import PropTypes from "prop-types";
-import IComposer from "components/modal/IComposer";
+import IComposer from "common/modal/IComposer";
 import {useForm} from "react-hook-form";
 import {
     callAddDoctor,

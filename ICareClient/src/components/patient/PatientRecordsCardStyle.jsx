@@ -1,6 +1,6 @@
 import GeneralStyles from "../../shared/GeneralStyles";
 const PatientRecordsCardStyle = theme => ({
-    ...GeneralStyles(),
+    ...GeneralStyles,
     root: {
         minWidth: 275
     },

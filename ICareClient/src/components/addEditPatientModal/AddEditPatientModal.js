@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import IModal from "../modal/IModal";
+import IModal from "common/modal/IModal";
 import {Grid, TextField, Button, Grow, CircularProgress, makeStyles} from "@material-ui/core";
 import {Controller, useForm} from "react-hook-form";
 import {
@@ -283,7 +283,7 @@ export default function AddEditPatientModal({
         <React.Fragment>
             <IModal
                 disabled={Object.values(isLoading).every(Boolean)}
-                modalTitle={isEdit ? "Edit Patient" : "Add Patient"}
+                title={isEdit ? "Edit Patient" : "Add Patient"}
                 open={open}
                 modalProps={{
                     fullWidth: true

@@ -12,17 +12,17 @@ import {callGetPatientsList, callDeletePatient} from "store/actions/patients/pat
 import PatientsListStyle from "./PatientsListStyle";
 
 // Components
-import WarningModal from "components/warningModal/WarningModal";
+import WarningModal from "common/warningModal/WarningModal";
 import AddEditPatientModal from "components/addEditPatientModal/AddEditPatientModal";
 
 // Utils
 import {toggle} from "utils/utils";
-import ForceUnMount from "components/forceUnMount/ForceUnMount";
+import ForceUnMount from "common/forceUnMount/ForceUnMount";
 
 // constants
 import {PAGINATION, DEFAULT_PAGINATION_VALUES} from "constants/constants";
 import {RenderActionBtns} from "containers/listUtils/listUtils";
-import TableWithBtnLayout from "components/tableWithBtnLayout/TableWithBtnLayout";
+import TableWithBtnLayout from "common/tableWithBtnLayout/TableWithBtnLayout";
 
 const toggleTypes = {
     modal: "modal",

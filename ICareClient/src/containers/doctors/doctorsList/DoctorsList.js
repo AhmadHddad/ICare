@@ -5,10 +5,10 @@ import {callGetDoctors, callDeleteDoctor} from "store/actions/doctors/doctorsAct
 import {toggle, isLength} from "utils/utils";
 
 import {RenderActionBtns} from "containers/listUtils/listUtils";
-import TableWithBtnLayout from "components/tableWithBtnLayout/TableWithBtnLayout";
+import TableWithBtnLayout from "common/tableWithBtnLayout/TableWithBtnLayout";
 import DoctorComposer from "../doctorComposer/DoctorComposer";
-import WarningModal from "components/warningModal/WarningModal";
-import ForceUnMount from "components/forceUnMount/ForceUnMount";
+import WarningModal from "common/warningModal/WarningModal";
+import ForceUnMount from "common/forceUnMount/ForceUnMount";
 import {useITablePagination} from "hooks/stateHooks";
 
 const propTypes = {};
