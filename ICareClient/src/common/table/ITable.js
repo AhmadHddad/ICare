@@ -31,10 +31,28 @@ export default function ITable(props) {
         onChangeRowsPerPage,
         addPagination,
         totalItems,
-        paperEffect
+        paperEffect,
+        select
     } = props;
 
     const [collapseRow, setCollapseRow] = useState(null);
+    const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+
+    function selectedRowClassName(index) {
+        let className = "";
+
+        if (selectedRowIndex === index) {
+            className = classes.selectedRow;
+        }
+
+        return className;
+    }
+
+    function onRowClick(index) {
+        return function () {
+            setSelectedRowIndex(index);
+        };
+    }
 
     const tableHeaders = headers.map((header, index) => (
         <TableCell key={index}>{header}</TableCell>
@@ -80,8 +98,13 @@ export default function ITable(props) {
             (rows &&
                 rows.length &&
                 rows.map((row, rowI) => (
-                    <TableRow {...row.props} hover={hover} key={row.id || rowI}>
-                        {console.log(row)}
+                    <TableRow
+                        {...row.props}
+                        hover={hover}
+                        key={row.id || rowI}
+                        onClick={select ? onRowClick(rowI) : row?.props?.onClick}
+                        className={`${row?.props?.className || ""} ${selectedRowClassName(rowI)}`}
+                    >
                         {row.cells.map((cell, index) => (
                             <TableCell key={index} {...cell.props}>
                                 {cell.component}
@@ -168,6 +191,7 @@ ITable.propTypes = {
     paperProps: PropTypes.object,
     emptyView: PropTypes.any,
     addPagination: PropTypes.bool,
+    select: PropTypes.bool,
     paperEffect: PropTypes.bool,
     rowsPerPageOptions: PropTypes.array,
     rowsPerPage: PropTypes.number,

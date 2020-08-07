@@ -17,6 +17,9 @@ const ITableStyle = theme => ({
     paper: {
         width: "100%",
         marginBottom: theme.spacing(2)
+    },
+    selectedRow: {
+        backgroundColor: "rgba(0, 0, 0, 0.04)"
     }
 });
 
