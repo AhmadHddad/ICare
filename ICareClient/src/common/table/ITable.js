@@ -48,9 +48,10 @@ export default function ITable(props) {
         return className;
     }
 
-    function onRowClick(index) {
-        return function () {
+    function onRowClick(row, index, callback) {
+        return function (event) {
             setSelectedRowIndex(index);
+            callback(event, row);
         };
     }
 
@@ -102,7 +103,11 @@ export default function ITable(props) {
                         {...row.props}
                         hover={hover}
                         key={row.id || rowI}
-                        onClick={select ? onRowClick(rowI) : row?.props?.onClick}
+                        onClick={
+                            select
+                                ? onRowClick(row, rowI, row?.props?.onClick)
+                                : row?.props?.onClick
+                        }
                         className={`${row?.props?.className || ""} ${selectedRowClassName(rowI)}`}
                     >
                         {row.cells.map((cell, index) => (
