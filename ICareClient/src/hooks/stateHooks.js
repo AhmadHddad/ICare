@@ -9,21 +9,17 @@ export function useFlag(initialKeys = [], initialValue = false) {
 
     const [flags, setFlags] = useState(initialValues);
 
-    const getFlagFunc = useCallback(
-        function (flagName = String) {
-            return flags[flagName];
-        },
-        [flags]
-    );
+    function getFlagFunc(flagName = String) {
+        return flags[flagName];
+    }
 
-    const setFlagFunc = useCallback(
-        function (flagName = String, flagValue = Boolean) {
-            setFlags({...flags, [flagName]: flagValue});
-        },
-        [flags]
-    );
+    function setFlagFunc(flagName = String, flagValue = Boolean) {
+        setFlags(prev => ({...prev, [flagName]: flagValue}));
+    }
 
-    return [getFlagFunc, setFlagFunc];
+    const setFlagConst = useCallback(setFlagFunc, []);
+
+    return [getFlagFunc, setFlagConst];
 }
 
 export function useITablePagination(defaultPagination = DEFAULT_PAGINATION_VALUES) {
