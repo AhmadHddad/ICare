@@ -5,8 +5,10 @@ import {
     DOCTOR_DELETE_DOCTOR,
     DOCTOR_GET_DOCTOR_BY_ID,
     DOCTOR_EDIT_DOCTOR,
-    DOCTOR_GET_ASSIGNED_PATIENTS
+    DOCTOR_GET_ASSIGNED_PATIENTS,
+    DOCTOR_ASSIGN_PATIENT
 } from "./doctorsActionTypes";
+import {formatParameterizedURL} from "utils/utils";
 
 const {apiCaller} = require("store/actions/app/appActions");
 
@@ -37,7 +39,7 @@ export function callAddDoctor(data, onStart, onSuccess, onFailure) {
 export function callDeleteDoctor(id, onStart, onSuccess, onFailure) {
     const api = APIS.doctors.deleteDoctor;
     return apiCaller({
-        url: api.url.replace("{id}", id),
+        url: formatParameterizedURL(api.url, {id}),
         method: api.method,
         actionType: DOCTOR_DELETE_DOCTOR,
         onStart,
@@ -49,7 +51,7 @@ export function callDeleteDoctor(id, onStart, onSuccess, onFailure) {
 export function callGetDoctorById(id, onStart, onSuccess, onFailure) {
     const api = APIS.doctors.getDoctorById;
     return apiCaller({
-        url: api.url.replace("{id}", id),
+        url: formatParameterizedURL(api.url, {id}),
         method: api.method,
         actionType: DOCTOR_GET_DOCTOR_BY_ID,
         onStart,
@@ -58,10 +60,13 @@ export function callGetDoctorById(id, onStart, onSuccess, onFailure) {
     });
 }
 
-export function callGetAssignedPatients(id, onStart, onSuccess, onFailure) {
-    const api = APIS.doctors.getDoctorById;
+export function callGetAssignedPatients(id, query, onStart, onSuccess, onFailure) {
+    const api = APIS.doctors.getAssignedPatients;
+
+    query = query || "";
+
     return apiCaller({
-        url: api.url.replace("{id}", id) + "?withAssignedPatients=true",
+        url: formatParameterizedURL(api.url, {id}) + `${query}`,
         method: api.method,
         actionType: DOCTOR_GET_ASSIGNED_PATIENTS,
         onStart,
@@ -81,5 +86,17 @@ export function callEditDoctor(data, onStart, onSuccess, onFailure) {
         onSuccess,
         onFailure,
         successMsg: "Doctor Updated Successfully"
+    });
+}
+
+export function callAssignPatient(doctorId, patientId, onStart, onSuccess, onFailure) {
+    const api = APIS.doctors.assignPatient;
+    return apiCaller({
+        url: formatParameterizedURL(api.url, {doctorId, patientId}),
+        method: api.method,
+        actionType: DOCTOR_ASSIGN_PATIENT,
+        onStart,
+        onSuccess,
+        onFailure
     });
 }
