@@ -33,5 +33,16 @@ namespace ICareAPI.Helpers
 
             return new PagedList<T>(items, count, pageNumber, pageSize, totalPages);
         }
+
+        public static PagedList<T> CreatePagedAsync(IList<T> source, int pageNumber, int pageSize, int? totalPages = null)
+        {
+
+            var count = source.Count;
+
+            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+
+            return new PagedList<T>(items, count, pageNumber, pageSize, totalPages);
+        }
     }
 }
