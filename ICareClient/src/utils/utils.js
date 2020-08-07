@@ -133,3 +133,9 @@ export function getCircularReplacer() {
         return value;
     };
 }
+
+export function toggleFlag(flagName = String, value = Boolean, callback = Function) {
+    return function () {
+        callback(flagName, value);
+    };
+}
