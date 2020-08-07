@@ -13,16 +13,23 @@ export const HTTP_REQUEST = {
 export const APIS = {
     login: "auth/login",
     register: "auth/register",
-    patients: "patients",
     records: "records",
-    statistics: "patients/statistics",
     doctors: {
         getDoctors: {url: "doctors", method: HTTP_REQUEST.GET},
         getDoctorById: {url: "doctors/{id}", method: HTTP_REQUEST.GET},
+        getAssignedPatients: {url: "doctors/{id}/assigned", method: HTTP_REQUEST.GET},
         deleteDoctor: {url: "doctors/{id}", method: HTTP_REQUEST.DELETE},
         addDoctor: {url: "doctors", method: HTTP_REQUEST.POST},
         editDoctor: {url: "doctors", method: HTTP_REQUEST.PUT},
         assignPatient: {url: "doctors/{doctorId}/{patientId}", method: HTTP_REQUEST.POST}
+    },
+    patients: {
+        getPatients: {url: "patients", method: HTTP_REQUEST.GET},
+        editPatients: {url: "patients", method: HTTP_REQUEST.PUT},
+        addPatients: {url: "patients", method: HTTP_REQUEST.POST},
+        getPatientById: {url: "patients/{id}", method: HTTP_REQUEST.GET},
+        deletePatient: {url: "patients/{id}", method: HTTP_REQUEST.DELETE},
+        getPatientStatistics: {url: "patients/statistics/{id}", method: HTTP_REQUEST.GET}
     }
 };
 
