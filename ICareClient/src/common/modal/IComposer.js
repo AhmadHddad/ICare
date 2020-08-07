@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import IModal from "../modal/IModal";
+import IModal from "./IModal";
 import {Grid, Button, Grow, CircularProgress, makeStyles} from "@material-ui/core";
 
 import GeneralStyles from "../../shared/GeneralStyles";
 
 const useStyles = makeStyles({
-    ...GeneralStyles()
+    ...GeneralStyles
 });
 
 export default function IComposer({
@@ -65,7 +65,7 @@ export default function IComposer({
         <React.Fragment>
             <IModal
                 disabled={disabled || isLoading}
-                modalTitle={title}
+                title={title}
                 open={open}
                 modalProps={{
                     fullWidth: true

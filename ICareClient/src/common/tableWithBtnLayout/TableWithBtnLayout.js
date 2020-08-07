@@ -9,16 +9,10 @@ import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
 // Styles
 import GeneralStyles from "shared/GeneralStyles";
-import ITable from "components/table/ITable";
+import ITable from "common/table/ITable";
 
 const useStyles = makeStyles(theme => ({
-    ...GeneralStyles(),
-    root: {
-        marginRight: theme.spacing(1),
-        verticalAlign: "middle",
-        width: 16,
-        height: 16
-    },
+    ...GeneralStyles,
     tableContainer: {
         marginTop: 20
     }
@@ -42,7 +36,9 @@ export default function TableWithBtnLayout({
             <Grid item container md={12} xs={12} justify="flex-end">
                 <Grid item>
                     <Button onClick={onAddBtnClick} variant="contained" color="primary">
-                        {addIcon || <PersonAddIcon fontSize="small" className={classes.root} />}
+                        {addIcon || (
+                            <PersonAddIcon fontSize="small" className={classes.buttonIconStyle} />
+                        )}
                         {AddBtnLabel}
                     </Button>
                 </Grid>

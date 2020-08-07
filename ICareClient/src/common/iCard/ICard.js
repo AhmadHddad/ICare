@@ -31,8 +31,9 @@ const defaultProps = {
     alignItems: "stretch"
 };
 
-export default function ICard({title, children, footer, icon: Icon, justify, alignItems, header}) {
-    const classes = useStyles();
+export default function ICard(props) {
+    const {title, children, footer, icon: Icon, justify, alignItems, header} = props;
+    const classes = useStyles(props);
 
     return (
         <Card className={classes.root}>

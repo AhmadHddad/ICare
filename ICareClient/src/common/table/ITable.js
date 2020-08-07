@@ -9,31 +9,11 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import GeneralStyles from "shared/GeneralStyles";
 import TablePagination from "@material-ui/core/TablePagination";
-
-const useStyles = makeStyles(theme => ({
-    ...GeneralStyles(),
-    table: {
-        minWidth: 650
-    },
-    loader: {
-        minHeight: 150,
-        width: "100%"
-    },
-    collapseTableCell: {
-        paddingBottom: 0,
-        paddingTop: 0,
-        border: "none"
-    },
-    paper: {
-        width: "100%",
-        marginBottom: theme.spacing(2)
-    }
-}));
+import ITableStyle from "./ITableStyle";
 
 export default function ITable(props) {
-    const classes = useStyles();
+    const classes = makeStyles(ITableStyle)(props);
     const {
         headers,
         rows,
@@ -101,8 +81,9 @@ export default function ITable(props) {
                 rows.length &&
                 rows.map((row, rowI) => (
                     <TableRow {...row.props} hover={hover} key={row.id || rowI}>
+                        {console.log(row)}
                         {row.cells.map((cell, index) => (
-                            <TableCell key={Math.random()} {...cell.props}>
+                            <TableCell key={index} {...cell.props}>
                                 {cell.component}
                             </TableCell>
                         ))}
@@ -113,7 +94,12 @@ export default function ITable(props) {
 
     if (isLoading || (tableRows && !tableRows.length) || !tableRows) {
         return (
-            <Paper className={classes.loader} {...paperProps}>
+            <Paper
+                className={`${(!paperEffect && classes.removePaperEffect) || ""} ${
+                    paperProps?.className || ""
+                } ${classes.loader}`}
+                {...paperProps}
+            >
                 <Grid
                     container
                     direction="row"
@@ -137,12 +123,17 @@ export default function ITable(props) {
     }
 
     const classNames = `${disabled ? classes.disabled : ""} ${
-        (!paperEffect && classes.tablePaper) || ""
+        (!paperEffect && classes.removePaperEffect) || ""
     }`;
 
     return (
         <div className={classes.fullWidth}>
-            <Paper className={(!paperEffect && classes.tablePaper) || ""} {...paperProps}>
+            <Paper
+                className={`${(!paperEffect && classes.removePaperEffect) || ""} ${
+                    paperProps?.className || ""
+                }`}
+                {...paperProps}
+            >
                 <TableContainer {...tableContainerProps} component={"div"} className={classNames}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
