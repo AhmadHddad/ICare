@@ -43,5 +43,8 @@ export function useITablePagination(defaultPagination = DEFAULT_PAGINATION_VALUE
         });
     }
 
-    return [pagination, onChangePage, onChangeRowsPerPage, setPagination];
+    const onChangePageCallback = useCallback(onChangePage, []);
+    const onChangeRowsPerPageCallback = useCallback(onChangeRowsPerPage, []);
+
+    return [pagination, onChangePageCallback, onChangeRowsPerPageCallback, setPagination];
 }
