@@ -181,7 +181,7 @@ namespace ICareAPI.Repositories
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
 
             var unAssingedPatients = _context.Patients
-            .Select(p => p.PatientDoctors.Count == 0 ? p : p.PatientDoctors.FirstOrDefault(p => p.DoctorId == doctorId) == null ? p : null)
+            .Select(p => p.PatientDoctors.Count == 0 ? p : p.PatientDoctors.FirstOrDefault(p => p.DoctorId == doctorId && p.Archived == false) == null ? p : null)
             .Where(p => p != null);
 
             var pagedList = await PagedList<Patient?>.CreatePagedAsync(unAssingedPatients, paginationParams.PageNumber, paginationParams.PageSize);
