@@ -8,6 +8,7 @@ using ICareAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using ICareAPI.Dtos;
 using static ICareAPI.constants.Enums;
+using ICareAPI.Helpers.Pagination;
 
 namespace ICareAPI.Repositories
 {
@@ -88,21 +89,25 @@ namespace ICareAPI.Repositories
             return await patientsDoctors.ToListAsync(); ;
         }
 
-        public async Task<List<PatientWithAssignedDoctorsDto>> GetAssignedPatientsToDoctorId(int doctorId)
+        public async Task<PagedList<PatientWithAssignedDoctorsDto>> GetAssignedPatientsToDoctorId(int doctorId, PaginationParams paginationParams)
         {
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
 
             var patientsForThisDoctor = _context.PatientDoctors
-            .Where(d => d.DoctorId == doctorId)
+            .Where(d => d.DoctorId == doctorId && d.Archived == false)
             .Include(p => p.Patient)
             .Select(d => d.Patient)
             .Include(x => x.PatientDoctors)
             .Include(i => i.Records);
 
 
-            var mappedPatients = _mapper.Map<List<PatientWithAssignedDoctorsDto>>(await patientsForThisDoctor.ToListAsync());
+            var pagedList = await PagedList<Patient>.CreatePagedAsync(patientsForThisDoctor, paginationParams.PageNumber, paginationParams.PageSize);
 
-            return mappedPatients;
+            var pagedPatientsList = PagedListConverter<Patient, PatientWithAssignedDoctorsDto>
+            .Convert(pagedList, in _mapper);
+
+
+            return pagedPatientsList;
         }
 
 
@@ -138,10 +143,12 @@ namespace ICareAPI.Repositories
             var patientDoctor = await GetPatientDoctor(doctorId, patientId, false);
 
 
-            if (patientDoctor == null) throw new BadRequestException("There is no assigned relatoinship");
+            if (patientDoctor == null || patientDoctor.Archived == true) throw new BadRequestException("There is no assigned relatoinship");
 
 
-            _context.PatientDoctors.Remove(patientDoctor);
+
+            patientDoctor.Archived = true;
+
 
             await _context.SaveChangesAsync();
 
@@ -151,8 +158,5 @@ namespace ICareAPI.Repositories
 
 
     }
-
-
-
 
 }

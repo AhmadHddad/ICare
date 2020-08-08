@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ICareAPI.Dtos;
+using ICareAPI.Helpers;
 using ICareAPI.Models;
 
 namespace ICareAPI.Repositories
@@ -9,7 +10,7 @@ namespace ICareAPI.Repositories
     {
         Task<List<PatientDoctor>> GetAssignedDoctorsToPatientId(int patientId, bool? withPatientRecords);
 
-        Task<List<PatientWithAssignedDoctorsDto>> GetAssignedPatientsToDoctorId(int dcotorId);
+        Task<PagedList<PatientWithAssignedDoctorsDto>> GetAssignedPatientsToDoctorId(int dcotorId, Helpers.Pagination.PaginationParams pagenationParams);
 
         Task<List<PatientDoctor>> GetAssignedPatientsDoctors(bool? withPatientRecords);
 
