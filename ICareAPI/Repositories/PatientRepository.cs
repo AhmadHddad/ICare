@@ -10,18 +10,24 @@ using ICareAPI.Models;
 using System.Collections.ObjectModel;
 using ICareAPI.Middlewares;
 using static ICareAPI.constants.Enums;
+using ICareAPI.Dtos;
+using AutoMapper;
 
 namespace ICareAPI.Repositories
 {
     public class PatientRepository : IPatientRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
         private readonly EntityType _entityTypePatient;
 
 
 
-        public PatientRepository(DataContext context)
+        public PatientRepository(
+            DataContext context,
+            IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
 
             _entityTypePatient = EntityType.patinet;
@@ -50,7 +56,10 @@ namespace ICareAPI.Repositories
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypePatient, _context, patient.Id);
 
-            _context.Patients.Remove(patient);
+
+            patient.Archived = true;
+            patient.ArchivedDate = DateTime.Now;
+
             await _context.SaveChangesAsync();
 
             return patient;
@@ -66,7 +75,7 @@ namespace ICareAPI.Repositories
 
             var patientToBeUpdated = await _context.Patients.FirstOrDefaultAsync(p => p.Id == patient.Id);
 
-            _context.Entry(patientToBeUpdated).CurrentValues.SetValues(patient);
+            _context.Attach(patientToBeUpdated).CurrentValues.SetValues(patient);
 
 
             await _context.SaveChangesAsync();
@@ -165,6 +174,23 @@ namespace ICareAPI.Repositories
             return result;
         }
 
+        public async Task<PagedList<PatientsForListDto>> GetUnAssignedPatientsToDoctor(int doctorId, PaginationParams paginationParams)
 
+        {
+
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
+
+            var unAssingedPatients = _context.Patients
+            .Select(p => p.PatientDoctors.Count == 0 ? p : p.PatientDoctors.FirstOrDefault(p => p.DoctorId == doctorId) == null ? p : null)
+            .Where(p => p != null);
+
+            var pagedList = await PagedList<Patient?>.CreatePagedAsync(unAssingedPatients, paginationParams.PageNumber, paginationParams.PageSize);
+
+            var pagedPatientsList = PagedListConverter<Patient?, PatientsForListDto>.Convert(pagedList, in _mapper);
+
+
+            return pagedPatientsList;
+
+        }
     }
 }

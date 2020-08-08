@@ -28,6 +28,10 @@ namespace ICareAPI.Repositories
         Task<int> PatchPatient(int id, JsonPatchDocument<Patient> patient);
 
 
+        Task<PagedList<PatientsForListDto>> GetUnAssignedPatientsToDoctor(int doctorId, PaginationParams paginationParams);
+
+
+
 
     }
 }
