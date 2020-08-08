@@ -41,7 +41,9 @@ namespace ICareAPI.Repositories
 
             var doctor = await GetDoctor(id);
 
-            _context.Doctors.Remove(doctor);
+            doctor.Archived = true;
+            doctor.ArchivedDate = DateTime.Now;
+
 
             await _context.SaveChangesAsync();
 
