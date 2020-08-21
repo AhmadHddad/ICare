@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ICareAPI.Migrations
 {
-    public partial class newMigration : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -72,6 +72,8 @@ namespace ICareAPI.Migrations
                 name: "PatientDoctors",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     PatientId = table.Column<int>(nullable: false),
                     DoctorId = table.Column<int>(nullable: false),
                     Archived = table.Column<bool>(nullable: false),
@@ -79,7 +81,7 @@ namespace ICareAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PatientDoctors", x => new { x.DoctorId, x.PatientId });
+                    table.PrimaryKey("PK_PatientDoctors", x => x.Id);
                     table.ForeignKey(
                         name: "FK_PatientDoctors_Doctors_DoctorId",
                         column: x => x.DoctorId,
@@ -119,6 +121,11 @@ namespace ICareAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PatientDoctors_DoctorId",
+                table: "PatientDoctors",
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PatientDoctors_PatientId",

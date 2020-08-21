@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ICareAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200802132845_newMigration")]
-    partial class newMigration
+    [Migration("20200820150012_NewMigration")]
+    partial class NewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,15 +74,20 @@ namespace ICareAPI.Migrations
 
             modelBuilder.Entity("ICareAPI.Models.PatientDoctor", b =>
                 {
-                    b.Property<int>("DoctorId");
-
-                    b.Property<int>("PatientId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Archived");
 
                     b.Property<DateTime?>("ArchivedDate");
 
-                    b.HasKey("DoctorId", "PatientId");
+                    b.Property<int>("DoctorId");
+
+                    b.Property<int>("PatientId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
 
                     b.HasIndex("PatientId");
 

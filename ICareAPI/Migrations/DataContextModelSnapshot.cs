@@ -21,6 +21,10 @@ namespace ICareAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
+
                     b.Property<DateTime>("Created");
 
                     b.Property<DateTime>("DateOfBirth");
@@ -47,6 +51,10 @@ namespace ICareAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
+
                     b.Property<DateTime>("Created");
 
                     b.Property<DateTime>("DateOfBirth");
@@ -64,11 +72,20 @@ namespace ICareAPI.Migrations
 
             modelBuilder.Entity("ICareAPI.Models.PatientDoctor", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
+
                     b.Property<int>("DoctorId");
 
                     b.Property<int>("PatientId");
 
-                    b.HasKey("DoctorId", "PatientId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
 
                     b.HasIndex("PatientId");
 
@@ -79,6 +96,10 @@ namespace ICareAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
 
                     b.Property<double>("Bill");
 
@@ -104,6 +125,10 @@ namespace ICareAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Archived");
+
+                    b.Property<DateTime?>("ArchivedDate");
+
                     b.Property<DateTime>("Created");
 
                     b.Property<string>("Email");
@@ -126,12 +151,12 @@ namespace ICareAPI.Migrations
                     b.HasOne("ICareAPI.Models.Doctor", "Doctor")
                         .WithMany("PatientDoctors")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ICareAPI.Models.Patient", "Patient")
                         .WithMany("PatientDoctors")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ICareAPI.Models.Record", b =>
