@@ -26,7 +26,8 @@ namespace ICareAPI.Repositories
         {
 
 
-            modelBuilder.Entity<PatientDoctor>().HasKey(k => new { k.DoctorId, k.PatientId });
+            modelBuilder.Entity<PatientDoctor>()
+            .HasKey(k => k.Id);
             modelBuilder.Entity<PatientDoctor>()
             .HasOne(p => p.Doctor)
             .WithMany(pd => pd.PatientDoctors)
