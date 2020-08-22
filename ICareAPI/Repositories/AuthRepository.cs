@@ -28,7 +28,7 @@ namespace ICareAPI.Repositories
             }
         }
 
-        public async Task<User> Login(string email, string password)
+        public async Task<User?> Login(string email, string password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
 
