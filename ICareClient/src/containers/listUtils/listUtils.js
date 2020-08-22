@@ -20,7 +20,7 @@ export const RenderActionBtns = (
     return (
         <Grid container>
             {conditionalRender(
-                renderDetails || renderAll,
+                renderAll || renderDetails,
                 <Grid item>
                     <Tooltip title="Details">
                         <IconButton
@@ -37,7 +37,7 @@ export const RenderActionBtns = (
                 </Grid>
             )}
             {conditionalRender(
-                renderEdit || renderAll,
+                renderAll || renderEdit,
                 <Grid item>
                     <Tooltip title="Edit">
                         <IconButton
@@ -54,7 +54,7 @@ export const RenderActionBtns = (
                 </Grid>
             )}
             {conditionalRender(
-                renderDelete || renderAll,
+                renderAll || renderDelete,
                 <Grid item>
                     <Tooltip title="Delete">
                         <IconButton
