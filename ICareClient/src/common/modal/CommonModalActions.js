@@ -40,7 +40,7 @@ export default function CommonModalActions(props) {
             </Grid>
             <Grid item>
                 <Button
-                    disabled={isLoading}
+                    disabled={isLoading || disabled}
                     onClick={onClose && onClose}
                     variant="outlined"
                     color="primary"
