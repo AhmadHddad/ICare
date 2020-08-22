@@ -20,6 +20,8 @@ function PatientsListTable({
     renderActions,
     ...rest
 }) {
+    const isRenderActions = Object.values(renderActions).some(v => v === true);
+
     const renderTableRows = () =>
         (patientsList?.length &&
             patientsList.map(li => ({
@@ -43,14 +45,18 @@ function PatientsListTable({
             }
         ];
 
-        if (renderActions) {
+        if (isRenderActions) {
             cells.push({
                 component: RenderActionBtns(
                     li.id,
                     li.name,
                     onViewDetailsClick,
                     onEditPatientClick,
-                    onDeletePatientClicked
+                    onDeletePatientClicked,
+                    renderActions.all,
+                    renderActions.renderDetails,
+                    renderActions.renderEdit,
+                    renderActions.renderDelete
                 )
             });
         }
@@ -60,7 +66,7 @@ function PatientsListTable({
 
     const tableHeaders = ["Patient Name", "Date Of Birth", "Last Entry"];
 
-    if (renderActions) {
+    if (isRenderActions) {
         tableHeaders.push(" ");
     }
 
@@ -92,12 +98,17 @@ PatientsListTable.propTypes = {
     onChangePage: PropTypes.func,
     onChangeRowsPerPage: PropTypes.func,
     onRowClick: PropTypes.func,
-    renderActions: PropTypes.bool,
+    renderActions: PropTypes.object,
     rowClassName: PropTypes.string
 };
 
 PatientsListTable.defaultProps = {
-    renderActions: true
+    renderActions: {
+        delete: true,
+        details: true,
+        edit: true,
+        all: true
+    }
 };
 
 export default React.memo(
