@@ -18,7 +18,6 @@ export default function IModal({
     actions,
     title,
     children,
-    modalRootStyle,
     modalTitleStyle,
     modalContentStyle,
     modalActionsStyle,
@@ -34,9 +33,8 @@ export default function IModal({
 
     return (
         <Dialog
-            className={disabled ? classes.disabled : null}
+            className={`${disabled ? classes.disabled : null} ${modalProps?.className}`}
             {...modalProps}
-            classes={{...modalRootStyle}}
             open={open}
             onClose={onClose}
             aria-labelledby="form-dialog-title"
@@ -62,7 +60,6 @@ IModal.propTypes = {
     actions: PropTypes.any,
     title: PropTypes.any,
     children: PropTypes.any,
-    modalRootStyle: PropTypes.object,
     modalTitleStyle: PropTypes.object,
     modalContentStyle: PropTypes.object,
     modalActionsStyle: PropTypes.object,

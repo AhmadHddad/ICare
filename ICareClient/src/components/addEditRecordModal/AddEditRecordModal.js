@@ -1,15 +1,7 @@
 import React, {useEffect, useState, useCallback} from "react";
 import PropTypes from "prop-types";
 import IModal from "../../common/modal/IModal";
-import {
-    Grid,
-    TextField,
-    Button,
-    Grow,
-    CircularProgress,
-    makeStyles,
-    InputAdornment
-} from "@material-ui/core";
+import {Grid, TextField, makeStyles, InputAdornment} from "@material-ui/core";
 import {Controller, useForm} from "react-hook-form";
 import {MuiPickersUtilsProvider, KeyboardDatePicker} from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
@@ -175,44 +167,6 @@ export default function AddEditRecordModal({
         </Grid>
     );
 
-    const renderActionsx = () => (
-        <Grid
-            item
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-            className={classes.actionsContainer}
-        >
-            <Grid item>
-                <Button
-                    disabled={Object.values(isLoading).every(Boolean)}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    startIcon={
-                        <Grow in={isLoading.savingLoader} unmountOnExit mountOnEnter>
-                            <CircularProgress color="secondary" size={20} />
-                        </Grow>
-                    }
-                >
-                    Save
-                </Button>
-            </Grid>
-            <Grid item>
-                <Button
-                    disabled={isLoading.savingLoader}
-                    onClick={onClose}
-                    variant="outlined"
-                    color="primary"
-                >
-                    Close
-                </Button>
-            </Grid>
-        </Grid>
-    );
-
     function renderActions(params) {
         return (
             <CommonModalActions
@@ -230,7 +184,8 @@ export default function AddEditRecordModal({
                 title={isEdit ? "Edit Record" : "Add Record"}
                 open={open}
                 modalProps={{
-                    fullWidth: true
+                    fullWidth: true,
+                    classes: {paper: classes.paperModal}
                 }}
                 modalRootStyle={{paper: classes.paperModal}}
                 onClose={onClose}
