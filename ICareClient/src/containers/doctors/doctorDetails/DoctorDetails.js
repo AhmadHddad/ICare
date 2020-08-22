@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {useDispatch} from "react-redux";
 import {unstable_batchedUpdates} from "react-dom";
 
@@ -37,6 +37,7 @@ import DoctorDetailsStyle from "./DoctorDetailsStyle";
 
 // Common
 import ForceUnMount from "common/forceUnMount/ForceUnMount";
+import WarningModal from "common/warningModal/WarningModal";
 
 // Utils
 import {toggleFlag, setPaginationUtil} from "utils/utils";
@@ -47,7 +48,9 @@ import {DOCTOR_DETAILS_FIELDS} from "constants/fields";
 const TOGGLE_NAMES = {
     DOCTOR_LOADER: "DOCTOR_LOADER",
     ASSIGNED_PATIENTS_LOADER: "ASSIGNED_PATIENTS_LOADER",
-    ASSIGN_PATIENT_MODAL: "ASSIGN_PATIENT_MODAL"
+    DELETE_ASSIGNED_PATIENT_LOADER: "DELETE_ASSIGNED_PATIENT_LOADER",
+    ASSIGN_PATIENT_MODAL: "ASSIGN_PATIENT_MODAL",
+    WARNING_MODAL: "WARNING_MODAL"
 };
 
 const {
@@ -61,11 +64,13 @@ const {
 } = DOCTOR_DETAILS_FIELDS;
 
 export default function DoctorDetails(props) {
+    //#region Local Variables
+    let patientIdForDelete = useRef(0);
+    //#endregion Local Variables
+
     //#region State
     const [assignedPatients, setAssignedPatients] = useState([]);
-
     const [getFlag, setFlag] = useFlag(Object.values(TOGGLE_NAMES));
-
     const [pagination, onPageChange, onRowChange, setPagination] = useITablePagination();
     //#endregion
 
@@ -110,6 +115,12 @@ export default function DoctorDetails(props) {
         onRowChange(value, getAssignedPatients);
     }
 
+    function onDeleteAssignedPatient(patientId) {
+        return function () {
+            patientIdForDelete.current = patientId;
+            setFlag(TOGGLE_NAMES.WARNING_MODAL, true);
+        };
+    }
     //#endregion Other Functions
 
     //#region Dispatch Functions
@@ -153,37 +164,45 @@ export default function DoctorDetails(props) {
         );
     }
 
-    function onDeleteAssignedPatient(patientId) {
-        return function () {
-            function onDeleteAssignedPatientSuccess(data) {
-                unstable_batchedUpdates(_ => {
-                    setFlag(TOGGLE_NAMES.ASSIGNED_PATIENTS_LOADER, false);
-                    setAssignedPatients(prev => {
-                        let assignPatientsToUpdate = [...prev];
+    function deleteAssignedPatient() {
+        function onDeleteAssignedPatientSuccess(data) {
+            unstable_batchedUpdates(_ => {
+                setFlag(TOGGLE_NAMES.DELETE_ASSIGNED_PATIENT_LOADER, false);
+                setAssignedPatients(prev => {
+                    let assignPatientsToUpdate = [...prev];
 
-                        assignPatientsToUpdate = assignPatientsToUpdate.filter(
-                            p => p.id !== patientId
-                        );
-                        return assignPatientsToUpdate;
-                    });
+                    assignPatientsToUpdate = assignPatientsToUpdate.filter(
+                        p => p.id !== patientIdForDelete.current
+                    );
+                    return assignPatientsToUpdate;
                 });
-            }
+                setFlag(TOGGLE_NAMES.WARNING_MODAL, false);
+            });
+        }
 
-            dispatch(
-                callDeleteAssignedPatient(
-                    doctorId,
-                    patientId,
-                    toggleFlag(TOGGLE_NAMES.ASSIGNED_PATIENTS_LOADER, true, setFlag),
-                    onDeleteAssignedPatientSuccess,
-                    toggleFlag(TOGGLE_NAMES.ASSIGNED_PATIENTS_LOADER, false, setFlag)
-                )
-            );
-        };
+        dispatch(
+            callDeleteAssignedPatient(
+                doctorId,
+                patientIdForDelete.current,
+                toggleFlag(TOGGLE_NAMES.DELETE_ASSIGNED_PATIENT_LOADER, true, setFlag),
+                onDeleteAssignedPatientSuccess,
+                toggleFlag(TOGGLE_NAMES.DELETE_ASSIGNED_PATIENT_LOADER, false, setFlag)
+            )
+        );
     }
     //#endregion Dispatch Functions
 
     return (
         <React.Fragment>
+            <ForceUnMount mount={getFlag(TOGGLE_NAMES.WARNING_MODAL)}>
+                <WarningModal
+                    isLoading={getFlag(TOGGLE_NAMES.DELETE_ASSIGNED_PATIENT_LOADER)}
+                    open
+                    message="Are you sure you want to archive patient"
+                    onClose={toggleFlag(TOGGLE_NAMES.WARNING_MODAL, false, setFlag)}
+                    onOk={deleteAssignedPatient}
+                />
+            </ForceUnMount>
             <ForceUnMount mount={getFlag(TOGGLE_NAMES.ASSIGN_PATIENT_MODAL)}>
                 <AssignPatientModal
                     doctorId={doctorId}
