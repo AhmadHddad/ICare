@@ -145,6 +145,6 @@ export function setPaginationUtil(callback, headers, pagination) {
     callback({...pagination, ...JSON.parse(resPagination)});
 }
 
-export function conditionalRender(render = Boolean, component) {
+export function conditionalRender(render, component) {
     return render ? component : null;
 }
