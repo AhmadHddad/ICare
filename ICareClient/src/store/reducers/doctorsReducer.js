@@ -43,7 +43,12 @@ const doctorsReducer = (state = initialState, {data, type, id}) => {
             };
         }
 
-        case (DOCTOR_ASSIGN_PATIENT_SUCCESS, DOCTOR_DELETE_ASSIGNED_PATIENT_SUCCESS): {
+        case DOCTOR_DELETE_ASSIGNED_PATIENT_SUCCESS: {
+            return {
+                ...initialState
+            };
+        }
+        case DOCTOR_ASSIGN_PATIENT_SUCCESS: {
             return {
                 ...initialState
             };
