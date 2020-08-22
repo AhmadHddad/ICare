@@ -32,7 +32,7 @@ const defaultProps = {
 };
 
 export default function ICard(props) {
-    const {title, children, footer, icon: Icon, justify, alignItems, header} = props;
+    const {title, children, icon: Icon, justify, alignItems, header} = props;
     const classes = useStyles(props);
 
     return (
