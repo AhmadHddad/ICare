@@ -131,7 +131,8 @@ export default function AssignPatientModal(props) {
             title="Assign Patient"
             actions={actions}
             modalProps={{
-                maxWidth: "xl"
+                maxWidth: "md",
+                fullWidth: true
             }}
         >
             <PatientsListTable
