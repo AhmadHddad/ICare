@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using ICareAPI.Dtos;
 using static ICareAPI.constants.Enums;
 using ICareAPI.Helpers.Pagination;
+using Z.EntityFramework.Plus;
 
 namespace ICareAPI.Repositories
 {
@@ -94,22 +96,19 @@ namespace ICareAPI.Repositories
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
 
             var patientsForThisDoctor = _context.PatientDoctors
-            .Where(d => d.DoctorId == doctorId && d.Archived == false)
-            .Include(p => p.Patient)
-            .Select(d => d.Patient)
-            .Include(x => x.PatientDoctors)
-            .Include(i => i.Records);
-
+             .Where(d => d.DoctorId == doctorId && d.Archived == false)
+             .Select(d => d.Patient)
+             .IncludeFilter(x => x.PatientDoctors.Where(pd => pd.Archived == false))
+             .Include(i => i.Records);
 
             var pagedList = await PagedList<Patient>.CreatePagedAsync(patientsForThisDoctor, paginationParams.PageNumber, paginationParams.PageSize);
 
-            var pagedPatientsList = PagedListConverter<Patient, PatientWithAssignedDoctorsDto>
-            .Convert(pagedList, in _mapper);
+
+            var pagedPatientsList = PagedListConverter<Patient, PatientWithAssignedDoctorsDto>.Convert(pagedList, in _mapper);
 
 
             return pagedPatientsList;
         }
-
 
         public async Task<PatientDoctor> GetPatientDoctor(int doctorId, int patientId, bool? withPatientRecords = false)
         {
@@ -120,7 +119,7 @@ namespace ICareAPI.Repositories
 
 
             var patientDoctor = _context.PatientDoctors
-            .Where(p => p.PatientId == patientId && p.DoctorId == doctorId)
+            .Where(p => p.PatientId == patientId && p.DoctorId == doctorId && p.Archived == false)
             .Include(p => p.Patient);
 
 
@@ -148,7 +147,7 @@ namespace ICareAPI.Repositories
 
 
             patientDoctor.Archived = true;
-
+            patientDoctor.ArchivedDate = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
