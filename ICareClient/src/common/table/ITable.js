@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
-import {makeStyles, CircularProgress, Grid, Collapse} from "@material-ui/core";
+import {makeStyles, CircularProgress, Grid, Collapse, Typography} from "@material-ui/core";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -56,7 +56,11 @@ export default function ITable(props) {
     }
 
     const tableHeaders = headers.map((header, index) => (
-        <TableCell key={index}>{header}</TableCell>
+        <TableCell key={index}>
+            <Typography variant="subtitle2" color="textSecondary">
+                {header}
+            </Typography>
+        </TableCell>
     ));
 
     const onCollapseRowClick = i => event => {
