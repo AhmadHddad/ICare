@@ -139,3 +139,8 @@ export function toggleFlag(flagName = String, value = Boolean, callback = Functi
         callback(flagName, value);
     };
 }
+
+export function setPaginationUtil(callback, headers, pagination) {
+    const resPagination = headers?.pagination;
+    callback({...pagination, ...JSON.parse(resPagination)});
+}
