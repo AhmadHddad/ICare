@@ -6,6 +6,7 @@ import {
     DOCTOR_GET_DOCTOR_BY_ID,
     DOCTOR_EDIT_DOCTOR,
     DOCTOR_GET_ASSIGNED_PATIENTS,
+    DOCTOR_GET_UNASSIGNED_PATIENTS_TO_DOCTOR,
     DOCTOR_ASSIGN_PATIENT
 } from "./doctorsActionTypes";
 import {formatParameterizedURL} from "utils/utils";
@@ -60,10 +61,8 @@ export function callGetDoctorById(id, onStart, onSuccess, onFailure) {
     });
 }
 
-export function callGetAssignedPatients(id, query, onStart, onSuccess, onFailure) {
+export function callGetAssignedPatients(id, query = "", onStart, onSuccess, onFailure) {
     const api = APIS.doctors.getAssignedPatients;
-
-    query = query || "";
 
     return apiCaller({
         url: formatParameterizedURL(api.url, {id}) + `${query}`,
@@ -95,6 +94,19 @@ export function callAssignPatient(doctorId, patientId, onStart, onSuccess, onFai
         url: formatParameterizedURL(api.url, {doctorId, patientId}),
         method: api.method,
         actionType: DOCTOR_ASSIGN_PATIENT,
+        onStart,
+        onSuccess,
+        onFailure
+    });
+}
+
+export function callGetUnAssignedPatients(doctorId, query = "", onStart, onSuccess, onFailure) {
+    const api = APIS.doctors.getUnAssignedPatientsToDoctor;
+
+    return apiCaller({
+        url: formatParameterizedURL(api.url, {id: doctorId}) + `${query}`,
+        method: api.method,
+        actionType: DOCTOR_GET_UNASSIGNED_PATIENTS_TO_DOCTOR,
         onStart,
         onSuccess,
         onFailure
