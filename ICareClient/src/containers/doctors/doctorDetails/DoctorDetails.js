@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {unstable_batchedUpdates} from "react-dom";
 
 // hooks
 import {useFlag, useITablePagination} from "hooks/stateHooks";
+import {useParams} from "react-router-dom";
 
 // IComponents
 import ICard from "common/iCard/ICard.js";
@@ -19,7 +22,8 @@ import {Grid, makeStyles, Button} from "@material-ui/core";
 
 // Core Components
 import PatientsListTable from "components/patientsListTable/PatientsListTable";
-import DoctorDetailsFields from "../doctorComposer/DoctorDetailsFields";
+import DoctorDetailsFields from "containers/doctors/doctorComposer/DoctorDetailsFields";
+import AssignPatientModal from "containers/doctors/assignPatientModal/AssignPatientModal";
 
 // Actions
 import {
@@ -27,14 +31,18 @@ import {
     callGetAssignedPatients,
     callDeleteAssignedPatient
 } from "store/actions/doctors/doctorsActions";
-import {useDispatch} from "react-redux";
-import {useParams} from "react-router-dom";
-import {DOCTOR_DETAILS_FIELDS} from "constants/fields";
+
+// Styles
 import DoctorDetailsStyle from "./DoctorDetailsStyle";
-import AssignPatientModal from "containers/doctors/assignPatientModal/AssignPatientModal";
+
+// Common
 import ForceUnMount from "common/forceUnMount/ForceUnMount";
+
+// Utils
 import {toggleFlag, setPaginationUtil} from "utils/utils";
-import {unstable_batchedUpdates} from "react-dom";
+
+// Constants
+import {DOCTOR_DETAILS_FIELDS} from "constants/fields";
 
 const TOGGLE_NAMES = {
     DOCTOR_LOADER: "DOCTOR_LOADER",
