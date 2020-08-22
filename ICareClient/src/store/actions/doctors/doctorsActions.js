@@ -7,7 +7,8 @@ import {
     DOCTOR_EDIT_DOCTOR,
     DOCTOR_GET_ASSIGNED_PATIENTS,
     DOCTOR_GET_UNASSIGNED_PATIENTS_TO_DOCTOR,
-    DOCTOR_ASSIGN_PATIENT
+    DOCTOR_ASSIGN_PATIENT,
+    DOCTOR_DELETE_ASSIGNED_PATIENT
 } from "./doctorsActionTypes";
 import {formatParameterizedURL} from "utils/utils";
 
@@ -110,5 +111,19 @@ export function callGetUnAssignedPatients(doctorId, query = "", onStart, onSucce
         onStart,
         onSuccess,
         onFailure
+    });
+}
+
+export function callDeleteAssignedPatient(doctorId, patientId, onStart, onSuccess, onFailure) {
+    const api = APIS.doctors.deleteAssignedPatient;
+
+    return apiCaller({
+        url: formatParameterizedURL(api.url, {doctorId, patientId}),
+        method: api.method,
+        actionType: DOCTOR_DELETE_ASSIGNED_PATIENT,
+        onStart,
+        onSuccess,
+        onFailure,
+        successMsg: "Patient archived successfully"
     });
 }
