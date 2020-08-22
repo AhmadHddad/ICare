@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -21,13 +22,16 @@ namespace ICareAPI.Controllers
         private readonly IDoctorRepository _repo;
         private readonly IPatientDoctorRepository _patientDoctorRepo;
         private readonly IMapper _mapper;
+        private readonly IPatientRepository _patientRepository;
 
         public DoctorsController(
             IDoctorRepository doctorRepository,
               IMapper mapper,
-          IPatientDoctorRepository patientDoctorRepository
+          IPatientDoctorRepository patientDoctorRepository,
+            IPatientRepository patientRepository
           )
         {
+            _patientRepository = patientRepository;
             _mapper = mapper;
             _patientDoctorRepo = patientDoctorRepository;
             _repo = doctorRepository;
@@ -39,38 +43,23 @@ namespace ICareAPI.Controllers
         public async Task<IActionResult> GetDoctors([FromQuery] PaginationParams paginationParams)
         {
 
-            var doctors = await _repo.GetDoctors(paginationParams);
-
-            var doctorsForReturn = _mapper.Map<IList<DoctorForListDto>>(doctors);
+            var doctors = await _repo.GetDoctorsList(paginationParams);
 
             HttpContext.Response.AddPagination(doctors.CurrnetPage, doctors.PageSize, doctors.TotalCount, doctors.TotalPages);
 
 
-            return Ok(doctorsForReturn);
+            return Ok(doctors);
         }
 
         // GET api/doctor/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDoctorById(int id, bool withAssignedPatients = false, bool withRecords = false)
+        public async Task<IActionResult> GetDoctorById(int id, bool withAssignedPatients = false)
         {
 
+            var doctor = await _repo.GetDoctor(id);
 
-            if (!withAssignedPatients)
-            {
+            return Ok(doctor);
 
-                var doctor = await _repo.GetDoctor(id);
-
-                return Ok(doctor);
-
-            }
-            else
-            {
-                var patientDoctors = await _patientDoctorRepo.GetAssignedPatientsToDoctorId(id, withRecords);
-
-                return Ok(patientDoctors);
-
-
-            }
         }
 
         // POST api/doctor
@@ -111,7 +100,32 @@ namespace ICareAPI.Controllers
             return Ok(deleted);
         }
 
+        // DELETE api/doctor/assigned/5
+        [HttpGet("{id}/assigned")]
+        public async Task<ActionResult> GetAssignedPatients(int id, [FromQuery] PaginationParams pagination)
+        {
 
+            var patientDoctors = await _patientDoctorRepo.GetAssignedPatientsToDoctorId(id, pagination);
+
+            HttpContext.Response.AddPagination(patientDoctors.CurrnetPage, patientDoctors.PageSize, patientDoctors.TotalCount, patientDoctors.TotalPages);
+
+
+            return Ok(patientDoctors);
+        }
+
+
+        [HttpGet("{doctorId}/unAssigned")]
+        public async Task<ActionResult> GetUnAssignedPatients(int doctorId, [FromQuery] PaginationParams paginationParams)
+        {
+
+            var unAssignedPatients = await _patientRepository.GetUnAssignedPatientsToDoctor(doctorId, paginationParams);
+
+            HttpContext.Response.AddPagination(unAssignedPatients.CurrnetPage, unAssignedPatients.PageSize, unAssignedPatients.TotalCount, unAssignedPatients.TotalPages);
+
+
+            return Ok(unAssignedPatients);
+
+        }
 
 
         [HttpPost("{doctorId}/{patientId}")]
@@ -120,8 +134,20 @@ namespace ICareAPI.Controllers
 
             var patientDoctor = await _patientDoctorRepo.AddPatientDoctor(doctorId, patientId);
 
-            return Ok(patientDoctor);
+            var patient = _mapper.Map<PatientsForListDto>(patientDoctor.Patient);
 
+            return Ok(patient);
+
+        }
+
+
+        [HttpDelete("{doctorId}/{patientId}")]
+        public async Task<IActionResult> RemovePatientDoctor(int doctorId, int patientId)
+        {
+
+            var removed = await _patientDoctorRepo.RemovePatientDoctor(doctorId, patientId);
+
+            return Ok(removed);
         }
 
 
@@ -136,8 +162,6 @@ namespace ICareAPI.Controllers
             return Ok(await _repo.EditDoctor(mappedDoctor));
 
         }
-
-
 
     }
 }
