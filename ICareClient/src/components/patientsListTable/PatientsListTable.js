@@ -54,9 +54,9 @@ function PatientsListTable({
                     onEditPatientClick,
                     onDeletePatientClicked,
                     renderActions.all,
-                    renderActions.renderDetails,
-                    renderActions.renderEdit,
-                    renderActions.renderDelete
+                    renderActions.details,
+                    renderActions.edit,
+                    renderActions.delete
                 )
             });
         }
