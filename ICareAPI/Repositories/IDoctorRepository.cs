@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ICareAPI.Dtos;
 using ICareAPI.Helpers;
 using ICareAPI.Helpers.Pagination;
 using ICareAPI.Models;
@@ -11,6 +12,8 @@ namespace ICareAPI.Repositories
         Task<Doctor> GetDoctor(int id);
 
         Task<PagedList<Doctor>> GetDoctors(PaginationParams paginationParams);
+
+        Task<PagedList<DoctorForListDto>> GetDoctorsList(PaginationParams paginationParams);
 
         Task<Doctor> AddDoctor(Doctor doctor);
 

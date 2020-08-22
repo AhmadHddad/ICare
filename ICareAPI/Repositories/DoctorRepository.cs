@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using ICareAPI.Dtos;
 using ICareAPI.Helpers;
 using ICareAPI.Helpers.Pagination;
 using ICareAPI.Middlewares;
 using ICareAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using static ICareAPI.constants.Enums;
+using Z.EntityFramework.Plus;
 
 namespace ICareAPI.Repositories
 {
@@ -16,8 +19,10 @@ namespace ICareAPI.Repositories
     {
         private readonly DataContext _context;
         private readonly EntityType _entityTypeDoctor;
-        public DoctorRepository(DataContext dataContext)
+        private readonly IMapper _mapper;
+        public DoctorRepository(DataContext dataContext, IMapper mapper)
         {
+            _mapper = mapper;
             _context = dataContext;
             _entityTypeDoctor = EntityType.doctor;
         }
@@ -102,6 +107,23 @@ namespace ICareAPI.Repositories
             var doctors = await PagedList<Doctor>.CreatePagedAsync(_context.Doctors.OrderByDescending(d => d.Created).Include(d => d.PatientDoctors), paginationParams.PageNumber, paginationParams.PageSize);
 
             return doctors;
+
+        }
+
+        public async Task<PagedList<DoctorForListDto>> GetDoctorsList(PaginationParams paginationParams)
+        {
+
+            var doctors = _context.Doctors.Where(d => d.Archived == false).OrderByDescending(d => d.Created)
+            .IncludeFilter(d => d.PatientDoctors.Where(pd => pd.Archived == false));
+
+
+            var pagedDoctors = await PagedList<Doctor>.CreatePagedAsync(doctors, paginationParams.PageNumber, paginationParams.PageSize);
+
+
+
+            var doctorForList = PagedListConverter<Doctor, DoctorForListDto>.Convert(pagedDoctors, _mapper);
+
+            return doctorForList;
 
         }
 
