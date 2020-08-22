@@ -1,19 +1,21 @@
 import React, {useState, useEffect} from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {callGetDoctors, callDeleteDoctor} from "store/actions/doctors/doctorsActions";
-import {toggle, isLength} from "utils/utils";
+import {useHistory, useRouteMatch} from "react-router-dom";
 
-import {RenderActionBtns} from "containers/listUtils/listUtils";
 import TableWithBtnLayout from "common/tableWithBtnLayout/TableWithBtnLayout";
-import DoctorComposer from "../doctorComposer/DoctorComposer";
+import DoctorComposer from "containers/doctors/doctorComposer/DoctorComposer";
+
+// Common
 import WarningModal from "common/warningModal/WarningModal";
 import ForceUnMount from "common/forceUnMount/ForceUnMount";
+
+// Hooks
 import {useITablePagination} from "hooks/stateHooks";
 
-const propTypes = {};
-
-const defaultProps = {};
+// Utils
+import {RenderActionBtns} from "containers/listUtils/listUtils";
+import {toggle, isLength} from "utils/utils";
 
 // Constants
 const toggleNames = {
@@ -24,17 +26,68 @@ const toggleNames = {
 };
 let selectedDoctorId;
 function DoctorsList(props) {
-    const {dispatch, doctorsList, history, match} = props;
-
+    //#region State management
     const [flags, setFlags] = useState({
         [toggleNames.dataLoader]: false,
         [toggleNames.doctorComposer]: false
     });
 
-    const [pagination, onPageChange, onRowChange, setPagination] = useITablePagination();
-
     const [warningMsg, setWarningMsg] = useState("");
+    //#endregion State management
 
+    //#region Hooks
+    const [pagination, onPageChange, onRowChange, setPagination] = useITablePagination();
+    const dispatch = useDispatch();
+    const doctorsList = useSelector(state => state.doctorsReducer.doctorsList);
+    const history = useHistory();
+    const match = useRouteMatch();
+    //#endregion Hooks
+
+    //#region LifeCycle
+    useEffect(didMount, []);
+    //#endregion LifeCycle
+
+    //#region Other Functions
+
+    function didMount() {
+        !isLength(doctorsList) && getDoctorsList();
+    }
+
+    function onViewDoctor(id) {
+        return _ => {
+            history.push(`${match.path}/${id}`);
+        };
+    }
+
+    function onEditDoctor(id) {
+        return () => {
+            selectedDoctorId = id;
+            toggle(toggleNames.doctorComposer, flags, setFlags)();
+        };
+    }
+
+    function onDeleteDoctor(id, name) {
+        return () => {
+            selectedDoctorId = id;
+            toggle(toggleNames.warningModal, flags, setFlags)();
+            setWarningMsg("Are sure you want to delete " + name);
+        };
+    }
+    //#endregion Other Functions
+
+    //#region Paging Functions
+    function onChangePage(e, newPage) {
+        onPageChange(newPage, getDoctorsList);
+    }
+
+    function onChangeRowsPerPage(e) {
+        const value = e?.target?.value || 5;
+
+        onRowChange(value, getDoctorsList);
+    }
+    //#endregion Paging Functions
+
+    //#region Dispatch Functions
     function getDoctorsList(searchQuery = "") {
         dispatch(
             callGetDoctors(
@@ -51,10 +104,19 @@ function DoctorsList(props) {
         );
     }
 
-    useEffect(function () {
-        !isLength(doctorsList) && getDoctorsList();
-    }, []);
+    function deleteDoctor() {
+        dispatch(
+            callDeleteDoctor(
+                selectedDoctorId,
+                toggle(toggleNames.deleteLoader, flags, setFlags),
+                toggle(toggleNames.deleteLoader, flags, setFlags),
+                toggle(toggleNames.deleteLoader, flags, setFlags)
+            )
+        );
+    }
+    //#endregion  Dispatch Functions
 
+    //#region Rendering Functions
     const renderTableRows = () =>
         (doctorsList &&
             doctorsList.length &&
@@ -89,47 +151,7 @@ function DoctorsList(props) {
             }))) ||
         [];
 
-    function onViewDoctor(id, name) {
-        return _ => {
-            history.push(`${match.path}/${id}`);
-        };
-    }
-
-    function onEditDoctor(id, name) {
-        return () => {
-            selectedDoctorId = id;
-            toggle(toggleNames.doctorComposer, flags, setFlags)();
-        };
-    }
-
-    function onDeleteDoctor(id, name) {
-        return () => {
-            selectedDoctorId = id;
-            toggle(toggleNames.warningModal, flags, setFlags)();
-            setWarningMsg("Are sure you want to delete " + name);
-        };
-    }
-
-    function deleteDoctor() {
-        dispatch(
-            callDeleteDoctor(
-                selectedDoctorId,
-                toggle(toggleNames.deleteLoader, flags, setFlags),
-                toggle(toggleNames.deleteLoader, flags, setFlags),
-                toggle(toggleNames.deleteLoader, flags, setFlags)
-            )
-        );
-    }
-
-    function onChangePage(e, newPage) {
-        onPageChange(newPage, getDoctorsList);
-    }
-
-    function onChangeRowsPerPage(e) {
-        const value = e?.target?.value || 5;
-
-        onRowChange(value, getDoctorsList);
-    }
+    //#endregion Rendering Functions
 
     return (
         <React.Fragment>
@@ -170,11 +192,4 @@ function DoctorsList(props) {
     );
 }
 
-const mapStateToProps = state => ({
-    doctorsList: state.doctorsReducer.doctorsList
-});
-
-DoctorsList.propTypes = propTypes;
-DoctorsList.defaultProps = defaultProps;
-
-export default connect(mapStateToProps)(DoctorsList);
+export default DoctorsList;
