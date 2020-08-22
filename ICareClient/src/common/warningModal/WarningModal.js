@@ -6,12 +6,13 @@ import {Button, Grid, CircularProgress, Grow, Typography, makeStyles} from "@mat
 import WarningIcon from "@material-ui/icons/Warning";
 
 import GeneralStyles from "shared/GeneralStyles";
+import {arePropsEqual} from "utils/utils";
 
 const useStyles = makeStyles(theme => ({
     ...GeneralStyles
 }));
 
-export default function WarningModal({open, onClose, message, isLoading, onOk, componentId}) {
+function WarningModal({open, onClose, message, isLoading, onOk, componentId}) {
     const classes = useStyles();
 
     const onOkClick = () => {
@@ -82,3 +83,5 @@ WarningModal.propTypes = {
     onOk: PropTypes.func,
     componentId: PropTypes.any
 };
+
+export default React.memo(WarningModal, arePropsEqual(["isLoading"]));
