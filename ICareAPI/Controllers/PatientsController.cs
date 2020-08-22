@@ -114,9 +114,11 @@ namespace ICareAPI.Controllers
         public async Task<IActionResult> DeletePatient(int id)
         {
             var patientForDelete = await _repo.GetPatient(id, false);
-            await _repo.DeletePatient(patientForDelete);
 
-            return Ok("Deleted");
+
+            var deletedPatient = await _repo.DeletePatient(patientForDelete);
+
+            return Ok(deletedPatient);
 
 
         }
