@@ -139,8 +139,8 @@ namespace ICareAPI.Repositories
         }
 
 
-
-        public async Task<List<Patient>> PatientsWithSimilarDisease(int patientId)
+        //TODO improve performance
+        public List<Patient> PatientsWithSimilarDisease(int patientId)
         {
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypePatient, _context, patientId);
@@ -150,10 +150,14 @@ namespace ICareAPI.Repositories
 
             if (patientRecord.Count > 0)
             {
+                var DbF = Microsoft.EntityFrameworkCore.EF.Functions;
                 foreach (var item in patientRecord)
                 {
-                    var patientIds = await _context.Records.Where(rec => rec.DiseaseName.Contains(item.DiseaseName, StringComparison.CurrentCultureIgnoreCase) && rec.PatientId != patientId).Select(r => r.PatientId).ToArrayAsync();
-                    var patientsWithThisDieseas = await _context.Patients.Where(t => patientIds.Contains(t.Id)).ToListAsync();
+                    var patientIds = _context.Records.AsEnumerable<Record>()
+                    .Where(rec => rec.DiseaseName.Contains(item.DiseaseName, StringComparison.CurrentCultureIgnoreCase) && rec.PatientId != patientId)
+                    .Select(r => r.PatientId).ToArray();
+
+                    var patientsWithThisDieseas = _context.Patients.AsEnumerable().Where(t => patientIds.Contains(t.Id)).ToList();
 
                     patientsWithSimilarDiseasesList.AddRange(patientsWithThisDieseas);
                 }
