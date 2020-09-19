@@ -39,7 +39,7 @@ namespace ICareAPI
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            
+
             services.AddCors();
             services.AddAutoMapper(typeof(Startup));
 
@@ -66,7 +66,7 @@ namespace ICareAPI
                 };
             });
 
-            services.AddScoped<LogUserAcitivity>();
+            services.AddScoped<LogUserActivity>();
             services.AddScoped<IUserRepository, UserRepository>();
 
         }
