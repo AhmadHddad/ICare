@@ -179,16 +179,14 @@ namespace ICareAPI.Repositories
         }
 
         public async Task<PagedList<PatientsForListDto>> GetUnAssignedPatientsToDoctor(int doctorId, PaginationParams paginationParams)
-
         {
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
 
-            var unAssingedPatients = _context.Patients
-            .Select(p => p.PatientDoctors.Count == 0 ? p : p.PatientDoctors.FirstOrDefault(p => p.DoctorId == doctorId && p.Archived == false) == null ? p : null)
-            .Where(p => p != null);
 
-            var pagedList = await PagedList<Patient?>.CreatePagedAsync(unAssingedPatients, paginationParams.PageNumber, paginationParams.PageSize);
+            var unAssignedPatients = _context.Patients.Where(P => !P.PatientDoctors.Any(pd => pd.DoctorId == doctorId && pd.Archived == false));
+
+            var pagedList = await PagedList<Patient?>.CreatePagedAsync(unAssignedPatients, paginationParams.PageNumber, paginationParams.PageSize);
 
             var pagedPatientsList = PagedListConverter<Patient?, PatientsForListDto>.Convert(pagedList, in _mapper);
 
