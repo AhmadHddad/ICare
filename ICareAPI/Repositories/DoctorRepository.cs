@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -39,7 +38,7 @@ namespace ICareAPI.Repositories
             return newDoctor.Entity;
         }
 
-        public async Task<Doctor> DeleteDocotr(int id)
+        public async Task<Doctor> DeleteDoctor(int id)
         {
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypeDoctor, _context, id);
