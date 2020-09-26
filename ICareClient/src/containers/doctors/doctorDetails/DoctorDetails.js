@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 import {unstable_batchedUpdates} from "react-dom";
 
 // hooks
-import {useFlag, useITablePagination} from "hooks/stateHooks";
+import {useFlag, useITablePagination} from "hooks/hooks";
 import {useParams} from "react-router-dom";
 
 // IComponents

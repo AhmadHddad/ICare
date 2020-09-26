@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import {makeStyles} from "@material-ui/core";
 
 // Hooks
-import {useFlag, useITablePagination} from "hooks/stateHooks";
+import {useFlag, useITablePagination} from "hooks/hooks";
 
 // Components
 import PatientsListTable from "components/patientsListTable/PatientsListTable";

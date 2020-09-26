@@ -7,7 +7,7 @@ import {
     callGetDoctorById,
     callEditDoctor
 } from "store/actions/doctors/doctorsActions";
-import {useFlag} from "hooks/stateHooks";
+import {useFlag} from "hooks/hooks";
 import DoctorDetailsFields from "./DoctorDetailsFields";
 
 // Constants
