@@ -11,7 +11,7 @@ import WarningModal from "common/warningModal/WarningModal";
 import ForceUnMount from "common/forceUnMount/ForceUnMount";
 
 // Hooks
-import {useITablePagination} from "hooks/stateHooks";
+import {useITablePagination} from "hooks/hooks";
 
 // Utils
 import {RenderActionBtns} from "containers/listUtils/listUtils";

@@ -13,7 +13,7 @@ using ICareAPI.Helpers;
 namespace ICareAPI.Controllers
 
 {
-    [ServiceFilter(typeof(LogUserAcitivity))]
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/patients")]
     [ApiController]
@@ -72,7 +72,7 @@ namespace ICareAPI.Controllers
             var mappedPatient = _mapper.Map<PatientForDetailsDto>(patient);
 
             var patientForReturn = _mapper.Map<StatisticsDto>(mappedPatient);
-            patientForReturn.PatientsWithSimilarDiseases = await _repo.PatientsWithSimilarDisease(id);
+            patientForReturn.PatientsWithSimilarDiseases = _repo.PatientsWithSimilarDisease(id);
 
 
 

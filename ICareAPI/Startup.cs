@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using AutoMapper;
 using ICareAPI.Interfaces;
 using ICareAPI.Middlewares;
+using Microsoft.Extensions.Hosting;
 
 namespace ICareAPI
 {
@@ -30,11 +31,13 @@ namespace ICareAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             //AddJsonOptions self Reference Loop accrues when a modal has another modal inside it like patients has records,
             // and in records there is patients and so on, so dot net will see it as self referencing loop, and we need to ignore it
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(opt => { opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
-
+            services.AddMvc()
+                  .AddMvcOptions(options => options.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddCors();
@@ -63,13 +66,13 @@ namespace ICareAPI
                 };
             });
 
-            services.AddScoped<LogUserAcitivity>();
+            services.AddScoped<LogUserActivity>();
             services.AddScoped<IUserRepository, UserRepository>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -91,7 +94,7 @@ namespace ICareAPI
                         {
                             //AddApplicationError an extension to modify and add CORS to the error;
                             context.Response.AddApplicationError(error.Error.Message);
-                            await context.Response.WriteAsync(error.Error.Message);
+                            await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
                         }
                     });
                 });
@@ -109,7 +112,12 @@ namespace ICareAPI
             // ErrorHandlingMiddleware
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                name: "default",
+                template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

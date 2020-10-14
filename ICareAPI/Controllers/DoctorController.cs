@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using ICareAPI.Dtos;
@@ -15,7 +13,7 @@ namespace ICareAPI.Controllers
     [Route("api/doctors")]
     [ApiController]
     [Authorize]
-    [ServiceFilter(typeof(LogUserAcitivity))]
+    [ServiceFilter(typeof(LogUserActivity))]
 
     public class DoctorsController : ControllerBase
     {
@@ -95,7 +93,7 @@ namespace ICareAPI.Controllers
         public async Task<ActionResult> DeleteDoctor(int id)
         {
 
-            var deleted = await _repo.DeleteDocotr(id);
+            var deleted = await _repo.DeleteDoctor(id);
 
             return Ok(deleted);
         }

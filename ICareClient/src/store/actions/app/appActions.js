@@ -59,17 +59,20 @@ export const apiCaller = (
     return async dispatch => {
         onStart && onStart();
 
-        await axios[method](url, data)
-            .then(res => {
-                dispatch(dispatchWhenSuccess(actionType, res.data, {...rest}));
-                onSuccess && onSuccess(res);
+        return new Promise(resolve => {
+            return axios[method](url, data)
+                .then(res => {
+                    resolve(res);
+                    dispatch(dispatchWhenSuccess(actionType, res.data, {...rest}));
+                    onSuccess && onSuccess(res);
 
-                !!successMsg && dispatch(showSuccessMessage(successMsg));
-            })
-            .catch(err => {
-                dispatch(dispatchWhenFailure(dispatch, actionType, err));
-                onFailure && onFailure(err, {...rest});
-            });
+                    !!successMsg && dispatch(showSuccessMessage(successMsg));
+                })
+                .catch(err => {
+                    dispatch(dispatchWhenFailure(dispatch, actionType, err));
+                    onFailure && onFailure(err, {...rest});
+                });
+        });
     };
 };
 

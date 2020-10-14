@@ -19,7 +19,7 @@ namespace ICareAPI.Repositories
 
         Task<Doctor> EditDoctor(Doctor doctor);
 
-        Task<Doctor> DeleteDocotr(int id);
+        Task<Doctor> DeleteDoctor(int id);
 
 
     }

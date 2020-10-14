@@ -23,7 +23,7 @@ namespace ICareAPI.Repositories
 
         Task<Patient> EditPatient(Patient patient);
 
-        Task<List<Patient>> PatientsWithSimilarDisease(int patientId);
+        List<Patient> PatientsWithSimilarDisease(int patientId);
 
         Task<int> PatchPatient(int id, JsonPatchDocument<Patient> patient);
 

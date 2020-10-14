@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ICareAPI.Repositories;
 using ICareAPI.Interfaces;
 using ICareAPI.Models;
 

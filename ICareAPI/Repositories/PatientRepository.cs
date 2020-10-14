@@ -139,8 +139,8 @@ namespace ICareAPI.Repositories
         }
 
 
-
-        public async Task<List<Patient>> PatientsWithSimilarDisease(int patientId)
+        //TODO improve performance
+        public List<Patient> PatientsWithSimilarDisease(int patientId)
         {
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypePatient, _context, patientId);
@@ -150,10 +150,14 @@ namespace ICareAPI.Repositories
 
             if (patientRecord.Count > 0)
             {
+                var DbF = Microsoft.EntityFrameworkCore.EF.Functions;
                 foreach (var item in patientRecord)
                 {
-                    var patientIds = await _context.Records.Where(rec => rec.DiseaseName.Contains(item.DiseaseName, StringComparison.CurrentCultureIgnoreCase) && rec.PatientId != patientId).Select(r => r.PatientId).ToArrayAsync();
-                    var patientsWithThisDieseas = await _context.Patients.Where(t => patientIds.Contains(t.Id)).ToListAsync();
+                    var patientIds = _context.Records.AsEnumerable<Record>()
+                    .Where(rec => rec.DiseaseName.Contains(item.DiseaseName, StringComparison.CurrentCultureIgnoreCase) && rec.PatientId != patientId)
+                    .Select(r => r.PatientId).ToArray();
+
+                    var patientsWithThisDieseas = _context.Patients.AsEnumerable().Where(t => patientIds.Contains(t.Id)).ToList();
 
                     patientsWithSimilarDiseasesList.AddRange(patientsWithThisDieseas);
                 }
@@ -175,16 +179,14 @@ namespace ICareAPI.Repositories
         }
 
         public async Task<PagedList<PatientsForListDto>> GetUnAssignedPatientsToDoctor(int doctorId, PaginationParams paginationParams)
-
         {
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
 
-            var unAssingedPatients = _context.Patients
-            .Select(p => p.PatientDoctors.Count == 0 ? p : p.PatientDoctors.FirstOrDefault(p => p.DoctorId == doctorId && p.Archived == false) == null ? p : null)
-            .Where(p => p != null);
 
-            var pagedList = await PagedList<Patient?>.CreatePagedAsync(unAssingedPatients, paginationParams.PageNumber, paginationParams.PageSize);
+            var unAssignedPatients = _context.Patients.Where(P => !P.PatientDoctors.Any(pd => pd.DoctorId == doctorId && pd.Archived == false));
+
+            var pagedList = await PagedList<Patient?>.CreatePagedAsync(unAssignedPatients, paginationParams.PageNumber, paginationParams.PageSize);
 
             var pagedPatientsList = PagedListConverter<Patient?, PatientsForListDto>.Convert(pagedList, in _mapper);
 
