@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
 
 namespace ICareAPI.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
         public int Id { get; set; }
 
@@ -23,7 +25,7 @@ namespace ICareAPI.Models
 
         public DateTime? ArchivedDate { get; set; }
 
-
+        public ICollection<UserRole> UserRoles { get; set; }
 
 
     }
