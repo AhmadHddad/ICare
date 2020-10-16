@@ -16,6 +16,10 @@ using AutoMapper;
 using ICareAPI.Interfaces;
 using ICareAPI.Middlewares;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Identity;
+using ICareAPI.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace ICareAPI
 {
@@ -31,25 +35,21 @@ namespace ICareAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configuration for Identity framework
 
-            //AddJsonOptions self Reference Loop accrues when a modal has another modal inside it like patients has records,
-            // and in records there is patients and so on, so dot net will see it as self referencing loop, and we need to ignore it
-            services.AddMvc()
-                  .AddMvcOptions(options => options.EnableEndpointRouting = false)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
+            {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 4;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+            });
 
-            services.AddCors();
-            services.AddAutoMapper(typeof(Startup));
-
-            /// Repos --- START ---
-            services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<IPatientRepository, PatientRepository>();
-            services.AddScoped<IRecordRepository, RecordRepository>();
-            services.AddScoped<IDoctorRepository, DoctorRepository>();
-            services.AddScoped<IPatientDoctorRepository, PatientDoctorRepository>();
-            /// Repos --- END ---
+            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+            builder.AddEntityFrameworkStores<DataContext>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
+            builder.AddSignInManager<SignInManager<User>>();
 
             // To Authenticate Token
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("AppSettings:Token").Value));
@@ -66,9 +66,36 @@ namespace ICareAPI
                 };
             });
 
+            //AddJsonOptions self Reference Loop accrues when a modal has another modal inside it like patients has records,
+            // and in records there is patients and so on, so dot net will see it as self referencing loop, and we need to ignore it
+            services.AddMvc(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
+            })
+                  .AddMvcOptions(options => options.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers()
+            .AddNewtonsoftJson(opt =>
+             opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+             );
+            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddCors();
+            services.AddAutoMapper(typeof(Startup));
+
+            /// Repos --- START ---
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
+            services.AddScoped<IRecordRepository, RecordRepository>();
+            services.AddScoped<IDoctorRepository, DoctorRepository>();
+            services.AddScoped<IPatientDoctorRepository, PatientDoctorRepository>();
             services.AddScoped<LogUserActivity>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            /// Repos --- END ---
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
