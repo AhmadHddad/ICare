@@ -6,12 +6,12 @@ namespace ICareAPI.Dtos
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
 
         public DateTime DateOfBirth { get; set; }
 
-        public string LastEntry { get; set; }
+        public string LastEntry { get; set; } = default!;
 
 
         public bool Archived { get; set; }

@@ -8,7 +8,7 @@ namespace ICareAPI.Models
     public class StatisticsDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
         public double AvarageOfBills { get; set; }
 
@@ -16,12 +16,12 @@ namespace ICareAPI.Models
 
         public int Age { get; set; }
 
-        public Record FivethRecord { get; set; }
+        public Record FivethRecord { get; set; } = default!;
 
 
-        public IList<Patient> PatientsWithSimilarDiseases { get; set; }
+        public IList<Patient> PatientsWithSimilarDiseases { get; set; } = default!;
 
 
-        public string HighestMonth { get; set; }
+        public string HighestMonth { get; set; } = default!;
     }
 }

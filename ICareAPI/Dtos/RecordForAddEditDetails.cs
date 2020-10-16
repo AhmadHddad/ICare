@@ -8,9 +8,9 @@ namespace ICareAPI.Dtos
     {
         public int Id { get; set; }
 
-        public string DiseaseName { get; set; }
+        public string DiseaseName { get; set; } = default!;
 
-        public string Description { get; set; }
+        public string Description { get; set; } = default!;
 
         public double Bill { get; set; }
 

@@ -7,16 +7,16 @@ namespace ICareAPI.Dtos
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = default!;
 
         [Required]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "User Name Minimum Length Is 3 And Maximum Is 20")]
-        public string UserName { get; set; }
+        public string UserName { get; set; } = default!;
 
 
         [Required]
         [StringLength(16, MinimumLength = 6, ErrorMessage = "Password Minimum Length Is 3 And Maximum Is 16")]
-        public string Password { get; set; }
+        public string Password { get; set; } = default!;
 
     }
 }

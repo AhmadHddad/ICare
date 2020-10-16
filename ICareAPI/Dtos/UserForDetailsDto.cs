@@ -9,13 +9,13 @@ namespace ICareAPI.Dtos
     {
         public int Id { get; set; }
 
-        public string UserName { get; set; }
+        public string UserName { get; set; } = default!;
 
-        public string Email { get; set; }
+        public string Email { get; set; } = default!;
 
         public DateTime Created { get; set; }
 
-        public DateTime LastAcitve { get; set; }
+        public DateTime LastActivity { get; set; }
 
         public bool Archived { get; set; }
 
