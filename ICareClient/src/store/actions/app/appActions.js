@@ -25,7 +25,7 @@ export function showErrorMessage(message) {
             type: SHOW_MESSAGE,
             message: {
                 type: MESSAGE_TYPES.error,
-                text: message
+                text: message?.message
             }
         });
     };
