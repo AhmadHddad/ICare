@@ -51,7 +51,7 @@ namespace ICareAPI.Controllers
 
         // GET api/doctor/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDoctorById(int id, bool withAssignedPatients = false)
+        public async Task<IActionResult> GetDoctorById(int id)
         {
 
             var doctor = await _repo.GetDoctor(id);
