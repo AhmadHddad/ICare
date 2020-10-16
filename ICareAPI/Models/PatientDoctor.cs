@@ -10,9 +10,9 @@ namespace ICareAPI.Models
 
         public int DoctorId { get; set; }
 
-        public Doctor Doctor { get; set; }
+        public Doctor Doctor { get; set; } = default!;
 
-        public Patient Patient { get; set; }
+        public Patient Patient { get; set; } = default!;
 
         public bool Archived { get; set; }
         public DateTime? ArchivedDate { get; set; }

@@ -8,23 +8,23 @@ namespace ICareAPI.Models
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
-        public string OfficialId { get; set; }
+        public string OfficialId { get; set; } = default!;
 
         public DateTime DateOfBirth { get; set; }
 
         public string? Email { get; set; }
 
-        public string Specialty { get; set; }
+        public string Specialty { get; set; } = default!;
 
-        public string University { get; set; }
+        public string University { get; set; } = default!;
 
-        public string Department { get; set; }
+        public string Department { get; set; } = default!;
 
         public DateTime Created { get; set; } = DateTime.Now;
 
-        public ICollection<PatientDoctor> PatientDoctors { get; set; } = new Collection<PatientDoctor>();
+        public ICollection<PatientDoctor> PatientDoctors { get; set; } = default!;
 
 
         public bool Archived { get; set; }

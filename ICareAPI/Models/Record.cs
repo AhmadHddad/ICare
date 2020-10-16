@@ -9,9 +9,9 @@ namespace ICareAPI.Models
     {
         public int Id { get; set; }
 
-        public string DiseaseName { get; set; }
+        public string DiseaseName { get; set; } = default!;
 
-        public string Description { get; set; }
+        public string Description { get; set; } = default!;
 
         public double Bill { get; set; }
 
@@ -19,7 +19,7 @@ namespace ICareAPI.Models
 
         public DateTime Created { get; set; } = DateTime.Now;
 
-        public Patient Patient { get; set; }
+        public Patient Patient { get; set; } = default!;
 
         public int PatientId { get; set; }
 

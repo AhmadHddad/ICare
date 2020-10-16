@@ -8,7 +8,7 @@ namespace ICareAPI.Models
 {
     public class Role : IdentityRole<int>
     {
-        public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; } = default!;
 
     }
 }

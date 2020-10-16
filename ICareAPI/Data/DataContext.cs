@@ -14,13 +14,13 @@ namespace ICareAPI.Repositories
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Patient> Patients { get; set; } = default!;
 
-        public DbSet<Record> Records { get; set; }
+        public DbSet<Record> Records { get; set; } = default!;
 
-        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Doctor> Doctors { get; set; } = default!;
 
-        public DbSet<PatientDoctor> PatientDoctors { get; set; }
+        public DbSet<PatientDoctor> PatientDoctors { get; set; } = default!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
