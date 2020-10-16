@@ -34,6 +34,15 @@ namespace ICareAPI.Middlewares
         }
     }
 
+    class UnAuthorizedException : Exception
+    {
+        public UnAuthorizedException(string msg)
+     : base(String.Format(msg))
+        {
+
+        }
+    }
+
 
 
 
@@ -69,6 +78,7 @@ namespace ICareAPI.Middlewares
             if (ex is NotFoundException) code = HttpStatusCode.NotFound;
             else if (ex is BadRequestException) code = HttpStatusCode.BadRequest;
             else if (ex is InternalServerException) code = HttpStatusCode.InternalServerError;
+            else if (ex is UnAuthorizedException) code = HttpStatusCode.Unauthorized;
 
             var result = JsonConvert.SerializeObject(new { message = ex.Message + "!", status = (int)code });
             context.Response.ContentType = "application/json";
