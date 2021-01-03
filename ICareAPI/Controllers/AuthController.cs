@@ -10,11 +10,13 @@ using ICareAPI.Repositories;
 using ICareAPI.Dtos;
 using ICareAPI.Helpers;
 using ICareAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ICareAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
 
@@ -34,61 +36,34 @@ namespace ICareAPI.Controllers
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
 
-            userForRegisterDto.Email = userForRegisterDto.Email.ToLower();
 
-            if (await _repo.EmailExists(userForRegisterDto.Email))
+            var newUser = new User
             {
-                return BadRequest("User Already Exists");
-            }
-            else
-            {
-                var newUser = new User
-                {
-                    Email = userForRegisterDto.Email,
-                    UserName = userForRegisterDto.UserName
-                };
+                Email = userForRegisterDto.Email,
+                UserName = userForRegisterDto.UserName
+            };
 
 
-                var createdUser = await _repo.Register(newUser, userForRegisterDto.Password);
-                return StatusCode(201);
-            }
+            var reg = await _repo.Register(newUser, userForRegisterDto.Password);
+            return StatusCode(201);
         }
 
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var userFromRepo = await _repo.Login(userForLoginDto.Email.ToLower(), userForLoginDto.Password);
+            var user = await _repo.Login(userForLoginDto.Email.ToLower(), userForLoginDto.Password);
 
-            if (userFromRepo == null)
+            if (user == null)
             {
                 return Unauthorized("Email Or Password Is Wrong");
             }
             else
             {
 
-                var claims = new[] {
-                    new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                    new Claim(ClaimTypes.Name, userFromRepo.UserName),
-                };
+                var token = _repo.GenerateUserToken(user);
 
-
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
-
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-                var tokenDecriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.Now.AddDays(1),
-                    SigningCredentials = creds
-                };
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-
-                var token = tokenHandler.CreateToken(tokenDecriptor);
-
-                return Ok(new { token = tokenHandler.WriteToken(token), Expires = DateTime.Now.AddDays(1) });
+                return Ok(token);
             }
         }
 

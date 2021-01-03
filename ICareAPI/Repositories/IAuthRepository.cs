@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ICareAPI.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ICareAPI.Repositories
 {
@@ -11,5 +12,7 @@ namespace ICareAPI.Repositories
         Task<bool> EmailExists(string email);
 
         Task<bool> SaveAll();
+
+        dynamic GenerateUserToken(User user);
     }
 }
