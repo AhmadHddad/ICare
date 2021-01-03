@@ -30,7 +30,7 @@ namespace ICareAPI.Repositories
             _mapper = mapper;
             _context = context;
 
-            _entityTypePatient = EntityType.patinet;
+            _entityTypePatient = EntityType.patient;
         }
 
         public Patient AddPatient(Patient patient)

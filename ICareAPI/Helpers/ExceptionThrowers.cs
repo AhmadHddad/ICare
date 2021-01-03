@@ -43,7 +43,7 @@ namespace ICareAPI.Helpers
             {
 
 
-                if (entityType == EntityType.patinet)
+                if (entityType == EntityType.patient)
                 {
                     using (var patient = context.Patients.FirstOrDefaultAsync(p => checkArchived == true ? p.Id == id && p.Archived == archived : p.Id == id))
                     {
@@ -80,7 +80,7 @@ namespace ICareAPI.Helpers
 
             if (context != null)
             {
-                if (entityType == EntityType.patinet)
+                if (entityType == EntityType.patient)
                 {
                     using (var patient = context.Patients.FirstOrDefaultAsync(p => checkArchived == true ? p.OfficialId == OfficialId && p.Archived == archived : p.OfficialId == OfficialId))
                     {
@@ -115,7 +115,7 @@ namespace ICareAPI.Helpers
             if (context != null)
             {
 
-                if (entityType == EntityType.patinet)
+                if (entityType == EntityType.patient)
                 {
                     using (var patient = context.Patients.FirstOrDefaultAsync(p => checkArchived ? p.Id == id && p.Archived == archived : p.Id == id))
                     {
@@ -149,7 +149,7 @@ namespace ICareAPI.Helpers
             {
 
 
-                if (entityType == EntityType.patinet)
+                if (entityType == EntityType.patient)
                 {
                     using (var patient = context.Patients.FirstOrDefaultAsync(p => checkArchived ? p.OfficialId == OfficialId && p.Archived == archived : p.OfficialId == OfficialId))
                     {

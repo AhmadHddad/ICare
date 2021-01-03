@@ -36,7 +36,7 @@ namespace ICareAPI.Repositories
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
 
-            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.patinet, _context, patientId);
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.patient, _context, patientId);
 
 
             if (await GetPatientDoctor(doctorId, patientId) != null)
@@ -61,7 +61,7 @@ namespace ICareAPI.Repositories
         public async Task<List<PatientDoctor>> GetAssignedDoctorsToPatientId(int patientId, bool? withPatientRecords)
         {
 
-            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.patinet, _context, patientId);
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.patient, _context, patientId);
 
             var patientsForThisDoctor = _context.PatientDoctors.Where(d => d.PatientId == patientId)
                 .Include(d => d.Doctor)
@@ -115,7 +115,7 @@ namespace ICareAPI.Repositories
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
 
-            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.patinet, _context, patientId);
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.patient, _context, patientId);
 
 
             var patientDoctor = _context.PatientDoctors
@@ -136,7 +136,7 @@ namespace ICareAPI.Repositories
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
 
-            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.patinet, _context, patientId);
+            ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.patient, _context, patientId);
 
 
             var patientDoctor = await GetPatientDoctor(doctorId, patientId, false);
