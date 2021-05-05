@@ -22,11 +22,16 @@ namespace ICareAPI.Helpers
             {
 
                 var repo = resultContext.HttpContext.RequestServices.GetService<IUserRepository>();
-                var user = await repo.GetUserById(int.Parse(userId.Value));
 
-                user.LastActivity = DateTime.Now;
+                if (repo != null)
+                {
 
-                await repo.SaveAll();
+                    var user = await repo.GetUserById(int.Parse(userId.Value));
+
+                    user.LastActivity = DateTime.Now;
+
+                    await repo.SaveAll();
+                }
             }
 
 
