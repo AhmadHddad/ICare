@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ICareAPI.constants;
 using ICareAPI.Middlewares;
 using ICareAPI.Models;
-using Microsoft.AspNetCore.Identity;
+// using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -19,20 +19,33 @@ namespace ICareAPI.Repositories
     {
         private readonly DataContext _context;
         private readonly IConfiguration _config;
-        private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<Role> _roleManager;
-        private readonly UserManager<User> _userManager;
+        //     private readonly SignInManager<User> _signInManager;
+        //     // private readonly RoleManager<Role> _roleManager;
+        //     private readonly UserManager<User> _userManager;
 
-        public AuthRepository(DataContext context, IConfiguration config,
-    UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+        //     public AuthRepository(DataContext context, IConfiguration config,
+        // UserManager<User> userManager, SignInManager<User> signInManager)
+        //     {
+        //         _userManager = userManager;
+        //         _signInManager = signInManager;
+        //         // _roleManager = roleManager;
+        //         _context = context;
+        //         _config = config;
+
+        //     }
+
+
+
+
+
+        public AuthRepository(DataContext context, IConfiguration config)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
+
             _context = context;
             _config = config;
 
         }
+
         public async Task<bool> EmailExists(string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
@@ -49,82 +62,136 @@ namespace ICareAPI.Repositories
 
         public async Task<User?> Login(string email, string password)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            // var user = await _userManager.FindByEmailAsync(email);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
 
-            if (user != null)
+
+            if (user == null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
 
-                var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+                // var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
 
 
-                if (result.Succeeded)
-                {
-                    return user;
-                }
-                else
-                {
-                    throw new UnAuthorizedException("User name or password is wrong");
-                }
+                // if (result.Succeeded)
+                // {
+                //     return user;
+                // }
+                // else
+                // {
+                //     throw new UnAuthorizedException("User name or password is wrong");
+                // }
+
+                throw new UnAuthorizedException("Could not find user");
+
             }
             else
             {
-                throw new UnAuthorizedException("Could not find user");
+                return user;
+
             }
 
 
         }
 
-        private async void CreateRoles()
+
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            var existingRoles = await _roleManager.Roles.CountAsync();
-
-            if (existingRoles == 0)
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
-                var newRoles = new List<Role>
-                {
-                    new Role{Name=Enums.Admin},
-                    new Role{Name= Enums.Doctor},
-                    new Role{Name= Enums.Patient},
-                };
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
 
-
-                foreach (var role in newRoles)
+                for (int i = 0; i < computedHash.Length; i++)
                 {
-                    await _roleManager.CreateAsync(role);
+                    if (computedHash[i] != passwordHash[i])
+                    {
+                        return false;
+                    }
                 }
+
+                return true;
             }
         }
+
+
+        // private async void CreateRoles()
+        // {
+        //     var existingRoles = await _roleManager.Roles.CountAsync();
+
+        //     if (existingRoles == 0)
+        //     {
+        //         var newRoles = new List<Role>
+        //         {
+        //             new Role{Name=Enums.Admin},
+        //             new Role{Name= Enums.Doctor},
+        //             new Role{Name= Enums.Patient},
+        //         };
+
+
+        //         foreach (var role in newRoles)
+        //         {
+        //             await _roleManager.CreateAsync(role);
+        //         }
+        //     }
+        // }
+
+        // public async Task<User> Register(User user, string password)
+        // {
+
+        //     if (!await EmailExists(user.Email))
+        //     {
+        //         // CreateRoles();
+
+        //         user.Created = DateTime.Now;
+
+        //         var result = await _userManager.CreateAsync(user, password);
+
+        //         if (result.Succeeded)
+        //         {
+        //             var res = await _userManager.AddToRoleAsync(user, "Admin");
+
+        //             return user;
+        //         }
+        //         else
+        //         {
+        //             throw new BadRequestException("Could not create user");
+
+        //         }
+        //     }
+        //     else
+        //     {
+        //         throw new BadRequestException("User already exists");
+        //     }
+
+
+        // }
+
 
         public async Task<User> Register(User user, string password)
         {
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            user.Created = DateTime.Now;
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
 
-            if (!await EmailExists(user.Email))
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
-                CreateRoles();
-
-                user.Created = DateTime.Now;
-
-                var result = await _userManager.CreateAsync(user, password);
-
-                if (result.Succeeded)
-                {
-                    var res = await _userManager.AddToRoleAsync(user, "Admin");
-
-                    return user;
-                }
-                else
-                {
-                    throw new BadRequestException("Could not create user");
-
-                }
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
-            else
-            {
-                throw new BadRequestException("User already exists");
-            }
-
 
         }
+
+
+
 
         private Claim[] CreateUserClaims(User user)
         {

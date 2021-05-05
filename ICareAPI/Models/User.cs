@@ -4,11 +4,17 @@ using System.Collections.Generic;
 
 namespace ICareAPI.Models
 {
-    public class User : IdentityUser<int>
+    public class User
     {
-        public override string UserName { get; set; } = default!;
+        public int Id { get; set; }
 
-        public override string Email { get; set; } = default!;
+        public string UserName { get; set; } = default!;
+
+        public string Email { get; set; } = default!;
+
+        public byte[] PasswordHash { get; set; } = default!;
+
+        public byte[] PasswordSalt { get; set; } = default!;
 
         public DateTime Created { get; set; } = DateTime.Now;
 
@@ -18,7 +24,7 @@ namespace ICareAPI.Models
 
         public DateTime? ArchivedDate { get; set; }
 
-        public ICollection<UserRole> UserRoles { get; set; } = default!;
+        // public ICollection<UserRole> UserRoles { get; set; } = default!;
 
 
     }
