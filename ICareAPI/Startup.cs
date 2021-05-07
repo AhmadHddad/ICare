@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Identity;
 using ICareAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.OpenApi.Models;
+using System;
 
 namespace ICareAPI
 {
@@ -99,14 +101,69 @@ namespace ICareAPI
             services.AddScoped<LogUserActivity>();
             services.AddScoped<IUserRepository, UserRepository>();
             /// Repos --- END ---
+
+
+
+
+            // Swagger Configuration
+
+            services.AddSwaggerGen(setup =>
+            {
+                // Include 'SecurityScheme' to use JWT Authentication
+                var jwtSecurityScheme = new OpenApiSecurityScheme
+                {
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Name = "JWT Authentication",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+
+                setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+                setup.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                  { jwtSecurityScheme, Array.Empty<string>() }
+                });
+
+
+                setup.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "ICareAPI",
+                    Version = "v1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Ahmad Hddad",
+                        Email = "ahmadhddad@outlook.com",
+                        Url = new Uri("https://www.linkedin.com/in/ahmad-naalwe-hddad/")
+
+                    },
+                });
+
+
+            });
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ICareAPI v1"));
             }
             else
             {
@@ -133,21 +190,30 @@ namespace ICareAPI
                 //  app.UseHsts();
             }
 
-            //  app.UseHttpsRedirection();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            app.UseAuthentication();
-            //app.UseDefaultFiles();
             //app.UseStaticFiles();
 
+            app.UseRouting();
+
+            //  app.UseHttpsRedirection();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            //app.UseDefaultFiles();
+
             // ErrorHandlingMiddleware
+
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
-            app.UseMvc(routes =>
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                name: "default",
-                template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
             });
+
+
+
         }
     }
 }
