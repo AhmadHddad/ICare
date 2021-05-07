@@ -81,7 +81,7 @@ namespace ICareAPI.Repositories
                 //     throw new UnAuthorizedException("User name or password is wrong");
                 // }
 
-                throw new UnAuthorizedException("Could not find user");
+                throw new UnAuthorizedException("Email Or Password Is Wrong");
 
             }
             else

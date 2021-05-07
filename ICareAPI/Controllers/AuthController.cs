@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ICareAPI.Repositories;
 using ICareAPI.Dtos;
-using ICareAPI.Helpers;
 using ICareAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 
@@ -54,9 +53,9 @@ namespace ICareAPI.Controllers
         {
             var user = await _repo.Login(userForLoginDto.Email.ToLower(), userForLoginDto.Password);
 
-            if (user == null)
+            if (user is null)
             {
-                return Unauthorized("Email Or Password Is Wrong");
+                return Unauthorized();
             }
             else
             {
