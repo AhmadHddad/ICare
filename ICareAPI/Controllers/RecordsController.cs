@@ -123,40 +123,40 @@ namespace ICareAPI.Controllers
             }
         }
 
-        public async Task<IActionResult> PatchRecord(int id, JsonPatchDocument<RecordForAddEditDetails> record)
-        {
-            var recordToPatch = await _repo.GetRecordById(id);
+        // public async Task<IActionResult> PatchRecord(int id, JsonPatchDocument<RecordForAddEditDetails> record)
+        // {
+        //     var recordToPatch = await _repo.GetRecordById(id);
 
-            if (recordToPatch == null)
-            {
-                return BadRequest("No record with this Id");
-            }
-            else
-            {
-                foreach (var item in record.Operations)
-                {
-                    if (item.path == "/patientId")
-                    {
-                        return BadRequest("You can't change patient id");
+        //     if (recordToPatch == null)
+        //     {
+        //         return BadRequest("No record with this Id");
+        //     }
+        //     else
+        //     {
+        //         foreach (var item in record.Operations)
+        //         {
+        //             if (item.path == "/patientId")
+        //             {
+        //                 return BadRequest("You can't change patient id");
 
-                    }
-                }
+        //             }
+        //         }
 
-                var result = await _repo.PatchRecord(id, _mapper.Map<JsonPatchDocument<Record>>(record));
+        //         var result = await _repo.PatchRecord(id, _mapper.Map<JsonPatchDocument<Record>>(record));
 
-                if (result == 0)
-                {
-                    return Accepted("Nothing changed");
+        //         if (result == 0)
+        //         {
+        //             return Accepted("Nothing changed");
 
-                }
-                else
-                {
-                    return Ok("Updated successfully");
+        //         }
+        //         else
+        //         {
+        //             return Ok("Updated successfully");
 
-                }
-            }
+        //         }
+        //     }
 
-        }
+        // }
 
     }
 }
