@@ -31,13 +31,13 @@ namespace ICareAPI.Controllers
             _patientRepo = patientRepo;
         }
 
-        [HttpGet("patient/{id}")]
+        [HttpGet("patient/{patientId}")]
         public async Task<IActionResult> GetPatientRecords(int patientId)
         {
 
             var records = await _repo.GetPatientRecords(patientId);
 
-            if (records != null)
+            if (records is not null)
             {
 
                 List<RecordForAddEditDetails> targetList = new List<RecordForAddEditDetails>(records.Cast<RecordForAddEditDetails>());
@@ -80,7 +80,7 @@ namespace ICareAPI.Controllers
 
             var patientRecord = patientToEdit.Records.FirstOrDefault(rec => rec.Id == record.Id);
 
-            if (patientRecord == null)
+            if (patientRecord is null)
             {
                 return BadRequest("This record is not for this patient");
             }
@@ -89,7 +89,7 @@ namespace ICareAPI.Controllers
             {
                 return BadRequest("Record does not exist");
             }
-            else if (patientToEdit == null)
+            else if (patientToEdit is null)
             {
                 return BadRequest("Patient does not exist");
 
@@ -113,7 +113,7 @@ namespace ICareAPI.Controllers
 
             var record = await _repo.GetRecordById(id);
 
-            if (record != null)
+            if (record is not null)
             {
                 return Ok(record);
             }
