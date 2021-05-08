@@ -84,6 +84,7 @@ namespace ICareAPI
             })
                   .AddMvcOptions(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
+
             services.AddControllers()
             .AddNewtonsoftJson(opt =>
              opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
