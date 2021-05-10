@@ -12,6 +12,8 @@ namespace ICareAPI.Models
 
         public string OfficialId { get; set; } = default!;
 
+        public string PhoneNumber { get; set; } = default!;
+
         public DateTime DateOfBirth { get; set; }
 
         public string? Email { get; set; }
@@ -25,7 +27,6 @@ namespace ICareAPI.Models
         public DateTime Created { get; set; } = DateTime.Now;
 
         public ICollection<PatientDoctor> PatientDoctors { get; set; } = default!;
-
 
         public bool Archived { get; set; }
 

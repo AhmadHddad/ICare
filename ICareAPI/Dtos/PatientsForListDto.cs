@@ -8,6 +8,7 @@ namespace ICareAPI.Dtos
 
         public string Name { get; set; } = default!;
 
+        public string PhoneNumber { get; set; } = default!;
 
         public DateTime DateOfBirth { get; set; }
 

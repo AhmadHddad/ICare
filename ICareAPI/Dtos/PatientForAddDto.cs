@@ -13,6 +13,10 @@ namespace ICareAPI.Dtos
         [StringLength(9, MinimumLength = 9, ErrorMessage = "OfficialId must be 9 digits!")]
         public string OfficialId { get; set; } = "";
 
+        [Required]
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "Phone Number must be 10 digits!")]
+        public string PhoneNumber { get; set; } = "";
+
 
         [Required]
         public DateTime DateOfBirth { get; set; } = DateTime.Now;

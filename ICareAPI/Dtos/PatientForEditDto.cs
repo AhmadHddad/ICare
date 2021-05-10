@@ -15,6 +15,11 @@ namespace ICareAPI.Dtos
         [Required]
         public DateTime DateOfBirth { get; set; }
 
+
+        [Required]
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "Phone Number must be 10 digits!")]
+        public string PhoneNumber { get; set; } = "";
+
         public string? Email { get; set; }
 
 

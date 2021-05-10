@@ -15,6 +15,9 @@ namespace ICareAPI.Dtos
 
         public DateTime DateOfBirth { get; set; }
 
+        public string PhoneNumber { get; set; } = default!;
+
+
         public string? Email { get; set; }
 
 

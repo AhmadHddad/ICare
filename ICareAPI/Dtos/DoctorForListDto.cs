@@ -12,6 +12,7 @@ namespace ICareAPI.Dtos
 
         public string Specialty { get; set; } = default!;
 
+        public string PhoneNumber { get; set; } = default!;
         public string Department { get; set; } = default!;
 
         public int NumberOfAssignedPatients { get; set; } = default!;

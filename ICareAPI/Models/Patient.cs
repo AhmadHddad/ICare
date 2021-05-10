@@ -16,6 +16,8 @@ namespace ICareAPI.Models
 
         public string? Email { get; set; }
 
+        public string PhoneNumber { get; set; } = default!;
+
         public DateTime Created { get; set; } = DateTime.Now;
 
         public ICollection<Record> Records { get; set; } = new Collection<Record>();
