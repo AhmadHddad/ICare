@@ -9,17 +9,17 @@ namespace ICareAPI.Repositories
 {
     public interface IDoctorRepository
     {
-        Task<Doctor> GetDoctor(int id);
+        Task<Doctor> GetDoctorAsync(int id);
 
-        Task<PagedList<Doctor>> GetDoctors(PaginationParams paginationParams);
+        Task<PagedList<Doctor>> GetDoctorsAsync(PaginationParams paginationParams);
 
-        Task<PagedList<DoctorForListDto>> GetDoctorsList(PaginationParams paginationParams);
+        Task<PagedList<DoctorForListDto>> GetDoctorsListAsync(PaginationParams paginationParams);
 
-        Task<Doctor> AddDoctor(Doctor doctor);
+        Task<Doctor> AddDoctorAsync(Doctor doctor);
 
-        Task<Doctor> EditDoctor(Doctor doctor);
+        Task<Doctor> EditDoctorAsync(Doctor doctor);
 
-        Task<Doctor> DeleteDoctor(int id);
+        Task<Doctor> DeleteDoctorAsync(int id);
 
 
     }

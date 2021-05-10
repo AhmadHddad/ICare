@@ -44,8 +44,8 @@ namespace ICareAPI.Repositories
                 throw new BadRequestException("This doctor is already assigned for this patient");
             }
 
-            var doctor = await _doctorRepo.GetDoctor(doctorId);
-            var patient = await _patientRepo.GetPatient(patientId);
+            var doctor = await _doctorRepo.GetDoctorAsync(doctorId);
+            var patient = await _patientRepo.GetPatientAsync(patientId);
 
 
             var patientDoctor = new PatientDoctor()

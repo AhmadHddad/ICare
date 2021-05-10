@@ -14,7 +14,7 @@ namespace ICareAPI.Repositories
 
         }
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<List<User>> GetAllUsersAsync()
         {
             var users = await _context.Users.ToListAsync();
 
@@ -22,7 +22,7 @@ namespace ICareAPI.Repositories
         }
 
 
-        public async Task<User> GetUserById(int id)
+        public async Task<User> GetUserByIdAsync(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
 
@@ -30,7 +30,7 @@ namespace ICareAPI.Repositories
 
         }
 
-        public async Task<bool> SaveAll()
+        public async Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync() > 0;
 

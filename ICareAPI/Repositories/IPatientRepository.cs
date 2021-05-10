@@ -15,20 +15,20 @@ namespace ICareAPI.Repositories
     {
         Patient AddPatient(Patient patient);
 
-        Task<Patient> DeletePatient(Patient patient);
+        Task<Patient> DeletePatientAsync(Patient patient);
 
-        Task<PagedList<Patient>> GetPatients(bool? withRecords, PaginationParams paginationParams);
+        Task<PagedList<Patient>> GetPatientsAsync(bool? withRecords, PaginationParams paginationParams);
 
-        Task<Patient> GetPatient(int id, bool? withRecords = false);
+        Task<Patient> GetPatientAsync(int id, bool? withRecords = false);
 
-        Task<Patient> EditPatient(Patient patient);
+        Task<Patient> EditPatientAsync(Patient patient);
 
         List<Patient> PatientsWithSimilarDisease(int patientId);
 
-        Task<int> PatchPatient(int id, JsonPatchDocument<Patient> patient);
+        Task<int> PatchPatientAsync(int id, JsonPatchDocument<Patient> patient);
 
 
-        Task<PagedList<PatientsForListDto>> GetUnAssignedPatientsToDoctor(int doctorId, PaginationParams paginationParams);
+        Task<PagedList<PatientsForListDto>> GetUnAssignedPatientsToDoctorAsync(int doctorId, PaginationParams paginationParams);
 
 
 

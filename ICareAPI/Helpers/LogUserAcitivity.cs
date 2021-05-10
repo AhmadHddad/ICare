@@ -26,11 +26,11 @@ namespace ICareAPI.Helpers
                 if (repo != null)
                 {
 
-                    var user = await repo.GetUserById(int.Parse(userId.Value));
+                    var user = await repo.GetUserByIdAsync(int.Parse(userId.Value));
 
                     user.LastActivity = DateTime.Now;
 
-                    await repo.SaveAll();
+                    await repo.SaveAllAsync();
                 }
             }
 

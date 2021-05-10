@@ -37,7 +37,7 @@ namespace ICareAPI.Controllers
         public async Task<IActionResult> GetDoctors([FromQuery] PaginationParams paginationParams)
         {
 
-            var doctors = await _repo.GetDoctorsList(paginationParams);
+            var doctors = await _repo.GetDoctorsListAsync(paginationParams);
 
             HttpContext.Response.AddPagination(doctors.CurrnetPage, doctors.PageSize, doctors.TotalCount, doctors.TotalPages);
 
@@ -50,7 +50,7 @@ namespace ICareAPI.Controllers
         public async Task<IActionResult> GetDoctorById(int id)
         {
 
-            var doctor = await _repo.GetDoctor(id);
+            var doctor = await _repo.GetDoctorAsync(id);
 
             return Ok(doctor);
 
@@ -65,7 +65,7 @@ namespace ICareAPI.Controllers
             if (ModelState.IsValid)
             {
 
-                var addedDoctor = await _repo.AddDoctor(_mapper.Map<Doctor>(doctor));
+                var addedDoctor = await _repo.AddDoctorAsync(_mapper.Map<Doctor>(doctor));
                 return Ok(addedDoctor);
             }
             else
@@ -89,7 +89,7 @@ namespace ICareAPI.Controllers
         public async Task<ActionResult> DeleteDoctor(int id)
         {
 
-            var deleted = await _repo.DeleteDoctor(id);
+            var deleted = await _repo.DeleteDoctorAsync(id);
 
             return Ok(deleted);
         }
@@ -112,7 +112,7 @@ namespace ICareAPI.Controllers
         public async Task<ActionResult> GetUnAssignedPatients(int doctorId, [FromQuery] PaginationParams paginationParams)
         {
 
-            var unAssignedPatients = await _patientRepository.GetUnAssignedPatientsToDoctor(doctorId, paginationParams);
+            var unAssignedPatients = await _patientRepository.GetUnAssignedPatientsToDoctorAsync(doctorId, paginationParams);
 
             HttpContext.Response.AddPagination(unAssignedPatients.CurrnetPage, unAssignedPatients.PageSize, unAssignedPatients.TotalCount, unAssignedPatients.TotalPages);
 
@@ -149,11 +149,11 @@ namespace ICareAPI.Controllers
         public async Task<ActionResult> EditDoctor(DoctorForEditDto doctorForEdit)
         {
 
-            var doctor = await _repo.GetDoctor(doctorForEdit.Id);
+            var doctor = await _repo.GetDoctorAsync(doctorForEdit.Id);
 
             var mappedDoctor = _mapper.Map<DoctorForEditDto, Doctor>(doctorForEdit, doctor);
 
-            return Ok(await _repo.EditDoctor(mappedDoctor));
+            return Ok(await _repo.EditDoctorAsync(mappedDoctor));
 
         }
 

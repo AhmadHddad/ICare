@@ -26,10 +26,10 @@ namespace ICareAPI.Repositories
             _entityTypeDoctor = EntityType.doctor;
         }
 
-        public async Task<Doctor> AddDoctor(Doctor doctor)
+        public async Task<Doctor> AddDoctorAsync(Doctor doctor)
         {
 
-            ExceptionThrowers.ThrowErrorIfEntiryExist(_entityTypeDoctor, _context, doctor.OfficialId);
+            ExceptionThrowers.ThrowErrorIfEntityExist(_entityTypeDoctor, _context, doctor.OfficialId);
 
             var newDoctor = await _context.Doctors.AddAsync(doctor);
 
@@ -38,12 +38,12 @@ namespace ICareAPI.Repositories
             return newDoctor.Entity;
         }
 
-        public async Task<Doctor> DeleteDoctor(int id)
+        public async Task<Doctor> DeleteDoctorAsync(int id)
         {
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypeDoctor, _context, id);
 
-            var doctor = await GetDoctor(id);
+            var doctor = await GetDoctorAsync(id);
 
             doctor.Archived = true;
             doctor.ArchivedDate = DateTime.Now;
@@ -54,12 +54,12 @@ namespace ICareAPI.Repositories
             return doctor;
         }
 
-        public async Task<Doctor> EditDoctor(Doctor doctor)
+        public async Task<Doctor> EditDoctorAsync(Doctor doctor)
         {
 
             if (doctor.OfficialId == null) throw new InternalServerException("OfficialId is null");
 
-            var doctorToBeUpdated = await GetDoctor(doctor.Id);
+            var doctorToBeUpdated = await GetDoctorAsync(doctor.Id);
 
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctor.Id);
@@ -82,7 +82,7 @@ namespace ICareAPI.Repositories
 
         }
 
-        public async Task<Doctor> GetDoctor(int id)
+        public async Task<Doctor> GetDoctorAsync(int id)
         {
             ExceptionThrowers.ThrowErrorIfNotValidId(id);
 
@@ -101,7 +101,7 @@ namespace ICareAPI.Repositories
 
 
 
-        public async Task<PagedList<Doctor>> GetDoctors(PaginationParams paginationParams)
+        public async Task<PagedList<Doctor>> GetDoctorsAsync(PaginationParams paginationParams)
         {
             var doctors = await PagedList<Doctor>.CreatePagedAsync(_context.Doctors.OrderByDescending(d => d.Created).Include(d => d.PatientDoctors), paginationParams.PageNumber, paginationParams.PageSize);
 
@@ -109,7 +109,7 @@ namespace ICareAPI.Repositories
 
         }
 
-        public async Task<PagedList<DoctorForListDto>> GetDoctorsList(PaginationParams paginationParams)
+        public async Task<PagedList<DoctorForListDto>> GetDoctorsListAsync(PaginationParams paginationParams)
         {
 
             var doctors = _context.Doctors.Where(d => d.Archived == false).OrderByDescending(d => d.Created)

@@ -140,7 +140,7 @@ namespace ICareAPI.Helpers
             }
         }
 
-        public static void ThrowErrorIfEntiryExist(EntityType entityType,
+        public static void ThrowErrorIfEntityExist(EntityType entityType,
          Repositories.DataContext context, string OfficialId, bool checkArchived = false, bool archived = false)
         {
             ThrowErrorIfNotValidId(OfficialId);

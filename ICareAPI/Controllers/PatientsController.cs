@@ -29,7 +29,7 @@ namespace ICareAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Patients(bool? withRecords, [FromQuery] PaginationParams paginationParams)
         {
-            var pations = await _repo.GetPatients(true, paginationParams);
+            var pations = await _repo.GetPatientsAsync(true, paginationParams);
 
             if (pations != null && withRecords == true)
             {
@@ -52,7 +52,7 @@ namespace ICareAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPatientById(int id, bool? withRecords)
         {
-            var pation = await _repo.GetPatient(id, withRecords);
+            var pation = await _repo.GetPatientAsync(id, withRecords);
 
             var patientToReturn = _mapper.Map<PatientForDetailsDto>(pation);
             return Ok(patientToReturn);
@@ -63,7 +63,7 @@ namespace ICareAPI.Controllers
 
         public async Task<IActionResult> GetPatientsStatistics(int id)
         {
-            var patient = await _repo.GetPatient(id, true);
+            var patient = await _repo.GetPatientAsync(id, true);
 
             var mappedPatient = _mapper.Map<PatientForDetailsDto>(patient);
 
@@ -94,9 +94,9 @@ namespace ICareAPI.Controllers
             if (ModelState.IsValid)
             {
 
-                var patientToEdit = await _repo.GetPatient(patient.Id);
+                var patientToEdit = await _repo.GetPatientAsync(patient.Id);
                 var mappedPatient = _mapper.Map<PatientForEditDto, Patient>(patient, patientToEdit);
-                var newPation = await _repo.EditPatient(mappedPatient);
+                var newPation = await _repo.EditPatientAsync(mappedPatient);
 
                 return Ok(patientToEdit);
             }
@@ -109,10 +109,10 @@ namespace ICareAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePatient(int id)
         {
-            var patientForDelete = await _repo.GetPatient(id, false);
+            var patientForDelete = await _repo.GetPatientAsync(id, false);
 
 
-            var deletedPatient = await _repo.DeletePatient(patientForDelete);
+            var deletedPatient = await _repo.DeletePatientAsync(patientForDelete);
 
             return Ok(deletedPatient);
 
@@ -123,7 +123,7 @@ namespace ICareAPI.Controllers
         public async Task<IActionResult> PatchPatient(int id, JsonPatchDocument<PatientForEditDto> patient)
         {
 
-            var patientToPatch = _repo.GetPatient(id, false).Result;
+            var patientToPatch = _repo.GetPatientAsync(id, false).Result;
 
             if (patientToPatch != null)
             {
@@ -143,7 +143,7 @@ namespace ICareAPI.Controllers
 
                 var patientForRepo = _mapper.Map<JsonPatchDocument<Patient>>(patient);
 
-                var x = await _repo.PatchPatient(id, patientForRepo);
+                var x = await _repo.PatchPatientAsync(id, patientForRepo);
 
                 if (x == 0)
                 {

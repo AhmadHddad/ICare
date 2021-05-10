@@ -32,7 +32,7 @@ namespace ICareAPI.Controllers
         public async Task<IActionResult> GetPatientRecords(int patientId)
         {
 
-            var records = await _repo.GetPatientRecords(patientId);
+            var records = await _repo.GetPatientRecordsAsync(patientId);
 
             if (records is not null)
             {
@@ -55,14 +55,14 @@ namespace ICareAPI.Controllers
             {
                 return BadRequest("Record already exits");
             }
-            else if (await _patientRepo.GetPatient(record.PatientId, false) == null)
+            else if (await _patientRepo.GetPatientAsync(record.PatientId, false) == null)
             {
                 return BadRequest("Patient does not exist");
 
             }
             else
             {
-                var newRecord = _repo.AddRecord(_mapper.Map<Record>(record)).Result;
+                var newRecord = _repo.AddRecordAsync(_mapper.Map<Record>(record)).Result;
 
                 var patientToReturn = _mapper.Map<RecordForAddEditDetails>(newRecord);
 
@@ -73,7 +73,7 @@ namespace ICareAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> EditRecord(RecordForAddEditDetails record)
         {
-            var patientToEdit = await _patientRepo.GetPatient(record.PatientId, true);
+            var patientToEdit = await _patientRepo.GetPatientAsync(record.PatientId, true);
 
             var patientRecord = patientToEdit.Records.FirstOrDefault(rec => rec.Id == record.Id);
 
@@ -82,7 +82,7 @@ namespace ICareAPI.Controllers
                 return BadRequest("This record is not for this patient");
             }
 
-            if (!await _repo.RecordExists(record.Id))
+            if (!await _repo.RecordExistsAsync(record.Id))
             {
                 return BadRequest("Record does not exist");
             }
@@ -94,7 +94,7 @@ namespace ICareAPI.Controllers
             else
             {
 
-                var newRecord = _repo.EditRecord(_mapper.Map<Record>(record)).Result;
+                var newRecord = _repo.EditRecordAsync(_mapper.Map<Record>(record)).Result;
 
 
                 return Ok(newRecord);
@@ -108,7 +108,7 @@ namespace ICareAPI.Controllers
         public async Task<IActionResult> GetRecordById(int id)
         {
 
-            var record = await _repo.GetRecordById(id);
+            var record = await _repo.GetRecordByIdAsync(id);
 
             if (record is not null)
             {

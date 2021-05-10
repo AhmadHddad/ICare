@@ -25,7 +25,7 @@ namespace ICareAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = _mapper.Map<IList<UserForDetailsDto>>(await _repo.GetAllUsers());
+            var users = _mapper.Map<IList<UserForDetailsDto>>(await _repo.GetAllUsersAsync());
             return Ok(users);
         }
     }

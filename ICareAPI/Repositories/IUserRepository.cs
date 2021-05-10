@@ -7,11 +7,11 @@ namespace ICareAPI.Repositories
     public interface IUserRepository
     {
 
-        Task<User> GetUserById(int id);
+        Task<User> GetUserByIdAsync(int id);
 
-        Task<List<User>> GetAllUsers();
+        Task<List<User>> GetAllUsersAsync();
 
-        Task<bool> SaveAll();
+        Task<bool> SaveAllAsync();
 
 
     }

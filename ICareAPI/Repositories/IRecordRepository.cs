@@ -10,20 +10,20 @@ namespace ICareAPI.Interfaces
 {
     public interface IRecordRepository
     {
-        Task<Record> AddRecord(Record record);
+        Task<Record> AddRecordAsync(Record record);
 
-        Task<Record> EditRecord(Record record);
-
-
-        Task<List<Record>> GetPatientRecords(int patientId);
+        Task<Record> EditRecordAsync(Record record);
 
 
-        Task<bool> RecordExists(int id);
-
-        Task<int> PatchRecord(int id, JsonPatchDocument<Record> record);
+        Task<List<Record>> GetPatientRecordsAsync(int patientId);
 
 
-        Task<Record> GetRecordById(int id);
+        Task<bool> RecordExistsAsync(int id);
+
+        Task<int> PatchRecordAsync(int id, JsonPatchDocument<Record> record);
+
+
+        Task<Record> GetRecordByIdAsync(int id);
 
 
     }

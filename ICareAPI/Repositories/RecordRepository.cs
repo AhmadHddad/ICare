@@ -20,7 +20,7 @@ namespace ICareAPI.Repositories
         }
 
 
-        public async Task<Record> AddRecord(Record record)
+        public async Task<Record> AddRecordAsync(Record record)
         {
 
 
@@ -30,7 +30,7 @@ namespace ICareAPI.Repositories
             return newRec.Entity;
         }
 
-        public async Task<Record> EditRecord(Record record)
+        public async Task<Record> EditRecordAsync(Record record)
         {
 
             var recordToBeUpdated = await _context.Records.FirstOrDefaultAsync(r => r.Id == record.Id);
@@ -46,14 +46,14 @@ namespace ICareAPI.Repositories
         }
 
 
-        public async Task<List<Record>> GetPatientRecords(int patientId)
+        public async Task<List<Record>> GetPatientRecordsAsync(int patientId)
         {
             var patientRecords = await _context.Records.Where(r => r.PatientId == patientId).ToListAsync();
 
             return patientRecords;
         }
 
-        public async Task<bool> RecordExists(int id)
+        public async Task<bool> RecordExistsAsync(int id)
         {
             var record = await _context.Records.FindAsync(id);
 
@@ -67,7 +67,7 @@ namespace ICareAPI.Repositories
             }
         }
 
-        public async Task<Record> GetRecordById(int id)
+        public async Task<Record> GetRecordByIdAsync(int id)
         {
 
             var record = await _context.Records.FindAsync(id);
@@ -76,9 +76,9 @@ namespace ICareAPI.Repositories
         }
 
 
-        public async Task<int> PatchRecord(int id, JsonPatchDocument<Record> record)
+        public async Task<int> PatchRecordAsync(int id, JsonPatchDocument<Record> record)
         {
-            var recordForPatch = await GetRecordById(id);
+            var recordForPatch = await GetRecordByIdAsync(id);
 
             record.ApplyTo(recordForPatch);
 

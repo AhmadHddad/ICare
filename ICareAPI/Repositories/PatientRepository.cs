@@ -37,7 +37,7 @@ namespace ICareAPI.Repositories
         {
 
 
-            ExceptionThrowers.ThrowErrorIfEntiryExist(_entityTypePatient, _context, patient.OfficialId);
+            ExceptionThrowers.ThrowErrorIfEntityExist(_entityTypePatient, _context, patient.OfficialId);
 
             patient.Created = DateTime.Now;
             // TODO Test this
@@ -51,7 +51,7 @@ namespace ICareAPI.Repositories
 
 
 
-        public async Task<Patient> DeletePatient(Patient patient)
+        public async Task<Patient> DeletePatientAsync(Patient patient)
         {
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(_entityTypePatient, _context, patient.Id);
@@ -65,7 +65,7 @@ namespace ICareAPI.Repositories
             return patient;
         }
 
-        public async Task<Patient> EditPatient(Patient patient)
+        public async Task<Patient> EditPatientAsync(Patient patient)
 
         {
 
@@ -85,7 +85,7 @@ namespace ICareAPI.Repositories
         }
 
 
-        public async Task<Patient> GetPatient(int id, bool? withRecords = false)
+        public async Task<Patient> GetPatientAsync(int id, bool? withRecords = false)
         {
 
 
@@ -115,7 +115,7 @@ namespace ICareAPI.Repositories
 
         }
 
-        public async Task<PagedList<Patient>> GetPatients(bool? withRecords, PaginationParams paginationParams)
+        public async Task<PagedList<Patient>> GetPatientsAsync(bool? withRecords, PaginationParams paginationParams)
         {
 
 
@@ -167,9 +167,9 @@ namespace ICareAPI.Repositories
             return patientsWithSimilarDiseasesList.Distinct().ToList();
         }
 
-        public async Task<int> PatchPatient(int id, JsonPatchDocument<Patient> patient)
+        public async Task<int> PatchPatientAsync(int id, JsonPatchDocument<Patient> patient)
         {
-            var patientToPatch = await GetPatient(id, false);
+            var patientToPatch = await GetPatientAsync(id, false);
 
             patient.ApplyTo(patientToPatch);
 
@@ -178,7 +178,7 @@ namespace ICareAPI.Repositories
             return result;
         }
 
-        public async Task<PagedList<PatientsForListDto>> GetUnAssignedPatientsToDoctor(int doctorId, PaginationParams paginationParams)
+        public async Task<PagedList<PatientsForListDto>> GetUnAssignedPatientsToDoctorAsync(int doctorId, PaginationParams paginationParams)
         {
 
             ExceptionThrowers.ThrowErrorIfEntityNotExist(EntityType.doctor, _context, doctorId);
