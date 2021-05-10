@@ -7,11 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ICareAPI.Repositories;
 using ICareAPI.Models;
+using Bogus;
+using System.Collections.ObjectModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ICareAPI.Controllers
 {
     [Route("api/patientTest")]
     [ApiController]
+    [AllowAnonymous]
     public class TestPatientsController : ControllerBase
     {
         private readonly DataContext _context;
@@ -102,6 +106,97 @@ namespace ICareAPI.Controllers
         private bool PatientExists(int id)
         {
             return _context.Patients.Any(e => e.Id == id);
+        }
+
+        [HttpPost("seed")]
+        public ActionResult SeedData()
+        {
+
+
+            try
+            {
+
+
+                var specialty = new[] { "Heart", "Brain", "Bones", "Muscles", "Women" };
+
+                var department = new[] { "Cardiology", "Burn Center", "Anesthetics", "Admissions", "Accident and emergency (A&E)" };
+
+                var university = new[] { "Massachusetts Institute of Technology", "Harvard University", "Stanford University", "California Institute of Technology", "University of Cambridge" };
+                var OfficialId = new List<string>();
+
+                for (int i = 0; i < 200; i++)
+                {
+                    Random r = new Random();
+                    int genRand = r.Next(100000000, 999999999);
+
+                    OfficialId.Add(genRand.ToString());
+                }
+
+                OfficialId.Distinct();
+
+
+                var patients = new Faker<Patient>()
+                    .RuleFor(o => o.Archived, f => false)
+                    .RuleFor(o => o.Created, f => DateTime.Now)
+                    .RuleFor(o => o.DateOfBirth, f => f.Date.Past())
+                    .RuleFor(o => o.Name, f => f.Name.FirstName())
+                    .RuleFor(o => o.Email, f => f.Internet.Email())
+                    .RuleFor(o => o.OfficialId, f => f.PickRandom(OfficialId))
+                    .RuleFor(o => o.PhoneNumber, f => f.Person.Phone)
+                    .RuleFor(o => o.ArchivedDate, f => null)
+                    .RuleFor(o => o.Records, f => new Collection<Record>())
+                    .RuleFor(o => o.PatientDoctors, f => new Collection<PatientDoctor>())
+                    .Generate(50);
+
+                var doctors = new Faker<Doctor>()
+                    .RuleFor(o => o.Archived, f => false)
+                    .RuleFor(o => o.Created, f => DateTime.Now)
+                    .RuleFor(o => o.Department, f => f.PickRandom(department))
+                    .RuleFor(o => o.DateOfBirth, f => f.Date.Past())
+                    .RuleFor(o => o.Name, f => f.Name.FirstName())
+                    .RuleFor(o => o.Specialty, f => f.PickRandom(specialty))
+                    .RuleFor(o => o.University, f => f.PickRandom(university))
+                    .RuleFor(o => o.Email, f => f.Internet.Email())
+                    .RuleFor(o => o.ArchivedDate, f => null)
+                    .RuleFor(o => o.PatientDoctors, f => new Collection<PatientDoctor>())
+                    .RuleFor(o => o.OfficialId, f => f.PickRandom(OfficialId))
+                    .RuleFor(o => o.PhoneNumber, f => f.Person.Phone)
+                    .Generate(50);
+
+
+
+                _context.Patients.AddRange(patients);
+                _context.Doctors.AddRange(doctors);
+
+                _context.SaveChanges();
+
+
+
+                // List<PatientDoctor> patientDoctorList = new() { };
+
+                // var patientsList = _context.Patients.ToList();
+                // _context.Doctors.Skip(25).OfType<Doctor>().ToList().ForEach((doctor,index) =>
+                // {
+                //     patientDoctorList.Add(new PatientDoctor() { DoctorId = doctor.Id, PatientId =  })
+                // });
+
+
+                return Ok();
+
+
+            }
+            catch (System.Exception error)
+            {
+
+
+                throw new Exception($"Something went wrong -- {error.Message}", error);
+            }
+
+
+
+
+
+
         }
     }
 }
