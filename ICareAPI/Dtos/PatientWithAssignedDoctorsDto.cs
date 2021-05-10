@@ -14,6 +14,9 @@ namespace ICareAPI.Dtos
 
         public int OfficialId { get; set; }
 
+        public string PhoneNumber { get; set; } = default!;
+
+
         public DateTime DateOfBirth { get; set; } = DateTime.Now;
 
         public string? Email { get; set; } = "";
@@ -24,7 +27,7 @@ namespace ICareAPI.Dtos
         public IList<int> AssignedDoctorsIds { get; set; } = new List<int>();
 
         public bool Archived { get; set; }
-        
+
         public DateTime? ArchivedDate { get; set; }
 
     }
