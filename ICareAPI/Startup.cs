@@ -90,8 +90,11 @@ namespace ICareAPI
              opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
              );
 
+            // Make routes to lower case
+            services.AddRouting(opt => opt.LowercaseUrls = true);
+
             services.AddCors();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
             /// Repos --- START ---
             services.AddScoped<IAuthRepository, AuthRepository>();
