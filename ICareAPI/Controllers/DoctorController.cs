@@ -10,12 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ICareAPI.Controllers
 {
-    [Route("api/doctors")]
-    [ApiController]
-    [Authorize]
-    [ServiceFilter(typeof(LogUserActivity))]
 
-    public class DoctorsController : ControllerBase
+    public class DoctorsController : BaseController
     {
         private readonly IDoctorRepository _repo;
         private readonly IPatientDoctorRepository _patientDoctorRepo;

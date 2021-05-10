@@ -9,10 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ICareAPI.Controllers
 {
-    [Authorize]
-    [Route("api/users")]
-    [ApiController]
-    public class UsersController : ControllerBase
+
+    public class UsersController : BaseController
     {
         private readonly IUserRepository _repo;
         private readonly IMapper _mapper;

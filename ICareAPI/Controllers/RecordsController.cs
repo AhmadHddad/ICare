@@ -14,10 +14,7 @@ using ICareAPI.Models;
 
 namespace ICareAPI.Controllers
 {
-    [Route("api/records")]
-    [Authorize]
-    [ApiController]
-    public class RecordsController : ControllerBase
+    public class RecordsController : BaseController
     {
         private readonly IRecordRepository _repo;
         private readonly IMapper _mapper;
