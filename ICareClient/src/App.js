@@ -10,10 +10,10 @@ import {Snackbar} from "@material-ui/core";
 import router, {loginPage} from "router/routs";
 
 // Components
-import Layout from "containers/layout/Layout.js";
+import Layout from "containers/layout/Layout";
 
 // Actions
-import {checkIfAuth} from "store/actions/auth/authActions.js";
+import {checkIfAuth} from "store/actions/auth/authActions";
 import {deleteMessage, purgeApp} from "store/actions/app/appActions";
 
 export default function App(props) {
