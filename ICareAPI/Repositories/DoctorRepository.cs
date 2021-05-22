@@ -73,10 +73,10 @@ namespace ICareAPI.Repositories
                 return doctor;
 
             }
-            catch (System.Exception)
+            catch (System.Exception error)
             {
 
-                throw new Exception("Could not save");
+                throw new InternalServerException($"Could not save - ${error.Message}");
             }
 
 
@@ -103,7 +103,7 @@ namespace ICareAPI.Repositories
 
         public async Task<PagedList<Doctor>> GetDoctorsAsync(PaginationParams paginationParams)
         {
-            var doctors = await PagedList<Doctor>.CreatePagedAsync(_context.Doctors.OrderByDescending(d => d.Created).Include(d => d.PatientDoctors), paginationParams.PageNumber, paginationParams.PageSize);
+            var doctors = await PagedList<Doctor>.CreatePagedAsync(_context.Doctors.OrderByDescending(d => d.Created).Include(d => d.PatientDoctors).AsNoTracking(), paginationParams.PageNumber, paginationParams.PageSize);
 
             return doctors;
 
