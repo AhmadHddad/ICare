@@ -1,18 +1,19 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using ICareAPI.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace ICareAPI.Repositories
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>,
+    UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
 
         public DataContext()
         {
         }
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-
-        public DbSet<User> Users { get; set; } = default!;
 
         public DbSet<Patient> Patients { get; set; } = default!;
 
@@ -36,6 +37,14 @@ namespace ICareAPI.Repositories
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
+            modelBuilder.Entity<User>().HasMany(u => u.UserRoles).WithOne(ur => ur.User)
+            .HasForeignKey(u => u.UserId).IsRequired();
+
+            modelBuilder.Entity<Role>().HasMany(u => u.UserRoles).WithOne(ur => ur.Role)
+            .HasForeignKey(u => u.RoleId).IsRequired();
+
 
             // modelBuilder.Entity<UserRole>(userRole =>
             // {
