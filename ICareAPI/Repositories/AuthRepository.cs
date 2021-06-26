@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ICareAPI.constants;
 using ICareAPI.Middlewares;
 using ICareAPI.Models;
+using Microsoft.AspNetCore.Identity;
 // using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,32 +20,32 @@ namespace ICareAPI.Repositories
     {
         private readonly DataContext _context;
         private readonly IConfiguration _config;
-        //     private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<User> _signInManager;
         //     // private readonly RoleManager<Role> _roleManager;
-        //     private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        //     public AuthRepository(DataContext context, IConfiguration config,
-        // UserManager<User> userManager, SignInManager<User> signInManager)
-        //     {
-        //         _userManager = userManager;
-        //         _signInManager = signInManager;
-        //         // _roleManager = roleManager;
-        //         _context = context;
-        //         _config = config;
-
-        //     }
-
-
-
-
-
-        public AuthRepository(DataContext context, IConfiguration config)
+        public AuthRepository(DataContext context, IConfiguration config,
+    UserManager<User> userManager, SignInManager<User> signInManager)
         {
-
+            _userManager = userManager;
+            _signInManager = signInManager;
+            // _roleManager = roleManager;
             _context = context;
             _config = config;
 
         }
+
+
+
+
+
+        // public AuthRepository(DataContext context, IConfiguration config)
+        // {
+
+        //     _context = context;
+        //     _config = config;
+
+        // }
 
         public async Task<bool> EmailExists(string email)
         {
@@ -66,28 +67,25 @@ namespace ICareAPI.Repositories
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
 
 
-            if (user == null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if (user is not null)
             {
 
-                // var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+                var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
 
 
-                // if (result.Succeeded)
-                // {
-                //     return user;
-                // }
-                // else
-                // {
-                //     throw new UnAuthorizedException("User name or password is wrong");
-                // }
-
-                throw new UnAuthorizedException("Email Or Password Is Wrong");
+                if (result.Succeeded)
+                {
+                    return user;
+                }
+                else
+                {
+                    throw new UnAuthorizedException("User name or password is wrong");
+                }
 
             }
             else
             {
-                return user;
-
+                throw new UnAuthorizedException("Email Or Password Is Wrong");
             }
 
 
@@ -135,62 +133,36 @@ namespace ICareAPI.Repositories
         //     }
         // }
 
-        // public async Task<User> Register(User user, string password)
-        // {
-
-        //     if (!await EmailExists(user.Email))
-        //     {
-        //         // CreateRoles();
-
-        //         user.Created = DateTime.Now;
-
-        //         var result = await _userManager.CreateAsync(user, password);
-
-        //         if (result.Succeeded)
-        //         {
-        //             var res = await _userManager.AddToRoleAsync(user, "Admin");
-
-        //             return user;
-        //         }
-        //         else
-        //         {
-        //             throw new BadRequestException("Could not create user");
-
-        //         }
-        //     }
-        //     else
-        //     {
-        //         throw new BadRequestException("User already exists");
-        //     }
-
-
-        // }
-
-
         public async Task<User> Register(User user, string password)
         {
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-            user.Created = DateTime.Now;
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user;
-        }
 
-
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            if (!await EmailExists(user.Email))
             {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                // CreateRoles();
+
+                user.Created = DateTime.Now;
+
+                var result = await _userManager.CreateAsync(user, password);
+
+                if (result.Succeeded)
+                {
+                    // var res = await _userManager.AddToRoleAsync(user, "Admin");
+
+                    return user;
+                }
+                else
+                {
+                    throw new BadRequestException("Could not create user");
+
+                }
+            }
+            else
+            {
+                throw new BadRequestException("User already exists");
             }
 
+
         }
-
-
 
 
         private Claim[] CreateUserClaims(User user)
