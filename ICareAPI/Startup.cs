@@ -5,23 +5,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ICareAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using ICareAPI.Helpers;
 using Microsoft.AspNetCore.Http;
-using AutoMapper;
 using ICareAPI.Interfaces;
 using ICareAPI.Middlewares;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Identity;
-using ICareAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.OpenApi.Models;
-using System;
+using ICareAPI.Extensions;
 
 namespace ICareAPI
 {
@@ -41,36 +34,11 @@ namespace ICareAPI
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
 
-            // Configuration for Identity framework
+            // adding identity services;
+            services.AddIdentityServices();
 
-            // IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
-            // {
-            //     opt.Password.RequireDigit = false;
-            //     opt.Password.RequiredLength = 4;
-            //     opt.Password.RequireNonAlphanumeric = false;
-            //     opt.Password.RequireUppercase = false;
-            // });
-
-            // builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
-            // builder.AddEntityFrameworkStores<DataContext>();
-            // builder.AddRoleValidator<RoleValidator<Role>>();
-            // builder.AddRoleManager<RoleManager<Role>>();
-            // builder.AddSignInManager<SignInManager<User>>();
-
-            // To Authenticate Token
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("AppSettings:Token").Value));
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = key,
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-
-                };
-            });
+            // To add Token services;
+            services.AddTokenService(Configuration);
 
             //AddJsonOptions self Reference Loop accrues when a modal has another modal inside it like patients has records,
             // and in records there is patients and so on, so dot net will see it as self referencing loop, and we need to ignore it
@@ -109,52 +77,9 @@ namespace ICareAPI
 
 
 
-            // Swagger Configuration
+            // Adding Swagger Service
 
-            services.AddSwaggerGen(setup =>
-            {
-                // Include 'SecurityScheme' to use JWT Authentication
-                var jwtSecurityScheme = new OpenApiSecurityScheme
-                {
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
-                    Name = "JWT Authentication",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
-
-                    Reference = new OpenApiReference
-                    {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
-                        Type = ReferenceType.SecurityScheme
-                    }
-                };
-
-                setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-
-                setup.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                  { jwtSecurityScheme, Array.Empty<string>() }
-                });
-
-
-                setup.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "ICareAPI",
-                    Version = "v1",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Ahmad Hddad",
-                        Email = "ahmadhddad@outlook.com",
-                        Url = new Uri("https://www.linkedin.com/in/ahmad-naalwe-hddad/")
-
-                    },
-                });
-
-
-            });
-
-
+            services.AddSwaggerService();
 
         }
 
