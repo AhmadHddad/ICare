@@ -50,6 +50,7 @@
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.5",
     "eslint": "7.26.0",
+    "eslint-plugin-react-hook-form": "^0.2.1",
     "prettier": "^2.3.0"
   }
 }
