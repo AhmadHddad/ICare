@@ -46,7 +46,7 @@ namespace ICareAPI.Helpers
 
 
 
-            CreateMap<User, UserForDetailsDto>().ReverseMap();
+            CreateMap<AppUser, UserForDetailsDto>().ReverseMap();
 
             CreateMap<DoctorForAddDto, Doctor>().ReverseMap();
 

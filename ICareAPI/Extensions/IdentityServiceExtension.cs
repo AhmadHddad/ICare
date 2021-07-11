@@ -12,17 +12,17 @@ namespace ICareAPI.Extensions
 
             // Configuration for Identity framework
 
-            services.AddIdentityCore<User>(opt =>
+            services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.Password.RequireDigit = false;
                 opt.Password.RequiredLength = 4;
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = false;
 
-            }).AddRoles<Role>()
-            .AddRoleManager<RoleManager<Role>>()
-            .AddSignInManager<SignInManager<User>>()
-            .AddRoleValidator<RoleValidator<Role>>()
+            }).AddRoles<AppRole>()
+            .AddRoleManager<RoleManager<AppRole>>()
+            .AddSignInManager<SignInManager<AppUser>>()
+            .AddRoleValidator<RoleValidator<AppRole>>()
             .AddEntityFrameworkStores<DataContext>();
 
 
