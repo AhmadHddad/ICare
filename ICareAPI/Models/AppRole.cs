@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ICareAPI.Models
 {
-    public class Role : IdentityRole<int>
+    public class AppRole : IdentityRole<int>
     {
         public ICollection<UserRole> UserRoles { get; set; } = default!;
 

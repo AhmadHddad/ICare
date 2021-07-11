@@ -14,7 +14,7 @@ namespace ICareAPI.Repositories
 
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<AppUser>> GetAllUsersAsync()
         {
             var users = await _context.Users.ToListAsync();
 
@@ -22,7 +22,7 @@ namespace ICareAPI.Repositories
         }
 
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<AppUser> GetUserByIdAsync(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
 

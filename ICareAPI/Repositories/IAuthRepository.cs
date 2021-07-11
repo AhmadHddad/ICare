@@ -6,13 +6,13 @@ namespace ICareAPI.Repositories
 {
     public interface IAuthRepository
     {
-        Task<User> Register(User user, string password);
-        Task<User?> Login(string email, string password);
+        Task<AppUser> Register(AppUser user, string password);
+        Task<AppUser?> Login(string email, string password);
 
         Task<bool> EmailExists(string email);
 
         Task<bool> SaveAll();
 
-        dynamic GenerateUserToken(User user);
+        dynamic GenerateUserToken(AppUser user);
     }
 }

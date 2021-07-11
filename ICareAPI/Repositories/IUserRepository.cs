@@ -7,9 +7,9 @@ namespace ICareAPI.Repositories
     public interface IUserRepository
     {
 
-        Task<User> GetUserByIdAsync(int id);
+        Task<AppUser> GetUserByIdAsync(int id);
 
-        Task<List<User>> GetAllUsersAsync();
+        Task<List<AppUser>> GetAllUsersAsync();
 
         Task<bool> SaveAllAsync();
 

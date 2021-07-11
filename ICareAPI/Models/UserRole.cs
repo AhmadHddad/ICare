@@ -4,10 +4,8 @@ namespace ICareAPI.Models
 {
     public class UserRole : IdentityUserRole<int>
     {
-        public int Id { get; set; }
+        public AppUser User { get; set; } = default!;
 
-        public User User { get; set; } = default!;
-
-        public Role Role { get; set; } = default!;
+        public AppRole Role { get; set; } = default!;
     }
 }

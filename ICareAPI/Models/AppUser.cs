@@ -4,9 +4,12 @@ using System.Collections.Generic;
 
 namespace ICareAPI.Models
 {
-    public class User : IdentityUser<int>
+    public class AppUser : IdentityUser<int>
     {
         public DateTime Created { get; set; } = DateTime.Now;
+
+        public DateTime DateOfBirth { get; set; }
+
 
         public DateTime LastActivity { get; set; } = DateTime.Now;
 

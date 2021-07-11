@@ -36,7 +36,7 @@ namespace ICareAPI.Controllers
         {
 
 
-            var newUser = new User
+            var newUser = new AppUser
             {
                 Email = userForRegisterDto.Email,
                 UserName = userForRegisterDto.UserName
