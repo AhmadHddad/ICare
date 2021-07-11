@@ -7,18 +7,79 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ICareAPI.Repositories;
 using ICareAPI.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using ICareAPI.constants;
 
 namespace ICareAPI.Controllers
 {
     [Route("api/recordTest")]
     [ApiController]
+    [AllowAnonymous]
     public class TestRecordsController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public TestRecordsController(DataContext context)
+        public TestRecordsController(DataContext context, RoleManager<AppRole> roleManager,
+         UserManager<AppUser> userManager)
         {
+            _userManager = userManager;
+            _roleManager = roleManager;
             _context = context;
+
+        }
+
+        [HttpPost("MakeRoles")]
+
+        public async Task<ActionResult<bool>> MakeRoles()
+        {
+
+            // var allRoles = _roleManager.Roles.ToList();
+
+            // System.Console.WriteLine($"---------ALL ROLES {allRoles.Count} ----------");
+
+
+            // if (allRoles.Count == 0)
+            // {
+
+
+
+
+            //     var roles = new List<AppRole>();
+
+            //     foreach (var roleEnum in Enum.GetValues(typeof(RolesEnum)))
+            //     {
+            //         roles.Add(new AppRole { Name = roleEnum.ToString() });
+            //     }
+
+
+
+
+            //     roles.ForEach(async role =>
+            //     {
+            //         await _roleManager.CreateAsync(role);
+            //     });
+
+            // }
+
+
+            var adminUser = new AppUser
+            {
+                UserName = "Ahmad Hddad",
+                Email = "a@a.com",
+                DateOfBirth = new DateTime(2011, 6, 10),
+                SecurityStamp = Guid.NewGuid().ToString()
+
+            };
+
+            await _userManager.CreateAsync(adminUser, "123456789");
+            await _userManager.AddToRoleAsync(adminUser, RolesEnum.Admin.ToString());
+
+
+            return true;
+
         }
 
         // GET: api/Records1
