@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ICareAPI.Repositories
 {
-    public class DataContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>,
+    public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>,
     UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
 
@@ -38,20 +38,19 @@ namespace ICareAPI.Repositories
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<AppUser>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
 
-            modelBuilder.Entity<User>().HasMany(u => u.UserRoles).WithOne(ur => ur.User)
-            .HasForeignKey(u => u.UserId).IsRequired();
+            modelBuilder.Entity<AppRole>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
 
-            modelBuilder.Entity<Role>().HasMany(u => u.UserRoles).WithOne(ur => ur.Role)
-            .HasForeignKey(u => u.RoleId).IsRequired();
 
-
-            // modelBuilder.Entity<UserRole>(userRole =>
-            // {
-            //     userRole.HasKey(ur => ur.Id);
-            //     userRole.HasOne(ur => ur.Role).WithMany(r => r.UserRoles).HasForeignKey(k => k.RoleId).IsRequired();
-            //     userRole.HasOne(ur => ur.User).WithMany(u => u.UserRoles).HasForeignKey(k => k.UserId).IsRequired();
-            // });
 
 
             modelBuilder.Entity<PatientDoctor>()
@@ -69,7 +68,6 @@ namespace ICareAPI.Repositories
             .OnDelete(DeleteBehavior.Restrict);
 
 
-            base.OnModelCreating(modelBuilder);
         }
 
     }
