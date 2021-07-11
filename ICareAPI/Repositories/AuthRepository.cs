@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using static ICareAPI.constants.Enums;
 
 namespace ICareAPI.Repositories
@@ -20,12 +22,12 @@ namespace ICareAPI.Repositories
     {
         private readonly DataContext _context;
         private readonly IConfiguration _config;
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<AppUser> _signInManager;
         //     // private readonly RoleManager<Role> _roleManager;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
         public AuthRepository(DataContext context, IConfiguration config,
-    UserManager<User> userManager, SignInManager<User> signInManager)
+    UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -61,11 +63,10 @@ namespace ICareAPI.Repositories
             }
         }
 
-        public async Task<User?> Login(string email, string password)
+        public async Task<AppUser?> Login(string email, string password)
         {
             // var user = await _userManager.FindByEmailAsync(email);
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
-
+            var user = await _context.Users.Include(u => u.UserRoles).FirstOrDefaultAsync(x => x.Email == email);
 
             if (user is not null)
             {
@@ -112,43 +113,31 @@ namespace ICareAPI.Repositories
         }
 
 
-        // private async void CreateRoles()
-        // {
-        //     var existingRoles = await _roleManager.Roles.CountAsync();
 
-        //     if (existingRoles == 0)
-        //     {
-        //         var newRoles = new List<Role>
-        //         {
-        //             new Role{Name=Enums.Admin},
-        //             new Role{Name= Enums.Doctor},
-        //             new Role{Name= Enums.Patient},
-        //         };
-
-
-        //         foreach (var role in newRoles)
-        //         {
-        //             await _roleManager.CreateAsync(role);
-        //         }
-        //     }
-        // }
-
-        public async Task<User> Register(User user, string password)
+        public async Task<AppUser> Register(AppUser user, string password)
         {
 
             if (!await EmailExists(user.Email))
             {
                 // CreateRoles();
 
-                user.Created = DateTime.Now;
 
                 var result = await _userManager.CreateAsync(user, password);
 
                 if (result.Succeeded)
                 {
-                    // var res = await _userManager.AddToRoleAsync(user, "Admin");
+                    // var res = await _userManager.AddToRoleAsync(user, RolesEnum.Admin.ToString());
+
+                    // if (res.Succeeded)
+                    // {
 
                     return user;
+                    // }
+                    // else
+                    // {
+                    //     var serializedJson = JsonConvert.SerializeObject(res.Errors);
+                    //     throw new Exception(serializedJson);
+                    // }
                 }
                 else
                 {
@@ -165,12 +154,15 @@ namespace ICareAPI.Repositories
         }
 
 
-        private Claim[] CreateUserClaims(User user)
+        private Claim[] CreateUserClaims(AppUser user)
         {
+
+
             return new[] {
                 new Claim (ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim (ClaimTypes.Name, user.UserName.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email.ToString())
+                    new Claim(ClaimTypes.Email, user.Email.ToString()),
+                    new Claim(ClaimTypes.Role, JsonConvert.SerializeObject(user.UserRoles.FirstOrDefault()?.RoleId))
             };
         }
 
@@ -205,7 +197,7 @@ namespace ICareAPI.Repositories
             return new { token = tokenHandler.WriteToken(token), Expires = DateTime.Now.AddDays(1) };
         }
 
-        public dynamic GenerateUserToken(User user)
+        public dynamic GenerateUserToken(AppUser user)
         {
 
             var userClaims = CreateUserClaims(user);
