@@ -16,6 +16,113 @@ namespace ICareAPI.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.5");
 
+            modelBuilder.Entity("ICareAPI.Models.AppRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("ICareAPI.Models.AppUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Archived")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ArchivedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("LastActivity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers");
+                });
+
             modelBuilder.Entity("ICareAPI.Models.Doctor", b =>
                 {
                     b.Property<int>("Id")
@@ -170,110 +277,6 @@ namespace ICareAPI.Migrations
                     b.ToTable("Records");
                 });
 
-            modelBuilder.Entity("ICareAPI.Models.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles");
-                });
-
-            modelBuilder.Entity("ICareAPI.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Archived")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("ArchivedDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("LastActivity")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers");
-                });
-
             modelBuilder.Entity("ICareAPI.Models.UserRole", b =>
                 {
                     b.Property<int>("UserId")
@@ -282,22 +285,9 @@ namespace ICareAPI.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RoleId1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UserId1")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("RoleId1");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserRoles");
                 });
@@ -418,27 +408,15 @@ namespace ICareAPI.Migrations
 
             modelBuilder.Entity("ICareAPI.Models.UserRole", b =>
                 {
-                    b.HasOne("ICareAPI.Models.Role", null)
-                        .WithMany()
+                    b.HasOne("ICareAPI.Models.AppRole", "Role")
+                        .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ICareAPI.Models.Role", "Role")
+                    b.HasOne("ICareAPI.Models.AppUser", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("RoleId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ICareAPI.Models.User", null)
-                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ICareAPI.Models.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -449,7 +427,7 @@ namespace ICareAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("ICareAPI.Models.Role", null)
+                    b.HasOne("ICareAPI.Models.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -458,7 +436,7 @@ namespace ICareAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("ICareAPI.Models.User", null)
+                    b.HasOne("ICareAPI.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -467,7 +445,7 @@ namespace ICareAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("ICareAPI.Models.User", null)
+                    b.HasOne("ICareAPI.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -476,11 +454,21 @@ namespace ICareAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("ICareAPI.Models.User", null)
+                    b.HasOne("ICareAPI.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ICareAPI.Models.AppRole", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("ICareAPI.Models.AppUser", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("ICareAPI.Models.Doctor", b =>
@@ -493,16 +481,6 @@ namespace ICareAPI.Migrations
                     b.Navigation("PatientDoctors");
 
                     b.Navigation("Records");
-                });
-
-            modelBuilder.Entity("ICareAPI.Models.Role", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("ICareAPI.Models.User", b =>
-                {
-                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }
