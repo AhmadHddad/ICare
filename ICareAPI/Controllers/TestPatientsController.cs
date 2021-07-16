@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ICareAPI.Repositories;
+using ICareAPI.Data;
 using ICareAPI.Models;
 using Bogus;
 using System.Collections.ObjectModel;

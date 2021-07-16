@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using static ICareAPI.constants.Enums;
+using ICareAPI.Data;
 
 namespace ICareAPI.Repositories
 {
@@ -38,29 +38,11 @@ namespace ICareAPI.Repositories
         }
 
 
-
-
-
-        // public AuthRepository(DataContext context, IConfiguration config)
-        // {
-
-        //     _context = context;
-        //     _config = config;
-
-        // }
-
         public async Task<bool> EmailExists(string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
 
-            if (user != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return user is not null;
         }
 
         public async Task<AppUser?> Login(string email, string password)

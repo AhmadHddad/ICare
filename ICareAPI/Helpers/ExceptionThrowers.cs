@@ -1,6 +1,8 @@
 using ICareAPI.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using static ICareAPI.constants.Enums;
+using ICareAPI.Data;
+
 namespace ICareAPI.Helpers
 {
     public static class ExceptionThrowers
@@ -33,7 +35,7 @@ namespace ICareAPI.Helpers
         }
 
         public static void ThrowErrorIfEntityNotExist(EntityType entityType,
-      Repositories.DataContext context,
+      DataContext context,
        int id, bool checkArchived = false, bool archived = true)
         {
 
@@ -72,7 +74,7 @@ namespace ICareAPI.Helpers
         }
 
         public static void ThrowErrorIfEntityNotExist(EntityType entityType,
-      Repositories.DataContext context,
+      DataContext context,
        string OfficialId, bool checkArchived = false, bool archived = true)
         {
 
@@ -106,7 +108,7 @@ namespace ICareAPI.Helpers
         }
 
         public static void ThrowErrorIfEntiryExist(EntityType entityType,
-         Repositories.DataContext context,
+         DataContext context,
           int id, bool checkArchived = false, bool archived = false)
         {
 
@@ -141,7 +143,7 @@ namespace ICareAPI.Helpers
         }
 
         public static void ThrowErrorIfEntityExist(EntityType entityType,
-         Repositories.DataContext context, string OfficialId, bool checkArchived = false, bool archived = false)
+         DataContext context, string OfficialId, bool checkArchived = false, bool archived = false)
         {
             ThrowErrorIfNotValidId(OfficialId);
 

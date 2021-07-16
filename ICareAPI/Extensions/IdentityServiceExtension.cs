@@ -1,5 +1,5 @@
 using ICareAPI.Models;
-using ICareAPI.Repositories;
+using ICareAPI.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 

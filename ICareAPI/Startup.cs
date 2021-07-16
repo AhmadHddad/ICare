@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using ICareAPI.Extensions;
+using ICareAPI.Data;
 
 namespace ICareAPI
 {

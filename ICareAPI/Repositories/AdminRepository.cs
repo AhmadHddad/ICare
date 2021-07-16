@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ICareAPI.Middlewares;
 using ICareAPI.Models;
 using ICareAPI.Repositories.IRepositories;
+using ICareAPI.Data;
 using Microsoft.AspNetCore.Identity;
 
 namespace ICareAPI.Repositories

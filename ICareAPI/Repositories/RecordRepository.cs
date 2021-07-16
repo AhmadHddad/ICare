@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ICareAPI.Interfaces;
 using ICareAPI.Models;
-
+using ICareAPI.Data;
 namespace ICareAPI.Repositories
 {
     public class RecordRepository : IRecordRepository

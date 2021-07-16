@@ -12,6 +12,7 @@ using ICareAPI.Middlewares;
 using static ICareAPI.constants.Enums;
 using ICareAPI.Dtos;
 using AutoMapper;
+using ICareAPI.Data;
 
 namespace ICareAPI.Repositories
 {

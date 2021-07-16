@@ -4,7 +4,7 @@ using ICareAPI.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
-namespace ICareAPI.Repositories
+namespace ICareAPI.Data
 {
     public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>,
     UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>

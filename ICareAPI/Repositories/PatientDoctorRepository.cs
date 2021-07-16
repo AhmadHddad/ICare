@@ -11,6 +11,7 @@ using ICareAPI.Dtos;
 using static ICareAPI.constants.Enums;
 using ICareAPI.Helpers.Pagination;
 using Z.EntityFramework.Plus;
+using ICareAPI.Data;
 
 namespace ICareAPI.Repositories
 {

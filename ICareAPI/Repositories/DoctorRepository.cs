@@ -10,6 +10,7 @@ using ICareAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using static ICareAPI.constants.Enums;
 using Z.EntityFramework.Plus;
+using ICareAPI.Data;
 
 namespace ICareAPI.Repositories
 {
