@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using ICareAPI.Extensions;
 using ICareAPI.Data;
+using StackExchange.Redis;
+using ICareAPI.Services;
 
 namespace ICareAPI
 {
@@ -75,11 +77,16 @@ namespace ICareAPI
             services.AddScoped<IUserRepository, UserRepository>();
             /// Repos --- END ---
 
+            //My Services
+            services.AddHostedService<CacheUsersInfoService>();
 
 
+            // Adding Redis
+            services.AddSingleton<IConnectionMultiplexer>(x =>
+            ConnectionMultiplexer.Connect(Configuration.GetConnectionString("RedisConnection")));
+            services.AddSingleton<RedisCacheService>();
 
             // Adding Swagger Service
-
             services.AddSwaggerService();
 
         }
