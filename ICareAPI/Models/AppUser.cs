@@ -10,7 +10,6 @@ namespace ICareAPI.Models
 
         public DateTime DateOfBirth { get; set; }
 
-
         public DateTime LastActivity { get; set; } = DateTime.Now;
 
         public bool Archived { get; set; }
@@ -19,6 +18,9 @@ namespace ICareAPI.Models
 
         public ICollection<UserRole> UserRoles { get; set; } = default!;
 
+        public bool Blocked { get; set; } = false;
+
+        public DateTime? BlockedAt { get; set; }
 
     }
 }
