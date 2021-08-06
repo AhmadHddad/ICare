@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
@@ -26,5 +27,21 @@ namespace ICareAPI.Services
 
             return await _database.StringSetAsync(key, value);
         }
+
+        public void SetCacheValuesAsync(string key, List<int> listValues)
+        {
+
+            listValues.ForEach(async val =>
+            {
+
+                await _database.ListLeftPushAsync(key, val);
+
+            });
+
+        }
+
+
+        public async Task<RedisValue[]> GetCacheValuesAsync(string key) 
+        => await _database.ListRangeAsync(key, 0, -1);
     }
 }
