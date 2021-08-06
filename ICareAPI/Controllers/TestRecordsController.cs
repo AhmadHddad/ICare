@@ -10,6 +10,7 @@ using ICareAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using ICareAPI.constants;
+using ICareAPI.Services;
 
 namespace ICareAPI.Controllers
 {
@@ -21,18 +22,47 @@ namespace ICareAPI.Controllers
         private readonly DataContext _context;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
+        private readonly RedisCacheService _redisCacheService;
+        private readonly CacheUsersInfoService _cacheUsersInfoService;
 
         public TestRecordsController(DataContext context, RoleManager<AppRole> roleManager,
-         UserManager<AppUser> userManager)
+         UserManager<AppUser> userManager, RedisCacheService redisCacheService, CacheUsersInfoService cacheUsersInfoService)
         {
+            _cacheUsersInfoService = cacheUsersInfoService;
+            _redisCacheService = redisCacheService;
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
 
         }
 
-        [HttpPost("MakeRoles")]
 
+        [HttpPost("setCache")]
+
+        public async Task<IActionResult> SetCache(string key, string value)
+        {
+
+            return Ok(await _redisCacheService.SetCacheValueAsync(key, value));
+
+        }
+
+
+        [HttpGet("getCache")]
+
+        public async Task<IActionResult> GetCache(string key)
+        {
+            return Ok(await _redisCacheService.GetCacheValueAsync(key));
+        }
+
+        // [HttpGet("getCachedUsers")]
+
+        // public async Task<IActionResult> GetCachedUsers()
+        // {
+        //     return Ok(await _cacheUsersInfoService.GetCachedUsersInfo(_userManager));
+        // }
+
+
+        [HttpPost("MakeRoles")]
         public async Task<ActionResult<bool>> MakeRoles()
         {
 
@@ -132,6 +162,7 @@ namespace ICareAPI.Controllers
 
             return NoContent();
         }
+
 
         // POST: api/Records1
         [HttpPost]
