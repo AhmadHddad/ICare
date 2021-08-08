@@ -17,6 +17,7 @@ namespace ICareAPI.Extensions
                 opt.Password.RequireDigit = false;
                 opt.Password.RequiredLength = 4;
                 opt.Password.RequireNonAlphanumeric = false;
+                opt.Lockout.AllowedForNewUsers =false;
                 opt.Password.RequireUppercase = false;
 
             }).AddRoles<AppRole>()
