@@ -57,7 +57,7 @@ namespace ICareAPI.Services
 
             System.Console.WriteLine(JsonConvert.SerializeObject(blockedusersIds));
 
-            await _redisCacheService.SetCacheValueAsync(Contants.CACHED_BLOCKED_USERS_IDS_KEY, JsonConvert.SerializeObject(blockedusersIds));
+            await _redisCacheService.SetCacheValueAsync(Constants.Constants.CACHED_BLOCKED_USERS_IDS_KEY, JsonConvert.SerializeObject(blockedusersIds));
 
         }
     }
