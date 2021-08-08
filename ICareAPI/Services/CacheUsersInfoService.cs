@@ -55,7 +55,6 @@ namespace ICareAPI.Services
         {
             var blockedusersIds = await this.GetBlockedUserIdsAsync();
 
-            System.Console.WriteLine("______________");
             System.Console.WriteLine(JsonConvert.SerializeObject(blockedusersIds));
 
             await _redisCacheService.SetCacheValueAsync(Contants.CACHED_BLOCKED_USERS_IDS_KEY, JsonConvert.SerializeObject(blockedusersIds));
