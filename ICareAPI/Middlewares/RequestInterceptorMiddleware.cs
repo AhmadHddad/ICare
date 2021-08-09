@@ -36,9 +36,9 @@ namespace ICareAPI.Middlewares
             if (allBearerToken is null || string.IsNullOrEmpty(allBearerToken) || string.IsNullOrWhiteSpace(allBearerToken)) return;
 
 
-            var contextUserId = await GetUserIdFromToken(allBearerToken) as int?;
+            var contextUserId = await GetUserIdFromToken(allBearerToken);
 
-            if (contextUserId is not null)
+            if (contextUserId != 0)
             {
 
                 var stringifiedValues = await _redisCacheService.GetCacheValueAsync(CACHED_BLOCKED_USERS_IDS_KEY);
@@ -57,6 +57,11 @@ namespace ICareAPI.Middlewares
 
                 };
             }
+            else
+            {
+                await _next(context);
+
+            }
 
 
 
@@ -67,17 +72,18 @@ namespace ICareAPI.Middlewares
         private Task<int> GetUserIdFromToken(string allBearerToken)
         {
             var token = allBearerToken.Split(" ")[1];
+            var id = 0;
 
-            if(string.IsNullOrEmpty(token) || token == "null") return null!;
+            if (string.IsNullOrEmpty(token) || token == "null") return Task.FromResult(id);
 
             var handler = new JwtSecurityTokenHandler();
             var parsedToken = handler.ReadJwtToken(token);
 
             var userIdClaim = parsedToken.Claims.FirstOrDefault(claim => claim.Type == "nameid");
 
-            if (userIdClaim is null) return null!;
+            if (userIdClaim is null) return Task.FromResult(id);
 
-            var id = int.Parse(userIdClaim.Value);
+             id = int.Parse(userIdClaim.Value);
 
             return Task.FromResult(id);
 
