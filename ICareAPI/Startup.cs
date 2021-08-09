@@ -142,6 +142,7 @@ namespace ICareAPI
             // ErrorHandlingMiddleware
 
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            app.UseMiddleware<RequestInterceptorMiddleware>();
 
 
             app.UseEndpoints(endpoints =>
