@@ -116,6 +116,7 @@ namespace ICareAPI
 
                         if (error != null)
                         {
+                            // Helloß
                             //AddApplicationError an extension to modify and add CORS to the error;
                             context.Response.AddApplicationError(error.Error.Message);
                             await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
