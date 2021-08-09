@@ -67,6 +67,9 @@ namespace ICareAPI.Middlewares
         private Task<int> GetUserIdFromToken(string allBearerToken)
         {
             var token = allBearerToken.Split(" ")[1];
+
+            if(string.IsNullOrEmpty(token) || token == "null") return null!;
+
             var handler = new JwtSecurityTokenHandler();
             var parsedToken = handler.ReadJwtToken(token);
 
