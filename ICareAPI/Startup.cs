@@ -140,8 +140,7 @@ namespace ICareAPI
 
             //app.UseDefaultFiles();
 
-            // ErrorHandlingMiddleware
-
+            // Custom MiddelWares
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMiddleware<RequestInterceptorMiddleware>();
 
