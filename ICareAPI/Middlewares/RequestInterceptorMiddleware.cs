@@ -24,8 +24,7 @@ namespace ICareAPI.Middlewares
             _redisCacheService = redisCacheService;
             _next = next;
         }
-
-        public async Task InvokeAsync(HttpContext context)
+         public async Task InvokeAsync(HttpContext context)
         {
 
 
@@ -33,7 +32,10 @@ namespace ICareAPI.Middlewares
 
             var allBearerToken = context.Request.Headers["Authorization"].FirstOrDefault();
 
-            if (allBearerToken is null || string.IsNullOrEmpty(allBearerToken) || string.IsNullOrWhiteSpace(allBearerToken)) return;
+            if (allBearerToken is null || string.IsNullOrEmpty(allBearerToken) || string.IsNullOrWhiteSpace(allBearerToken)) {
+
+                throw new UnAuthorizedException("Un Authorized");
+            };
 
 
             var contextUserId = await GetUserIdFromToken(allBearerToken);
@@ -49,7 +51,7 @@ namespace ICareAPI.Middlewares
 
                 if (blockedUsersIds is not null && blockedUsersIds.Any(blockedUserId => blockedUserId == contextUserId))
                 {
-                    return;
+                    throw new UnAuthorizedException("You Are Blocked");
                 }
                 else
                 {
