@@ -108,11 +108,11 @@ namespace ICareAPI.Controllers
             return _context.Patients.Any(e => e.Id == id);
         }
 
-        [HttpPost("seed")]
-        public ActionResult SeedData()
+
+
+        [HttpGet("SEED_THIS")]
+        public void SeedData()
         {
-
-
             try
             {
 
@@ -181,21 +181,13 @@ namespace ICareAPI.Controllers
                 // });
 
 
-                return Ok();
 
 
             }
             catch (System.Exception error)
             {
-
-
                 throw new Exception($"Something went wrong -- {error.Message}", error);
             }
-
-
-
-
-
 
         }
     }
