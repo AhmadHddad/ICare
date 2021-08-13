@@ -16,6 +16,7 @@ import {useITablePagination} from "hooks/hooks";
 // Utils
 import {RenderActionBtns} from "containers/listUtils/listUtils";
 import {toggle, isLength} from "utils/utils";
+import {  ROUTES_PATH_ENUM } from "constants/routesPathEnum";
 
 // Constants
 const toggleNames = {
@@ -55,7 +56,7 @@ function DoctorsList(props) {
 
     function onViewDoctor(id) {
         return _ => {
-            history.push(`${match.path}/${id}`);
+            history.push(`${ROUTES_PATH_ENUM.DoctorDetails}/${id}`);
         };
     }
 

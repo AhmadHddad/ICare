@@ -23,6 +23,7 @@ import ForceUnMount from "common/forceUnMount/ForceUnMount";
 import {PAGINATION, DEFAULT_PAGINATION_VALUES} from "constants/constants";
 import {RenderActionBtns} from "containers/listUtils/listUtils";
 import TableWithBtnLayout from "common/tableWithBtnLayout/TableWithBtnLayout";
+import { ROUTES_PATH_ENUM } from "constants/routesPathEnum";
 
 const toggleTypes = {
     modal: "modal",
@@ -102,7 +103,7 @@ function PatientsList({dispatch, patientsList, history}) {
         [];
 
     const onViewDetailsClick = id => event => {
-        history.push(`pationslist/${id}`, id);
+        history.push(`${ROUTES_PATH_ENUM.PatientDetails}/${id}`, id);
     };
 
     const onEditPatientClick = id => event => {
