@@ -45,8 +45,6 @@ namespace ICareAPI.Middlewares
 
 
 
-
-
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate next;
