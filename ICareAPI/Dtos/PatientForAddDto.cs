@@ -14,7 +14,7 @@ namespace ICareAPI.Dtos
         public string OfficialId { get; set; } = "";
 
         [Required]
-        [StringLength(9, MinimumLength = 9, ErrorMessage = "Phone Number must be 10 digits!")]
+        [StringLength(10, MinimumLength = 10, ErrorMessage = "Phone Number must be 10 digits!")]
         public string PhoneNumber { get; set; } = "";
 
 
