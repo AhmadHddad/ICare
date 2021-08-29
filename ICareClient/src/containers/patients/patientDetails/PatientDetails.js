@@ -30,7 +30,8 @@ function PatientDetails({match, dispatch, history, ...rest}) {
         name: "",
         dateOfBirth: "",
         email: "",
-        officialId: ""
+        officialId: "",
+        phoneNumber: ""
     });
 
     const [records, setRecords] = useState([]);
@@ -70,12 +71,13 @@ function PatientDetails({match, dispatch, history, ...rest}) {
         );
     }, []);
 
-    const setDetails = ({name, officialId, dateOfBirth, email, id}) => {
+    const setDetails = ({name, officialId, dateOfBirth, email, id, phoneNumber}) => {
         setPatientDetails({
             id,
             name,
             officialId,
             email,
+            phoneNumber,
             dateOfBirth
         });
     };
@@ -134,7 +136,7 @@ function PatientDetails({match, dispatch, history, ...rest}) {
                     dispatch={dispatch}
                 />
             </ForceUnMount>
-            <Grid container direction="row" justify="center" alignItems="center" spacing={3}>
+            <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
                 <Grid item md={12} xs={12} sm={12}>
                     <IconButton color="inherit" edge="start" onClick={() => history.goBack()}>
                         <KeyboardBackspaceIcon />
