@@ -23,7 +23,7 @@ const {
 } = DOCTOR_DETAILS_FIELDS;
 export default function DoctorDetailsFields({control, errors, disabled}) {
     return (
-        <Grid item container direction="row" justify="center" alignItems="center" spacing={2}>
+        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Grid item md={6} sm={6} xs={12}>
                 <ITextField
                     disabled={disabled?.name ?? disabled === true}

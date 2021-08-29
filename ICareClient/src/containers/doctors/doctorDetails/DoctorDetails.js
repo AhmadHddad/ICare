@@ -211,7 +211,7 @@ export default function DoctorDetails(props) {
                     onClose={toggleFlag(TOGGLE_NAMES.ASSIGN_PATIENT_MODAL, false, setFlag)}
                 />
             </ForceUnMount>
-            <Grid container direction="row" justify="center" alignItems="center" spacing={3}>
+            <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
                 <Grid item xs={12}>
                     <ICard title={"Doctor Details"} icon={DetailsIcon}>
                         <DoctorDetailsFields disabled={true} control={control} errors={errors} />
@@ -222,11 +222,11 @@ export default function DoctorDetails(props) {
                         <Grid
                             container
                             direction="row"
-                            justify="center"
+                            justifyContent="center"
                             alignItems="center"
                             spacing={3}
                         >
-                            <Grid container item xs={12} md={12} justify="flex-end">
+                            <Grid container item xs={12} md={12} justifyContent="flex-end">
                                 <Button
                                     onClick={toggleFlag(
                                         TOGGLE_NAMES.ASSIGN_PATIENT_MODAL,
