@@ -35,7 +35,7 @@ export default function PatientDetailsCard({patientDetails, onEdit, isLoading}) 
     const classes = useStyles();
 
     const renderPatientDetailsFields = () => (
-        <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Grid item xs={12} md={6} sm={6}>
                 <TextField
                     disabled
@@ -80,7 +80,7 @@ export default function PatientDetailsCard({patientDetails, onEdit, isLoading}) 
     );
 
     const renderSkeleton = () => (
-        <Grid item container direction="row" justify="center" alignItems="center" spacing={2}>
+        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Grid item md={6} sm={6} xs={12}>
                 <Skeleton
                     className={classes.skeleton}
@@ -123,7 +123,7 @@ export default function PatientDetailsCard({patientDetails, onEdit, isLoading}) 
     return (
         <Card className={classes.root}>
             <CardContent>
-                <Grid container direction="row" justify="space-between" alignItems="stretch">
+                <Grid container direction="row" justifyContent="space-between" alignItems="stretch">
                     <Grid item>
                         <Typography
                             className={classes.patientDetailsText}
