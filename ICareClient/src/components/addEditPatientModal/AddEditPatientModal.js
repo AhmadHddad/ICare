@@ -72,6 +72,8 @@ export default function AddEditPatientModal({
     }, [patientIdToEdit, open]);
 
     useEffect(() => {
+
+        // This one is because of an issue when setting data inside the input.
         if (patientToEdit && Object.keys(patientToEdit).length) {
             setTimeout(() => setPatientValues(patientToEdit));
         }
@@ -104,7 +106,7 @@ export default function AddEditPatientModal({
     };
 
     const renderFields = () => (
-        <Grid item container direction="row" justify="center" alignItems="center" spacing={2}>
+        <Grid item container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
             <Grid item md={6} sm={6} xs={12}>
                 <Controller
                     as={
@@ -197,11 +199,42 @@ export default function AddEditPatientModal({
                     control={control}
                 />
             </Grid>
+            <Grid item md={6} sm={6} xs={6}>
+                <Controller
+                    as={
+                        <TextField
+                            error={!!errors.phoneNumber}
+                            fullWidth
+                            id="outlined-basic"
+                            label={(errors.phoneNumber && "Must be Phone Number") || "Patient Phone Number"}
+                            variant="outlined"
+                        />
+                    }
+                    defaultValue=""
+                    rules={{
+                        required: true,
+                        minLength: 10,
+                        maxLength: 10,
+                        pattern: REGEX.number
+                    }}
+                    name="phoneNumber"
+                    control={control}
+                />
+            </Grid>
         </Grid>
     );
 
     const renderSkeleton = () => (
-        <Grid item container direction="row" justify="center" alignItems="center" spacing={2}>
+        <Grid item container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+            <Grid item md={6} sm={6} xs={12}>
+                <Skeleton
+                    className={classes.skeleton}
+                    variant="rect"
+                    width={"100%"}
+                    height={72}
+                    animation="wave"
+                />
+            </Grid>
             <Grid item md={6} sm={6} xs={12}>
                 <Skeleton
                     className={classes.skeleton}
@@ -246,7 +279,7 @@ export default function AddEditPatientModal({
             item
             container
             direction="row"
-            justify="center"
+            justifyContent="center"
             alignItems="center"
             spacing={2}
             className={classes.actionsContainer}
@@ -296,7 +329,7 @@ export default function AddEditPatientModal({
                             spacing={2}
                             container
                             direction="row"
-                            justify="center"
+                            justifyContent="center"
                             alignItems="center"
                         >
                             {isLoading.dataLoader ? renderSkeleton() : renderFields()}
