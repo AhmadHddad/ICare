@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ITable from "common/table/ITable";
+import ICTable from "common/table/ICTable";
 import {RenderActionBtns} from "containers/listUtils/listUtils";
 
 import {arePropsEqual} from "utils/utils";
@@ -71,12 +71,12 @@ function PatientsListTable({
     }
 
     return (
-        <ITable
+        <ICTable
             {...rest}
             hover={hover}
             paperEffect={false}
             onChangePage={onChangePage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
+            onRowsPerPageChange={onChangeRowsPerPage}
             page={pagination?.currentPage}
             rowsPerPage={pagination?.itemsPerPage}
             totalItems={pagination?.totalItems}
