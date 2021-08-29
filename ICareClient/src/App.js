@@ -79,7 +79,10 @@ export default function App(props) {
                 key={`${vertical},${horizontal}`}
                 open={openSnackbar}
                 autoHideDuration={1500}
-                onExited={toggleSnackbar(false)}
+                TransitionProps={{
+                    unmountOnExit:true,
+                    onExit:toggleSnackbar(false)
+                }}
                 onClose={toggleSnackbar(false)}
             >
                 <MuiAlert
