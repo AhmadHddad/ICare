@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ITable from "common/table/ITable";
+import ICTable from "common/table/ICTable";
 import {Card, CardContent, Typography, Grid, TextField, makeStyles} from "@material-ui/core";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import {Skeleton} from "@material-ui/lab";
@@ -91,7 +91,7 @@ export default function PatientStatistics({patientRecords, statistics, isLoading
     );
 
     const renderPatientDetailsFields = () => (
-        <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Grid item xs={12} md={3} sm={3}>
                 <TextField
                     disabled
@@ -143,7 +143,7 @@ export default function PatientStatistics({patientRecords, statistics, isLoading
             md={12}
             container
             direction="row"
-            justify="center"
+            justifyContent="center"
             alignItems="center"
             spacing={2}
         >
@@ -189,7 +189,7 @@ export default function PatientStatistics({patientRecords, statistics, isLoading
     return (
         <Card className={classes.root}>
             <CardContent>
-                <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+                <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                     <Grid
                         item
                         md={12}
@@ -197,7 +197,7 @@ export default function PatientStatistics({patientRecords, statistics, isLoading
                         sm={12}
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
                     >
                         <Typography
@@ -221,7 +221,7 @@ export default function PatientStatistics({patientRecords, statistics, isLoading
                         className={`${classes.removeSidePadding} ${classes.tableContainer}`}
                     >
                         <Typography className={classes.heading}>Patient 5th Record</Typography>
-                        <ITable
+                        <ICTable
                             isLoading={isLoading}
                             hover
                             addCollapse={true}
@@ -246,7 +246,7 @@ export default function PatientStatistics({patientRecords, statistics, isLoading
                         <Typography className={classes.heading}>
                             Patients with similar diseases
                         </Typography>
-                        <ITable
+                        <ICTable
                             isLoading={isLoading}
                             emptyView={<strong>No Patients</strong>}
                             headers={["Patient Name", "Date Of Birth", "Email", "Official ID"]}

@@ -28,7 +28,7 @@ export default function IComposer({
             item
             container
             direction="row"
-            justify="center"
+            justifyContent="center"
             alignItems="center"
             spacing={2}
             className={classes.removeMargin}
@@ -78,7 +78,7 @@ export default function IComposer({
                         spacing={2}
                         container
                         direction="row"
-                        justify="center"
+                        justifyContent="center"
                         alignItems="center"
                     >
                         {children}

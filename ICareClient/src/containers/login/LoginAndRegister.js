@@ -36,11 +36,11 @@ function LoginAndRegister({classes, dispatch}) {
 
     const renderLoginContent = () => (
         <Grid container>
-            <Grid item container justify="center">
+            <Grid item container justifyContent="center">
                 <Grid item xs={12}>
                     <SystemLogo rootStyle={classes.logo} />
                 </Grid>
-                <Grid item xs={12} container justify="center">
+                <Grid item xs={12} container justifyContent="center">
                     <Typography className={classes.logoText}>ICare</Typography>
                 </Grid>
             </Grid>
@@ -49,7 +49,7 @@ function LoginAndRegister({classes, dispatch}) {
                 item
                 container
                 direction="row"
-                justify="center"
+                justifyContent="center"
                 alignItems="center"
                 spacing={2}
             >

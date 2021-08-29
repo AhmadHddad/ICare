@@ -20,7 +20,7 @@ function WarningModal({open, onClose, message, isLoading, onOk, componentId}) {
     };
 
     const renderModalActions = () => (
-        <Grid container spacing={1} direction="row" justify="center" alignItems="center">
+        <Grid container spacing={1} direction="row" justifyContent="center" alignItems="center">
             <Grid item>
                 <Button
                     onClick={onOkClick}
@@ -61,7 +61,7 @@ function WarningModal({open, onClose, message, isLoading, onOk, componentId}) {
             title={<strong>Warning !</strong>}
             actions={renderModalActions()}
         >
-            <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+            <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                 <Grid item md={12} xs={12} className={classes.textAlignCenter}>
                     <WarningIcon color="error" fontSize="large" />
                 </Grid>

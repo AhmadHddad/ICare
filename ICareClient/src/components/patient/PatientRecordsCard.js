@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ITable from "common/table/ITable";
+import ICTable from "common/table/ICTable";
 import {
     Card,
     CardContent,
@@ -87,7 +87,7 @@ function PatientRecordsCard({
     return (
         <Card className={classes.root}>
             <CardContent>
-                <Grid container direction="row" justify="space-between" alignItems="stretch">
+                <Grid container direction="row" justifyContent="space-between" alignItems="stretch">
                     <Grid item>
                         <Typography
                             className={classes.patientDetailsText}
@@ -113,7 +113,7 @@ function PatientRecordsCard({
                     </Grid>
                 </Grid>
 
-                <ITable
+                <ICTable
                     isLoading={isLoading}
                     hover
                     addCollapse={true}

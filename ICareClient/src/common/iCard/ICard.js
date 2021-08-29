@@ -38,7 +38,7 @@ export default function ICard(props) {
     return (
         <Card className={classes.root}>
             <CardContent>
-                <Grid container direction="row" justify={justify} alignItems={alignItems}>
+                <Grid container direction="row" justifyContent={justify} alignItems={alignItems}>
                     <Grid item>
                         <Typography
                             className={classes.patientDetailsText}

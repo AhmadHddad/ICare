@@ -82,7 +82,7 @@ export default function AddEditRecordModal({
     };
 
     const renderFields = () => (
-        <Grid item container direction="row" justify="center" alignItems="center" spacing={2}>
+        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Grid item md={4} sm={4} xs={12}>
                 <Controller
                     as={
@@ -196,7 +196,7 @@ export default function AddEditRecordModal({
                             spacing={2}
                             container
                             direction="row"
-                            justify="center"
+                            justifyContent="center"
                             alignItems="center"
                         >
                             {renderFields()}

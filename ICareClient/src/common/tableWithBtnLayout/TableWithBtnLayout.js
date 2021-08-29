@@ -9,7 +9,7 @@ import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
 // Styles
 import GeneralStyles from "shared/GeneralStyles";
-import ITable from "common/table/ITable";
+import ICTable from "common/table/ICTable";
 
 const useStyles = makeStyles(theme => ({
     ...GeneralStyles,
@@ -32,8 +32,8 @@ export default function TableWithBtnLayout({
     const classes = useStyles();
 
     return (
-        <Grid container direction="row" justify="center" alignItems="center">
-            <Grid item container md={12} xs={12} justify="flex-end">
+        <Grid container direction="row" justifyContent="center" alignItems="center">
+            <Grid item container md={12} xs={12} justifyContent="flex-end">
                 <Grid item>
                     <Button onClick={onAddBtnClick} variant="contained" color="primary">
                         {addIcon || (
@@ -44,7 +44,7 @@ export default function TableWithBtnLayout({
                 </Grid>
             </Grid>
             <Grid item md={12} xs={12} className={classes.tableContainer}>
-                <ITable
+                <ICTable
                     onChangePage={onChangePage}
                     onChangeRowsPerPage={onChangeRowsPerPage}
                     page={pagination?.currentPage}
