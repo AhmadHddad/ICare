@@ -10,10 +10,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
-import ITableStyle from "./ITableStyle";
+import ICTableStyle from "./ICTableStyle";
 
-export default function ITable(props) {
-    const classes = makeStyles(ITableStyle)(props);
+export default function ICTable(props) {
+    const classes = makeStyles(ICTableStyle)(props);
     const {
         headers,
         rows,
@@ -135,7 +135,7 @@ export default function ITable(props) {
                 <Grid
                     container
                     direction="row"
-                    justify="center"
+                    justifyContent="center"
                     alignItems="center"
                     className={classes.loader}
                     {...paperProps}
@@ -181,8 +181,8 @@ export default function ITable(props) {
                         count={totalItems || rows.length}
                         rowsPerPage={rowsPerPage}
                         page={page - 1}
-                        onChangePage={onChangePage}
-                        onChangeRowsPerPage={onChangeRowsPerPage}
+                        onPageChange={onChangePage}
+                        onRowsPerPageChange={onChangeRowsPerPage}
                     />
                 )}
             </Paper>
@@ -190,7 +190,7 @@ export default function ITable(props) {
     );
 }
 
-ITable.propTypes = {
+ICTable.propTypes = {
     headers: PropTypes.array,
     rows: PropTypes.array,
     isLoading: PropTypes.bool,
@@ -210,7 +210,7 @@ ITable.propTypes = {
     onChangeRowsPerPage: PropTypes.func
 };
 
-ITable.defaultProps = {
+ICTable.defaultProps = {
     rowsPerPageOptions: [5, 15, 20],
     rowsPerPage: 5,
     page: 1,

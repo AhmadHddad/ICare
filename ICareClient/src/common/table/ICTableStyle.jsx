@@ -1,6 +1,6 @@
 import GeneralStyles from "shared/GeneralStyles";
 
-const ITableStyle = theme => ({
+const ICTableStyle = theme => ({
     ...GeneralStyles,
     table: {
         minWidth: 650
@@ -23,4 +23,4 @@ const ITableStyle = theme => ({
     }
 });
 
-export default ITableStyle;
+export default ICTableStyle;
