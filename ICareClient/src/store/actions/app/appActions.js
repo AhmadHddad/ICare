@@ -25,7 +25,7 @@ export function showErrorMessage(message) {
             type: SHOW_MESSAGE,
             message: {
                 type: MESSAGE_TYPES.error,
-                text: message?.message
+                text: message
             }
         });
     };
@@ -87,16 +87,29 @@ const dispatchWhenSuccess = (actionType, data, rest) => {
 const dispatchWhenFailure = (dispatch, actionType, err, rest) => {
     const errorObj = err?.response?.data;
 
-    const errMsg =
-        errorObj && typeof errorObj === "object" && Object.keys(errorObj?.errors ?? errorObj).length
-            ? errorObj.title ||
-              Object.entries(errorObj)[0][1] ||
-              Object.entries(errorObj.errors)[0][1]
-            : null;
+    const isValidationError = "One or more validation errors occurred.".includes(errorObj?.title);
+
+    let errMsg = "";
+
+    if (isValidationError) {
+        errMsg = Object.keys(errorObj?.errors)
+            .map(key => errorObj?.errors[key])
+            .flat()
+            .join(" ");
+    } else {
+        errMsg =
+            errorObj &&
+            typeof errorObj === "object" &&
+            Object.keys(errorObj?.errors ?? errorObj).length
+                ? errorObj.title ||
+                  Object.entries(errorObj)[0][1] ||
+                  Object.entries(errorObj.errors)[0][1]
+                : null;
+    }
 
     const message = errMsg ?? errorObj?.title ?? errorObj ?? err?.message ?? "Something went wrong";
 
-    dispatch(showErrorMessage(message));
+    dispatch(showErrorMessage(message?.message || message));
 
     return {
         type: actionType + "_FAILURE",
