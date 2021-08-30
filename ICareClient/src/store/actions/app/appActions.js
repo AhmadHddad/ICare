@@ -76,7 +76,7 @@ export const apiCaller = (
     };
 };
 
-const dispatchWhenSuccess = (actionType, data, rest) => {
+export const dispatchWhenSuccess = (actionType, data, rest) => {
     return {
         type: actionType + "_SUCCESS",
         data: data,
@@ -84,7 +84,7 @@ const dispatchWhenSuccess = (actionType, data, rest) => {
     };
 };
 
-const dispatchWhenFailure = (dispatch, actionType, err, rest) => {
+export const dispatchWhenFailure = (dispatch, actionType, err, rest) => {
     const errorObj = err?.response?.data;
 
     const isValidationError = "One or more validation errors occurred.".includes(errorObj?.title);
