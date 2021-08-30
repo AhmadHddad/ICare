@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using ICareAPI.Middlewares;
 using ICareAPI.Models;
 using ICareAPI.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ICareAPI.Repositories
 {
