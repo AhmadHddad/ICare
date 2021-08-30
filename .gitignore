@@ -49,3 +49,5 @@ ICareClient/.vscode
 ICareAPI/._ICareAPI.code-workspace
 ICareAPI/dump.rdb
 ICareClient/._ICareClient.code-workspace
+._ICareAPI
+._ICareClient
