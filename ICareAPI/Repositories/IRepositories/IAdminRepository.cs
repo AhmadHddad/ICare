@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using ICareAPI.Models;
 
-namespace ICareAPI.Repositories.IRepositories
+namespace ICareAPI.Repositories
 {
     public interface IAdminRepository
     {

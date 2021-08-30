@@ -71,6 +71,7 @@ namespace ICareAPI
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IRecordRepository, RecordRepository>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IPatientDoctorRepository, PatientDoctorRepository>();
             services.AddScoped<LogUserActivity>();
