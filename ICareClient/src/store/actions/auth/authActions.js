@@ -1,6 +1,11 @@
 import axios from "axios";
 import * as actionTypes from "./authActionsTypes";
-import {purgeApp, showErrorMessage, showSuccessMessage} from "../app/appActions";
+import {
+    purgeApp,
+    showErrorMessage,
+    showSuccessMessage,
+    dispatchWhenFailure
+} from "../app/appActions";
 import {APIS} from "../../../constants/constants";
 
 export const logInUser = (user, onStart, onSuccess, onFailure) => {
@@ -16,20 +21,14 @@ export const logInUser = (user, onStart, onSuccess, onFailure) => {
                     let response = res.data;
                     const expirationDate = new Date(response.expires);
                     localStorage.setItem("token", response.token);
-                    localStorage.setItem("expirationDate", expirationDate);
+                    localStorage.setItÍem("expirationDate", expirationDate);
                     dispatch(authSuccess(response.token, expirationDate));
                     onSuccess && onSuccess(res);
                     window.location.reload();
                 })
                 .catch(err => {
                     onFailure && onFailure(err.response && err.response.data);
-                    dispatch(
-                        showErrorMessage(
-                            (err.response && err.response.data) ||
-                                err.message ||
-                                "Something went wrong"
-                        )
-                    );
+                    dispatchWhenFailure(dispatch, actionTypes.LOGIN, err);
                     dispatch(authFail());
                 });
         };
@@ -51,14 +50,8 @@ export const registerUser = (user, onStart, onSuccess, onFailure) => {
                 })
                 .catch(err => {
                     onFailure && onFailure(err);
-
-                    dispatch(
-                        showErrorMessage(
-                            (err.response && err.response.data) ||
-                                err.message ||
-                                "Something went wrong"
-                        )
-                    );
+                    dispatchWhenFailure(dispatch, actionTypes.REGISTER, err);
+        
                 });
         };
     }
