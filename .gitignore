@@ -51,3 +51,5 @@ ICareAPI/dump.rdb
 ICareClient/._ICareClient.code-workspace
 ._ICareAPI
 ._ICareClient
+ICareAPI/ICareDB.db-wal
+.gitignore
