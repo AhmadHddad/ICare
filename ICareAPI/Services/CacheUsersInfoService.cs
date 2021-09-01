@@ -34,9 +34,18 @@ namespace ICareAPI.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+                try
+                {
+                    var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-                return await _userManager.Users.Where(u => u.Blocked).Select(user => user.Id).ToListAsync();
+                    return await _userManager.Users.Where(u => u.Blocked).Select(user => user.Id).ToListAsync();
+                }
+                catch (System.Exception error)
+                {
+
+                    throw new Exception($"Internal Server Error {error.Message} -> GetBlockedUserIdsAsync");
+                }
+
             }
 
         }
@@ -53,12 +62,21 @@ namespace ICareAPI.Services
 
         public async void CacheBlockedUsersIds()
         {
-            var blockedusersIds = await this.GetBlockedUserIdsAsync();
+            try
+            {
 
-            System.Console.WriteLine(JsonConvert.SerializeObject(blockedusersIds));
 
-            await _redisCacheService.SetCacheValueAsync(Constants.Constants.CACHED_BLOCKED_USERS_IDS_KEY, JsonConvert.SerializeObject(blockedusersIds));
+                var blockedusersIds = await this.GetBlockedUserIdsAsync();
 
+                System.Console.WriteLine(JsonConvert.SerializeObject(blockedusersIds));
+
+                await _redisCacheService.SetCacheValueAsync(Constants.Constants.CACHED_BLOCKED_USERS_IDS_KEY, JsonConvert.SerializeObject(blockedusersIds));
+            }
+            catch (System.Exception error)
+            {
+
+                throw new Exception($"Internal Server Error {error.Message} -> CacheBlockedUsersIds");
+            }
         }
     }
 }
