@@ -77,9 +77,9 @@ namespace ICareAPI.Repositories
 
             var userModel = _userManager.Users;
 
-            if (includeRoles == true)
+            if (includeRoles)
             {
-                userModel.Include(u => u.UserRoles);
+                userModel = userModel.Include(u => u.UserRoles);
             }
 
             return userModel;
