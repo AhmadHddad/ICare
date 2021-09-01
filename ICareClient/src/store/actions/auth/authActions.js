@@ -21,7 +21,7 @@ export const logInUser = (user, onStart, onSuccess, onFailure) => {
                     let response = res.data;
                     const expirationDate = new Date(response.expires);
                     localStorage.setItem("token", response.token);
-                    localStorage.setItÍem("expirationDate", expirationDate);
+                    localStorage.setItem("expirationDate", expirationDate);
                     dispatch(authSuccess(response.token, expirationDate));
                     onSuccess && onSuccess(res);
                     window.location.reload();
