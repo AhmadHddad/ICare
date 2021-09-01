@@ -27,7 +27,7 @@ namespace ICareAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Patients(bool? withRecords, [FromQuery] PaginationParams paginationParams)
+        public async Task<IActionResult> GetPatients(bool? withRecords, [FromQuery] PaginationParams paginationParams)
         {
             var pations = await _repo.GetPatientsAsync(true, paginationParams);
 
