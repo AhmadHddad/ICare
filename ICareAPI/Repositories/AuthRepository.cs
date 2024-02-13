@@ -115,6 +115,7 @@ namespace ICareAPI.Repositories
 
                     return user;
                     // }
+
                     // else
                     // {
                     //     var serializedJson = JsonConvert.SerializeObject(res.Errors);
@@ -123,7 +124,15 @@ namespace ICareAPI.Repositories
                 }
                 else
                 {
-                    throw new BadRequestException("Could not create user");
+                    var err = new StringBuilder();
+
+                    foreach (var error in result.Errors)
+                    {
+                        err.Append(error.Description);
+                        err.Append(" ");
+                    }
+
+                    throw new BadRequestException($"Could not create user - {err}");
 
                 }
             }

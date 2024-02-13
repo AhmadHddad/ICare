@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using ICareAPI.Extensions;
 using ICareAPI.Data;
-using StackExchange.Redis;
+// using StackExchange.Redis;
 using ICareAPI.Services;
 
 namespace ICareAPI
@@ -38,10 +38,7 @@ namespace ICareAPI
 
 
             // adding identity services;
-            services.AddIdentityServices();
-
-            // To add Token services;
-            services.AddTokenService(Configuration);
+            services.AddIdentityServices(Configuration);
 
             //AddJsonOptions self Reference Loop accrues when a modal has another modal inside it like patients has records,
             // and in records there is patients and so on, so dot net will see it as self referencing loop, and we need to ignore it
@@ -79,13 +76,13 @@ namespace ICareAPI
             /// Repos --- END ---
 
             //My Services
-            services.AddHostedService<CacheUsersInfoService>();
+            // services.AddHostedService<CacheUsersInfoService>();
 
 
             // Adding Redis
-            services.AddSingleton<IConnectionMultiplexer>(x =>
-            ConnectionMultiplexer.Connect(Configuration.GetConnectionString("RedisConnection")));
-            services.AddSingleton<RedisCacheService>();
+            // services.AddSingleton<IConnectionMultiplexer>(x =>
+            // ConnectionMultiplexer.Connect(Configuration.GetConnectionString("RedisConnection")));
+            // services.AddSingleton<RedisCacheService>();
 
             // Adding Swagger Service
             services.AddSwaggerService();
@@ -143,7 +140,7 @@ namespace ICareAPI
 
             // Custom MiddelWares
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            app.UseMiddleware<RequestInterceptorMiddleware>();
+            // app.UseMiddleware<RequestInterceptorMiddleware>();
 
 
             app.UseEndpoints(endpoints =>

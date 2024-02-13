@@ -23,12 +23,12 @@ namespace ICareAPI.Controllers
         private readonly RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly RedisCacheService _redisCacheService;
-        private readonly CacheUsersInfoService _cacheUsersInfoService;
+        // private readonly CacheUsersInfoService _cacheUsersInfoService;
 
         public TestRecordsController(DataContext context, RoleManager<AppRole> roleManager,
-         UserManager<AppUser> userManager, RedisCacheService redisCacheService, CacheUsersInfoService cacheUsersInfoService)
+         UserManager<AppUser> userManager, RedisCacheService redisCacheService)
         {
-            _cacheUsersInfoService = cacheUsersInfoService;
+            // _cacheUsersInfoService = cacheUsersInfoService;
             _redisCacheService = redisCacheService;
             _userManager = userManager;
             _roleManager = roleManager;
@@ -66,33 +66,33 @@ namespace ICareAPI.Controllers
         public async Task<ActionResult<bool>> MakeRoles()
         {
 
-            // var allRoles = _roleManager.Roles.ToList();
+            var allRoles = _roleManager.Roles.ToList();
 
-            // System.Console.WriteLine($"---------ALL ROLES {allRoles.Count} ----------");
-
-
-            // if (allRoles.Count == 0)
-            // {
+            System.Console.WriteLine($"---------ALL ROLES {allRoles.Count} ----------");
 
 
-
-
-            //     var roles = new List<AppRole>();
-
-            //     foreach (var roleEnum in Enum.GetValues(typeof(RolesEnum)))
-            //     {
-            //         roles.Add(new AppRole { Name = roleEnum.ToString() });
-            //     }
+            if (allRoles.Count == 0)
+            {
 
 
 
 
-            //     roles.ForEach(async role =>
-            //     {
-            //         await _roleManager.CreateAsync(role);
-            //     });
+                var roles = new List<AppRole>();
 
-            // }
+                foreach (var roleEnum in Enum.GetValues(typeof(RolesEnum)))
+                {
+                    roles.Add(new AppRole { Name = roleEnum.ToString() });
+                }
+
+
+
+
+                roles.ForEach(async role =>
+                {
+                    await _roleManager.CreateAsync(role);
+                });
+
+            }
 
 
             var adminUser = new AppUser

@@ -5,7 +5,7 @@ const initialState = {
     usersList: []
 };
 
-function adminReducer(state = initialState, {type}: IReducerOtherParams<any>) {
+function adminReducer(state = initialState, {type, data}: IReducerOtherParams<any>) {
     switch (type) {
         case PURGE:
             return {
